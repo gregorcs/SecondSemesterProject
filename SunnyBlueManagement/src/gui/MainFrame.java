@@ -6,6 +6,9 @@ import java.awt.GridBagConstraints;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import gui.login.LoginGui;
+
 import java.awt.GridBagLayout;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -20,6 +23,9 @@ public class MainFrame extends JFrame {
 	 */
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	
+	private LoginGui loginPanel;
+	private JPanel panel;
 
 	/**
 	 * Launch the application.
@@ -30,6 +36,7 @@ public class MainFrame extends JFrame {
 				try {
 					MainFrame frame = new MainFrame();
 					frame.setVisible(true);
+					frame.setExtendedState(JFrame.MAXIMIZED_BOTH); 
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -44,12 +51,6 @@ public class MainFrame extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 1920, 1080);
 		
-		JMenuBar menuBar = new JMenuBar();
-		setJMenuBar(menuBar);
-		
-		JMenuItem mntmNewMenuItem = new JMenuItem("New menu item");
-		mntmNewMenuItem.setHorizontalAlignment(SwingConstants.CENTER);
-		menuBar.add(mntmNewMenuItem);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -66,11 +67,16 @@ public class MainFrame extends JFrame {
 		contentPane.add(layeredPane, gbc_layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		GridBagJPanel panel = new GridBagJPanel();
-		layeredPane.add(panel, "name_1331648275192300");
+		loginPanel = new LoginGui();
+		layeredPane.add(loginPanel, "name_82071188656100");
+		
+		panel = new JPanel();
+		layeredPane.add(panel, "name_69172224462400");
 		GridBagConstraints gbc = new GridBagConstraints();
 
-		
+		/**
+		 * 
+		 */
 	}
 
 }

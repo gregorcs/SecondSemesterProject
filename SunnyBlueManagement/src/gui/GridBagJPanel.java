@@ -3,7 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
-public class GridBagJPanel extends JPanel {
+public abstract class GridBagJPanel extends JPanel {
 
 	/**
 	 * 
@@ -14,11 +14,12 @@ public class GridBagJPanel extends JPanel {
 	 * Create the panel.
 	 */
 	public GridBagJPanel() {
-		JButton a, b;
 		setLayout(new GridBagLayout());
 		GridBagConstraints gbc = new GridBagConstraints();
 		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
-
+/*
+ * an example below of how to add buttons (remove at the end of the project)
+  		JButton a, b;
 		a = new JButton("button");
 		gbc.gridx = 0;
 		gbc.gridy = 0;
@@ -30,6 +31,7 @@ public class GridBagJPanel extends JPanel {
 		gbc.gridx = 1;
 		gbc.gridy = 1;
 		add(b, gbc);
+		*/
 	}
 
 }
