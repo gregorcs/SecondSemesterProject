@@ -7,22 +7,18 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
+import gui.resupply.Resupply;
+
 import java.awt.GridBagLayout;
-import javax.swing.JMenuBar;
-import javax.swing.JMenuItem;
-import javax.swing.SwingConstants;
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
-import javax.swing.JButton;
-import java.awt.Insets;
 
 public class MainFrame extends JFrame {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 5771240247116622335L;
 	private JPanel contentPane;
+	private MainMenu mainMenuPanel;
+	private JPanel resupplyPanel;
 
 	/**
 	 * Launch the application.
@@ -55,6 +51,25 @@ public class MainFrame extends JFrame {
 		gbl_contentPane.rowWeights = new double[]{1.0};
 		gbl_contentPane.columnWeights = new double[]{1.0};
 		contentPane.setLayout(gbl_contentPane);
+		/**
+		 * first layered pane 
+		 */
+		JLayeredPane layeredPane = new JLayeredPane();
+		GridBagConstraints gbc_layeredPane = new GridBagConstraints();
+		gbc_layeredPane.fill = GridBagConstraints.BOTH;
+		gbc_layeredPane.gridx = 0;
+		gbc_layeredPane.gridy = 0;
+		contentPane.add(layeredPane, gbc_layeredPane);
+		layeredPane.setLayout(new CardLayout(0, 0));
+		
+		/**
+		 * panels added
+		 */
+		mainMenuPanel = new MainMenu();
+		layeredPane.add(mainMenuPanel, "name_1816740339900");
+		
+		resupplyPanel = new Resupply();
+		layeredPane.add(resupplyPanel, "name_1894438046500");
 		
 
 
