@@ -1,19 +1,25 @@
 package model;
 
+import java.sql.Date;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-public class ResupplyOrder {
+public class SupplyOrder {
 
 	private Date date;
 	private String urgency;
 	private ArrayList<Item> listOfItems;
 	
-	public ResupplyOrder(Date date, String urgency, ArrayList<Item> listOfItems) {
+	public SupplyOrder(Date date, String urgency, ArrayList<Item> listOfItems) {
 		super();
 		this.date = date;
 		this.urgency = urgency;
 		this.listOfItems = listOfItems;
+	}
+
+	public SupplyOrder() {
+		// TODO Auto-generated constructor stub
 	}
 
 	public Date getDate() {
@@ -35,5 +41,10 @@ public class ResupplyOrder {
 
 	public void setListOfItems(ArrayList<Item> listOfItems) {
 		this.listOfItems = listOfItems;
+	}
+	
+	public String getDateString() {
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
+        return dateFormat.format(getDate());  
 	}
 }
