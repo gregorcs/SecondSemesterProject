@@ -19,6 +19,7 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private MainMenu mainMenuPanel;
 	private JPanel resupplyPanel;
+	private JLayeredPane layeredPane;
 
 	/**
 	 * Launch the application.
@@ -54,7 +55,7 @@ public class MainFrame extends JFrame {
 		/**
 		 * first layered pane 
 		 */
-		JLayeredPane layeredPane = new JLayeredPane();
+		layeredPane = new JLayeredPane();
 		GridBagConstraints gbc_layeredPane = new GridBagConstraints();
 		gbc_layeredPane.fill = GridBagConstraints.BOTH;
 		gbc_layeredPane.gridx = 0;
@@ -65,7 +66,7 @@ public class MainFrame extends JFrame {
 		/**
 		 * panels added
 		 */
-		mainMenuPanel = new MainMenu();
+		mainMenuPanel = new MainMenu(this);
 		layeredPane.add(mainMenuPanel, "name_1816740339900");
 		
 		resupplyPanel = new Resupply();
@@ -75,4 +76,14 @@ public class MainFrame extends JFrame {
 
 	}
 
+	public JLayeredPane getLayeredPane() {
+		return this.layeredPane;
+	}
+	
+	public void switchPanels(JPanel panel) {
+		layeredPane.removeAll();
+		layeredPane.add(panel);
+		layeredPane.repaint();
+		layeredPane.revalidate();
+	}
 }

@@ -10,6 +10,8 @@ import java.awt.Dimension;
 import javax.swing.BoxLayout;
 import javax.swing.JLayeredPane;
 import java.awt.CardLayout;
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
 
 public class Resupply extends JPanel {
 
@@ -28,8 +30,31 @@ public class Resupply extends JPanel {
 		add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		layeredPane.add(panel, "name_2798950394800");
+		JPanel ResupplyMenuPanel = new JPanel();
+		layeredPane.add(ResupplyMenuPanel, "name_2798950394800");
+		ResupplyMenuPanel.setLayout(new MigLayout("", "[89px,center][89px]", "[23px][][][]"));
+		
+		JLabel lblHeader = new JLabel("Resupply Menu");
+		ResupplyMenuPanel.add(lblHeader, "cell 0 0,alignx center");
+		
+		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
+		ResupplyMenuPanel.add(rigidArea, "cell 0 1,alignx center");
+		
+		JButton btnResupplyRestaurant = new JButton("Resupply restaurant");
+		btnResupplyRestaurant.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		ResupplyMenuPanel.add(btnResupplyRestaurant, "cell 0 2,alignx center,aligny top");
+		
+		JButton btnResupplyKitchen = new JButton("Resupply kitchen");
+		ResupplyMenuPanel.add(btnResupplyKitchen, "cell 0 3,alignx center,aligny top");
+		
+		JPanel ResupplyRestaurantPanel = new JPanel();
+		layeredPane.add(ResupplyRestaurantPanel, "name_3150264217800");
+		
+		JPanel ResupplyKitchenPanel = new JPanel();
+		layeredPane.add(ResupplyKitchenPanel, "name_3157677484000");
 
 	}
 
