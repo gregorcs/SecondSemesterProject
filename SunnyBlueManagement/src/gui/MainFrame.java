@@ -69,11 +69,9 @@ public class MainFrame extends JFrame {
 		mainMenuPanel = new MainMenu(this);
 		layeredPane.add(mainMenuPanel, "name_1816740339900");
 		
-		resupplyPanel = new Resupply();
+		resupplyPanel = new Resupply(this);
 		layeredPane.add(resupplyPanel, "name_1894438046500");
 		
-
-
 	}
 
 	public JLayeredPane getLayeredPane() {
@@ -85,5 +83,9 @@ public class MainFrame extends JFrame {
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
+	}
+	
+	public void backToMainMenu() {
+		switchPanels(mainMenuPanel);
 	}
 }
