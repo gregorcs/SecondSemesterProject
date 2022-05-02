@@ -2,21 +2,19 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
+import net.miginfocom.swing.MigLayout;
 
-public abstract class GridBagJPanel extends JPanel {
+public abstract class MigJPanel extends JPanel {
 
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 9104222594694661953L;
 
 	/**
 	 * Create the panel.
 	 */
-	public GridBagJPanel() {
-		setLayout(new GridBagLayout());
-		GridBagConstraints gbc = new GridBagConstraints();
-		gbc.anchor = GridBagConstraints.FIRST_LINE_START;
+	public MigJPanel() {
+		setBounds(100, 100, 1920, 1080);
+		setLayout(new MigLayout("", "[]", "[]"));
+
 /*
  * an example below of how to add buttons (remove at the end of the project)
   		JButton a, b;
