@@ -28,6 +28,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 	public SupplyOrder create(SupplyOrder obj) throws Exception {
 		
 		PreparedStatement stmt = buildCreateStatement(obj);
+		//TODO RETURN THE CREATED SUPPLY ORDER
 		SupplyOrder createdSupplyOrder = new SupplyOrder();
 
 		int insertedKey = 1;

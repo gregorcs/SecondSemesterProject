@@ -1,17 +1,19 @@
 package model;
 
-import java.sql.Date;
+import java.time.LocalDateTime;  
+import java.time.format.DateTimeFormatter;  
+
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SupplyOrder {
 
-	private Date date;
+	private LocalDateTime date;
 	private String urgency;
 	private ArrayList<Item> listOfItems;
 	
-	public SupplyOrder(Date date, String urgency, ArrayList<Item> listOfItems) {
+	public SupplyOrder(LocalDateTime date, String urgency, ArrayList<Item> listOfItems) {
 		super();
 		this.date = date;
 		this.urgency = urgency;
@@ -22,10 +24,10 @@ public class SupplyOrder {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Date getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
-	public void setDate(Date date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 	public String getUrgency() {
@@ -44,7 +46,7 @@ public class SupplyOrder {
 	}
 	
 	public String getDateString() {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
-        return dateFormat.format(getDate());  
+	   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");    
+	   return dtf.format(this.getDate());
 	}
 }
