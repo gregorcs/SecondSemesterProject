@@ -25,8 +25,10 @@ class SupplyOrderTests {
 	public void SupplyOrderWasCreated() {
 		//Arrange
 		SupplyOrderController resupplyOrderController = new SupplyOrderController();
-		Item item = new Item(0, "potato", "restaurant");
+		Item item = new Item(1, "potato", "restaurant");
+		Item item2 = new Item(2, "decoration", "restaurant");
 		LineItem lineItem = new LineItem(40, item);
+		LineItem lineItem2 = new LineItem(20, item2);
 		SupplyOrder supplyOrderCreated = null;
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 		LocalDateTime date = LocalDateTime.now();  
@@ -36,7 +38,8 @@ class SupplyOrderTests {
 			 */
 			private static final long serialVersionUID = -1669512258082083176L;
 
-		{add(lineItem);}});
+		{add(lineItem);
+		 add(lineItem2);}});
 		
 		System.out.println(supplyOrderCreated);
 		//Assert
