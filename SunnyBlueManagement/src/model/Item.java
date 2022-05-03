@@ -2,14 +2,20 @@ package model;
 
 public class Item {
 	
+	private int itemId;
 	private String name;
-	private int quantityInStock;
 	private String departmentType;
 	
-	public Item(String name, int quantityInStock, String departmentType) {
+	public Item(int itemId, String name, String departmentType) {
+		super();
+		this.itemId = itemId;
+		this.name = name;
+		this.departmentType = departmentType;
+	}
+
+	public Item(String name,String departmentType) {
 		super();
 		this.name = name;
-		this.quantityInStock = quantityInStock;
 		this.departmentType = departmentType;
 	}
 	
@@ -19,16 +25,18 @@ public class Item {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public int getQuantityInStock() {
-		return quantityInStock;
-	}
-	public void setQuantityInStock(int quantityInStock) {
-		this.quantityInStock = quantityInStock;
-	}
 	public String getDepartmentType() {
 		return departmentType;
 	}
 	public void setDepartmentType(String departmentType) {
 		this.departmentType = departmentType;
+	}
+
+	public int getItemId() {
+		return itemId;
+	}
+
+	public void setItemId(int itemId) {
+		this.itemId = itemId;
 	}
 }

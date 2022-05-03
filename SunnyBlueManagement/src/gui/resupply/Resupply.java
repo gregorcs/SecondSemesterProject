@@ -2,7 +2,7 @@ package gui.resupply;
 
 import javax.swing.JPanel;
 
-import controller.ResupplyOrderController;
+import controller.SupplyOrderController;
 import gui.MainFrame;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
@@ -27,7 +27,7 @@ public class Resupply extends JPanel {
 	 */
 	private static final long serialVersionUID = -7068038639929039542L;
 	private MainFrame mainFrame;
-	private ResupplyOrderController resupplyOrderController;
+	private SupplyOrderController supplyOrderController;
 	private JLayeredPane layeredPane;
 	private JPanel ResupplyRestaurantPanel;
 	private JPanel ResupplyKitchenPanel;
@@ -39,7 +39,7 @@ public class Resupply extends JPanel {
 	 */
 	public Resupply(final MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
-		this.resupplyOrderController = new ResupplyOrderController();
+		this.supplyOrderController = new SupplyOrderController();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		layeredPane = new JLayeredPane();

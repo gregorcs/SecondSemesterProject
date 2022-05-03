@@ -7,17 +7,17 @@ import dao.interfaces.DaoSupplyOrderIF;
 
 import java.time.LocalDateTime;  
 
-import model.Item;
+import model.LineItem;
 import model.SupplyOrder;
 
-public class ResupplyOrderController {
+public class SupplyOrderController {
 	
 	DaoSupplyOrderIF daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
 
-	public void createResupplyOrder(LocalDateTime date, String urgency, ArrayList<Item> listOfItems) {
-		SupplyOrder resupplyOrder = new SupplyOrder(date, urgency, listOfItems);
+	public void createResupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
 		try {
-			daoSupplyOrder.create(resupplyOrder);
+			daoSupplyOrder.create(supplyOrder);
 		} catch (Exception e) {
 			// TODO RETURN SOME KIND OF ERROR TO THE USER
 			e.printStackTrace();

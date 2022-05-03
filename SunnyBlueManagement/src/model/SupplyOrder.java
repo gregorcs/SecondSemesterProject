@@ -9,11 +9,26 @@ import java.util.ArrayList;
 
 public class SupplyOrder {
 
+	private int supplyOrderId;
 	private LocalDateTime date;
 	private String urgency;
-	private ArrayList<Item> listOfItems;
+	private ArrayList<LineItem> listOfItems;
 	
-	public SupplyOrder(LocalDateTime date, String urgency, ArrayList<Item> listOfItems) {
+	public SupplyOrder(int supplyOrderId, LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+		super();
+		this.supplyOrderId = supplyOrderId;
+		this.date = date;
+		this.urgency = urgency;
+		this.listOfItems = listOfItems;
+	}
+
+	/**
+	 * in case you need to create a supplyOrder before it is inserted into the database (you don't know the id yet)
+	 * @param date
+	 * @param urgency
+	 * @param listOfItems
+	 */
+	public SupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
 		super();
 		this.date = date;
 		this.urgency = urgency;
@@ -37,16 +52,24 @@ public class SupplyOrder {
 		this.urgency = urgency;
 	}
 
-	public ArrayList<Item> getListOfItems() {
+	public ArrayList<LineItem> getListOfItems() {
 		return listOfItems;
 	}
 
-	public void setListOfItems(ArrayList<Item> listOfItems) {
+	public void setListOfItems(ArrayList<LineItem> listOfItems) {
 		this.listOfItems = listOfItems;
 	}
 	
 	public String getDateString() {
 	   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");    
 	   return dtf.format(this.getDate());
+	}
+
+	public int getSupplyOrderId() {
+		return supplyOrderId;
+	}
+
+	public void setSupplyOrderId(int supplyOrderId) {
+		this.supplyOrderId = supplyOrderId;
 	}
 }
