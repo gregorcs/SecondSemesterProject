@@ -4,16 +4,33 @@ import java.util.ArrayList;
 
 public class Reservation {
 	
+	private int reservationId;
 	private int numOfPeople;
 	private String date;
 	private String reservationName;
 	private String specificRequests;
 	// ^^^^ these should be either a boolean isEvent or we can have event tags for different events
 	private long phoneNo;
-	private ArrayList<Table> tables = new ArrayList<>();
+	private ArrayList<Table> listOfTables = new ArrayList<>();
 
 	
 	//constructor
+	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+		this.setNumOfPeople(numOfPeople);
+		this.setDate(date);
+		this.setReservationName(reservationName);
+		this.setSpecificRequests(specificRequests);
+		this.setPhoneNo(phoneNo);
+	}
+	
+	/**
+	 * if you need to create a reservation before it is inserted into the database
+	 * @param numOfPeople
+	 * @param date
+	 * @param reservationName
+	 * @param specificRequests
+	 * @param phoneNo
+	 */
 	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
 		this.setNumOfPeople(numOfPeople);
 		this.setDate(date);
@@ -63,7 +80,15 @@ public class Reservation {
 	}
 	
 	public void addTable(Table table) {
-		tables.add(table);
+		listOfTables.add(table);
+	}
+
+	public int getReservationId() {
+		return reservationId;
+	}
+
+	public void setReservationID(int reservationId) {
+		this.reservationId = reservationId;
 	}
 
 }
