@@ -15,22 +15,20 @@ public class SupplyOrderController {
 	private DaoSupplyOrderIF daoSupplyOrder;
 	private SupplyOrder supplyOrder;
 	
-	
-
 	public SupplyOrderController() {
 		super();
 		this.daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
 		this.supplyOrder = new SupplyOrder();
 	}
 
-	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) throws Exception {
 		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
-		try {
-			daoSupplyOrder.create(supplyOrder);
-		} catch (Exception e) {
-			// TODO RETURN SOME KIND OF ERROR TO THE USER
-			e.printStackTrace();
-		}
+	
+		daoSupplyOrder.create(supplyOrder);
+	}
+	
+	public void createSupplyOrder() throws Exception {
+		daoSupplyOrder.create(supplyOrder);
 	}
 
 	public SupplyOrder getSupplyOrder() {

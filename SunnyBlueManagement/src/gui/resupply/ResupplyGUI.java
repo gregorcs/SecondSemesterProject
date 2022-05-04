@@ -46,7 +46,6 @@ public class ResupplyGUI extends JPanel {
 		this.mainFrame = mainFrame;
 		this.supplyOrderController = new SupplyOrderController();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-
 		constructLayeredPane();
 		constructResupplyMenuPanel();
 		constructResupplyRestaurantPanel();
@@ -109,8 +108,8 @@ public class ResupplyGUI extends JPanel {
 		lblResupplyRestaurantHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		ResupplyRestaurantPanel.add(lblResupplyRestaurantHeader, "cell 0 0,alignx left,aligny top");
 
-		JLabel lblNewLabel_1 = new JLabel("Enter product:");
-		ResupplyRestaurantPanel.add(lblNewLabel_1, "flowx,cell 0 1,alignx left,aligny center");
+		JLabel lblEnterProduct = new JLabel("Enter product:");
+		ResupplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 0 1,alignx left,aligny center");
 
 		JButton btnSelectItem = new JButton("Select");
 		btnSelectItem.addActionListener(new ActionListener() {
@@ -128,8 +127,8 @@ public class ResupplyGUI extends JPanel {
 		ResupplyRestaurantPanel.add(textField, "cell 0 1,growx,aligny center");
 		textField.setColumns(10);
 
-		JButton btnBackFromRestaurant = new JButton("Back");
-		btnBackFromRestaurant.addActionListener(new ActionListener() {
+		JButton btnGoBack = new JButton("Back");
+		btnGoBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				switchResupplyPanels(ResupplyMenuPanel);
@@ -138,20 +137,28 @@ public class ResupplyGUI extends JPanel {
 
 		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
 		ResupplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 0 3");
-
-		ResupplyRestaurantPanel.add(btnBackFromRestaurant, "cell 5 5,growx,aligny bottom");
-
-		textFieldEnterQuantity = new JTextField();
-		ResupplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 3");
-		textFieldEnterQuantity.setColumns(10);
-
-		JButton btnNewButton = new JButton("Add");
-		btnNewButton.addActionListener(new ActionListener() {
+		
+		JButton btnAddItem = new JButton("Add");
+		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addLineItems();
 			}
 		});
-		ResupplyRestaurantPanel.add(btnNewButton, "cell 5 3,growx,aligny bottom");
+		ResupplyRestaurantPanel.add(btnAddItem, "cell 4 3,growx,aligny bottom");
+		
+		JButton btnProceed = new JButton("Proceed");
+		btnProceed.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				finalizeOrder();
+			}
+		});
+		ResupplyRestaurantPanel.add(btnProceed, "cell 4 5");
+
+		ResupplyRestaurantPanel.add(btnGoBack, "cell 5 5,growx,aligny bottom");
+
+		textFieldEnterQuantity = new JTextField();
+		ResupplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 3");
+		textFieldEnterQuantity.setColumns(10);
 
 	}
 
@@ -187,6 +194,56 @@ public class ResupplyGUI extends JPanel {
 													+ "Quantity: " + lineItem.getQuantity());
 		}
 	}
+	
+	private void finalizeOrder() {	
+		String messageToShow = createOrderReceipt();
+		JOptionPane.showMessageDialog(mainFrame, messageToShow);
+		boolean orderSuccess = true;
+		supplyOrderController.getSupplyOrder().setUrgency("low");
+		try {
+			supplyOrderController.createSupplyOrder();
+		} catch (Exception e) {
+			orderSuccess = false;
+			JOptionPane.showMessageDialog(mainFrame, "Order creation failed");
+			e.printStackTrace();
+		}
+		if (orderSuccess) {
+			JOptionPane.showMessageDialog(mainFrame, "Order was created");
+		}
+	}
+	
+	private String createOrderReceipt() {
+		String messageToShow = "Your order";
+		for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
+			messageToShow += System.lineSeparator() 
+			+ "Name: " + lineItem.getItem().getName()
+			+ System.lineSeparator()
+			+ "Quantity: " + lineItem.getQuantity();
+		}
+		return messageToShow;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	

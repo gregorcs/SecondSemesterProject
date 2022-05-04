@@ -39,7 +39,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
 	@Override
 	public int create(SupplyOrder obj) throws Exception {
-
+		con = DBConnection.getInstance().getDBcon();
 		PreparedStatement stmt = buildCreateSupplyOrderStatement(obj);
 		int insertedKey = 1;
 

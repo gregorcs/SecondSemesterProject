@@ -33,15 +33,19 @@ class SupplyOrderTests {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 		LocalDateTime date = LocalDateTime.now();  
 		//Act
-		resupplyOrderController.createSupplyOrder(date, "urgent", new ArrayList<LineItem>() {/**
-			 * 
-			 */
-			private static final long serialVersionUID = -1669512258082083176L;
+		try {
+			resupplyOrderController.createSupplyOrder(date, "urgent", new ArrayList<LineItem>() {/**
+				 * 
+				 */
+				private static final long serialVersionUID = -1669512258082083176L;
 
-		{add(lineItem);
-		 add(lineItem2);}});
+			{add(lineItem);
+			 add(lineItem2);}});
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		System.out.println(supplyOrderCreated);
 		//Assert
 		assertEquals(true, true);
 	}
