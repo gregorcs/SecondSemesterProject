@@ -10,7 +10,7 @@ import javax.swing.JLayeredPane;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import gui.resupply.Resupply;
+import gui.resupply.ResupplyGUI;
 
 import java.awt.Component;
 import javax.swing.Box;
@@ -23,7 +23,7 @@ public class MainMenu extends JPanel implements Runnable {
 
 	private static final long serialVersionUID = -2547880461104225298L;
 	private MainFrame mainFrame;
-	private Resupply resupplyPanel;
+	private ResupplyGUI resupplyPanel;
 
 	/**
 	 * Create the panel.
@@ -33,7 +33,7 @@ public class MainMenu extends JPanel implements Runnable {
 		setBounds(100, 100, 1920, 1080);
 		setLayout(new MigLayout("", "[][][center][]", "[][][][][][][][][]"));
 		//setLayout(new MigLayout("align 50% 50%"));
-		resupplyPanel = new Resupply(mainFrame);
+		resupplyPanel = new ResupplyGUI(mainFrame);
 		
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
