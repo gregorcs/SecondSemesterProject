@@ -26,7 +26,8 @@ public class ItemScrollPane extends JScrollPane {
 	}
 	
 	public void initializeList() {
-		
+		ItemListCellRenderer cellRenderer = new ItemListCellRenderer();
+		itemList.setCellRenderer(cellRenderer);
 	}
 	
 	public void updateList() {
@@ -36,6 +37,6 @@ public class ItemScrollPane extends JScrollPane {
 	public Item getSelectedItem() {return itemList.getSelectedValue();};
 	
 	private void findAllItems() {
-		//TODO needs to get it from dao item
+		//TODO needs to get all items from dao item
 	}
 }

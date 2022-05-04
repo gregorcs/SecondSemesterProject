@@ -12,9 +12,9 @@ import model.SupplyOrder;
 
 public class SupplyOrderController {
 	
-	DaoSupplyOrderIF daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
+	private DaoSupplyOrderIF daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
 
-	public void createResupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
 		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
 		try {
 			daoSupplyOrder.create(supplyOrder);

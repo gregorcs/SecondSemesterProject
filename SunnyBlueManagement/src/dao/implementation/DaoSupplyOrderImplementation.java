@@ -46,7 +46,6 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		try {
 		    con.setAutoCommit(false);
 			stmt.executeUpdate();
-			//TODO RETURN THE CREATED SUPPLY ORDER
 
 	        ResultSet generatedKeys = stmt.getGeneratedKeys();
 	        if (generatedKeys.next()) {

@@ -33,7 +33,7 @@ class SupplyOrderTests {
 		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 		LocalDateTime date = LocalDateTime.now();  
 		//Act
-		resupplyOrderController.createResupplyOrder(date, "urgent", new ArrayList<LineItem>() {/**
+		resupplyOrderController.createSupplyOrder(date, "urgent", new ArrayList<LineItem>() {/**
 			 * 
 			 */
 			private static final long serialVersionUID = -1669512258082083176L;
@@ -45,5 +45,4 @@ class SupplyOrderTests {
 		//Assert
 		assertEquals(true, true);
 	}
-
 }
