@@ -39,14 +39,13 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
 	@Override
 	public int create(SupplyOrder obj) throws Exception {
-
+		con = DBConnection.getInstance().getDBcon();
 		PreparedStatement stmt = buildCreateSupplyOrderStatement(obj);
 		int insertedKey = 1;
 
 		try {
 		    con.setAutoCommit(false);
 			stmt.executeUpdate();
-			//TODO RETURN THE CREATED SUPPLY ORDER
 
 	        ResultSet generatedKeys = stmt.getGeneratedKeys();
 	        if (generatedKeys.next()) {

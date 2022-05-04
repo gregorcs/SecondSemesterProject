@@ -34,9 +34,10 @@ public class SupplyOrder {
 		this.urgency = urgency;
 		this.listOfItems = listOfItems;
 	}
-
+	
 	public SupplyOrder() {
-		// TODO Auto-generated constructor stub
+		this.listOfItems = new ArrayList<LineItem>();
+		this.date = LocalDateTime.now();
 	}
 
 	public LocalDateTime getDate() {
@@ -58,6 +59,14 @@ public class SupplyOrder {
 
 	public void setListOfItems(ArrayList<LineItem> listOfItems) {
 		this.listOfItems = listOfItems;
+	}
+	
+	public void addLineItem(LineItem lineItem) {
+		this.listOfItems.add(lineItem);
+	}
+	
+	public void removeLineItem(LineItem LineItem) {
+		this.listOfItems.remove(LineItem);
 	}
 	
 	public String getDateString() {
