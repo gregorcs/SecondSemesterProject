@@ -1,9 +1,10 @@
 package tests;
 
-import static org.junit.jupiter.api.Assertions.*;
+
 
 import org.junit.jupiter.api.Test;
 
+import controller.ItemController;
 import dao.DBConnection;
 
 class ItemTests {
@@ -13,10 +14,11 @@ class ItemTests {
 	@Test
 	public void AllItemsReturned() {
 		//Arrange
-		
+		ItemController itemController = new ItemController();
 		//Act
-		
+		itemController.readAll();
 		//Assert
+		
 	}
 
 }
