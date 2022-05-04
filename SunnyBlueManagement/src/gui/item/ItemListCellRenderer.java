@@ -18,7 +18,7 @@ public class ItemListCellRenderer implements ListCellRenderer<Item> {
 			boolean cellHasFocus) {
 		dlcr = new DefaultListCellRenderer();
 		String textToShow = ("Name: " + value.getName() + ",  ID: " + value.getItemId() + ",  Department: " + value.getDepartmentType());
-
+		System.out.println(value.getName());
 		return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 	}
 }

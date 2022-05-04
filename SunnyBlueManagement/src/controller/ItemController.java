@@ -10,6 +10,8 @@ import model.Item;
 public class ItemController {
 	
 	private DaoItemIF daoItem;
+	
+	
 
 	public ItemController() {
 		super();
@@ -21,14 +23,8 @@ public class ItemController {
 	}
 	
 	public Collection<Item> readAll() {
-		Collection<Item> al;
 		try {
-			al = daoItem.readAll();
-			for (Item item : al) {
-				System.out.println(item.getName());
-			}
-			
-			return al;
+			return daoItem.readAll();
 		} catch (Exception e) {
 			// TODO PRINT SOMETHING TO THE USER
 			e.printStackTrace();

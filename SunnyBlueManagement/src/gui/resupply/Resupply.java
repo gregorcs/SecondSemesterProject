@@ -4,6 +4,7 @@ import javax.swing.JPanel;
 
 import controller.SupplyOrderController;
 import gui.MainFrame;
+import gui.item.ItemScrollPane;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -33,6 +34,8 @@ public class Resupply extends JPanel {
 	private JPanel ResupplyKitchenPanel;
 	private JPanel ResupplyMenuPanel;
 	private JTextField textField;
+	
+	private ItemScrollPane scrollPane;
 
 	/**
 	 * Create the panel.
@@ -94,11 +97,9 @@ public class Resupply extends JPanel {
 		});
 		ResupplyRestaurantPanel.add(btnSelectItem, "cell 1 1,alignx left,aligny bottom");
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new ItemScrollPane();
 		ResupplyRestaurantPanel.add(scrollPane, "cell 0 2 5 1,grow");
 		
-		JList list = new JList();
-		scrollPane.setViewportView(list);
 		
 		textField = new JTextField();
 		ResupplyRestaurantPanel.add(textField, "cell 0 1,growx,aligny center");
