@@ -1,5 +1,7 @@
 package model.ReservationFolder;
 
+import java.util.ArrayList;
+
 public class Reservation {
 	
 	private int numOfPeople;
@@ -8,6 +10,7 @@ public class Reservation {
 	private String specificRequests;
 	// ^^^^ these should be either a boolean isEvent or we can have event tags for different events
 	private long phoneNo;
+	private ArrayList<Table> tables = new ArrayList<>();
 
 	
 	//constructor
@@ -57,6 +60,10 @@ public class Reservation {
 
 	public void setPhoneNo(long phoneNo) {
 		this.phoneNo = phoneNo;
+	}
+	
+	public void addTable(Table table) {
+		tables.add(table);
 	}
 
 }
