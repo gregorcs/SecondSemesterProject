@@ -2,27 +2,29 @@ package model.ReservationFolder;
 
 public class Reservation {
 	
-	private int amountOfPeople;
+	private int numOfPeople;
 	private String date;
 	private String reservationName;
 	private String specificRequests;
 	// ^^^^ these should be either a boolean isEvent or we can have event tags for different events
-	private long phoneNumber;
+	private long phoneNo;
 
-	public Reservation(int amountOfPeople, String Date,String reservationName, String specificRequests, long phoneNumber) {
-		this.setAmountOfPeople(amountOfPeople);
+	
+	//constructor
+	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+		this.setNumOfPeople(numOfPeople);
 		this.setDate(date);
 		this.setReservationName(reservationName);
 		this.setSpecificRequests(specificRequests);
-		this.setPhoneNumber(phoneNumber);
+		this.setPhoneNo(phoneNo);
 	}
 
-	public int getAmountOfPeople() {
-		return amountOfPeople;
+	public int getnumOfPeople() {
+		return numOfPeople;
 	}
 
-	public void setAmountOfPeople(int amountOfPeople) {
-		this.amountOfPeople = amountOfPeople;
+	public void setNumOfPeople(int numOfPeople) {
+		this.numOfPeople = numOfPeople;
 	}
 
 	public String getDate() {
@@ -49,12 +51,12 @@ public class Reservation {
 		this.specificRequests = specificRequests;
 	}
 
-	public long getPhoneNumber() {
-		return phoneNumber;
+	public long getphoneNo() {
+		return phoneNo;
 	}
 
-	public void setPhoneNumber(long phoneNumber) {
-		this.phoneNumber = phoneNumber;
+	public void setPhoneNo(long phoneNo) {
+		this.phoneNo = phoneNo;
 	}
 
 }

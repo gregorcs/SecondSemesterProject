@@ -1,19 +1,14 @@
 package controller;
 
+import model.ReservationFolder.Reservation;
+
 public class ReservationController {
 	
+	Reservation reservation;
 	
-	
-	
-	
-	
-	
-	
-	
-	
-	//input the reservation details
-	public void enterDetails(String name, String date, int numOfPeople, int phoneNo) {	
-	
+	//creates reservation??? - should be in DAO
+	public void enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) {	
+		reservation = new Reservation(numOfPeople, specificRequests, specificRequests, specificRequests, phoneNo);
 	}
 
 	//select table(s) for the reservation
@@ -30,8 +25,8 @@ public class ReservationController {
 	public String toString(){
 		return null;}
 	
-	//
-	public void createReservation() {
+	//confirms the reservation
+	public void confirmReservation() {
 		
 	}
 }
