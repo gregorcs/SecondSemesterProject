@@ -54,19 +54,28 @@ public class SupplyOrder {
 	}
 
 	public ArrayList<LineItem> getListOfItems() {
-		return listOfItems;
+		return this.listOfItems;
 	}
 
 	public void setListOfItems(ArrayList<LineItem> listOfItems) {
-		this.listOfItems = listOfItems;
+		this.setListOfItems(listOfItems);
 	}
 	
 	public void addLineItem(LineItem lineItem) {
-		this.listOfItems.add(lineItem);
+		boolean found = false;
+		for (LineItem temp : this.getListOfItems()) {
+			if (temp.getItem().getName().equals(lineItem.getItem().getName())) {
+				temp.setQuantity(temp.getQuantity() + lineItem.getQuantity());
+				found = true;
+			}
+		}
+		if (!found) {
+			this.listOfItems.add(lineItem);
+		}
 	}
 	
 	public void removeLineItem(LineItem LineItem) {
-		this.listOfItems.remove(LineItem);
+		this.getListOfItems().remove(LineItem);
 	}
 	
 	public String getDateString() {
