@@ -208,6 +208,7 @@ public class ResupplyGUI extends JPanel {
 			e.printStackTrace();
 		}
 		if (orderSuccess) {
+			supplyOrderController.emptySupplyOrder();
 			JOptionPane.showMessageDialog(mainFrame, "Order was created");
 		}
 	}

@@ -38,4 +38,8 @@ public class SupplyOrderController {
 	public void setSupplyOrder(SupplyOrder supplyOrder) {
 		this.supplyOrder = supplyOrder;
 	}
+	
+	public void emptySupplyOrder() {
+		supplyOrder = new SupplyOrder();
+	}
 }
