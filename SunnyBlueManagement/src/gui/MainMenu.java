@@ -36,6 +36,7 @@ public class MainMenu extends JPanel implements Runnable {
 		setLayout(new MigLayout("", "[][][center][]", "[][][][][][][][][]"));
 		//setLayout(new MigLayout("align 50% 50%"));
 		resupplyPanel = new Resupply(mainFrame);
+		reservePanel = new Reserve(mainFrame);
 		
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
