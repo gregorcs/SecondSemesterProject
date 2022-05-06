@@ -35,7 +35,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		String createDinnerTableReservation = "INSERT INTO DinnerTable_Reservation values (?, ?)";
 		PreparedStatement stmt = con.prepareStatement(createDinnerTableReservation, Statement.RETURN_GENERATED_KEYS);
 	//getReservationID needs to be implemented??
-		stmt.SetString(1, Integer.toString(reservation.getReservationID()));
+		stmt.SetString(1, Integer.toString(reservation.getReservationId()));
 		stmt.SetString(2, Integer.toString(table.getTable().getTableNo()));
 		System.out.println(createDinnerTableReservation);
 		return stmt;

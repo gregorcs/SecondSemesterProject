@@ -1,5 +1,6 @@
 package controller;
 
+import model.Item;
 import model.ReservationFolder.Reservation;
 
 public class ReservationController {

@@ -10,6 +10,7 @@ import javax.swing.JLayeredPane;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import gui.reservation.Reserve;
 import gui.resupply.Resupply;
 
 import java.awt.Component;
@@ -24,6 +25,7 @@ public class MainMenu extends JPanel implements Runnable {
 	private static final long serialVersionUID = -2547880461104225298L;
 	private MainFrame mainFrame;
 	private Resupply resupplyPanel;
+	private Reserve reservePanel;
 
 	/**
 	 * Create the panel.
@@ -42,7 +44,13 @@ public class MainMenu extends JPanel implements Runnable {
 		Component rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea_2, "cell 2 1");
 		
+		//It needs to go to the EnterDetails Panel instead - halp
 		JButton btnReserveTable = new JButton("Reserve Table");
+		btnReserveTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.switchPanels(reservePanel);
+			}
+		});
 		add(btnReserveTable, "cell 2 2");
 		
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
