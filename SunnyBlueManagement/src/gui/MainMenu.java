@@ -10,6 +10,7 @@ import javax.swing.JLayeredPane;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import controller.CheckConnectionController;
 import gui.resupply.ResupplyGUI;
 
 import java.awt.Component;
@@ -19,11 +20,12 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class MainMenu extends JPanel implements Runnable {
+public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
 	private MainFrame mainFrame;
 	private ResupplyGUI resupplyPanel;
+	private JLabel lblConOutput;
 
 	/**
 	 * Create the panel.
@@ -59,19 +61,22 @@ public class MainMenu extends JPanel implements Runnable {
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea, "cell 2 5");
 		
-		JLabel lblConnection = new JLabel("Connection");
+		JLabel lblConnection = new JLabel("Connection:");
 		add(lblConnection, "cell 0 6");
+		CheckConnectionController connection = new CheckConnectionController(this);
+		connection.execute();
 		
-		JLabel lblConnectionOutput = new JLabel("");
-		add(lblConnectionOutput, "cell 1 8");
+		lblConOutput = new JLabel("");
+		add(lblConOutput, "cell 1 6");
 
 	}
-
-	@Override
-	public void run() {
-		
-		
+	
+	public void updateConnectionOutput(String status) {
+		lblConOutput.setText(status);
 	}
 	
-	
+	public void refresh() {
+		this.revalidate();
+		this.repaint();
+	}
 }
