@@ -82,6 +82,10 @@ public class Reservation {
 	public void addTable(Table table) {
 		listOfTables.add(table);
 	}
+	
+	public ArrayList<Table> getListOfTables(){
+		return listOfTables;
+	}
 
 	public int getReservationId() {
 		return reservationId;

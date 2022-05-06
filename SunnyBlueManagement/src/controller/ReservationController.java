@@ -23,7 +23,8 @@ public class ReservationController {
 	
 	//to be implemented
 	public String toString(){
-		return null;}
+		return null;
+		}
 	
 	//confirms the reservation
 	public void confirmReservation() {
