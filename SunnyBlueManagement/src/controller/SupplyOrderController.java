@@ -23,12 +23,15 @@ public class SupplyOrderController {
 
 	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) throws Exception {
 		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
-	
-		daoSupplyOrder.create(supplyOrder);
+		if (listOfItems.isEmpty()) {
+			throw new Exception();
+		} else {daoSupplyOrder.create(supplyOrder);}
 	}
 	
 	public void createSupplyOrder() throws Exception {
-		daoSupplyOrder.create(supplyOrder);
+		if (supplyOrder.getListOfItems().isEmpty()) {
+			throw new Exception();
+		} else {daoSupplyOrder.create(supplyOrder);}
 	}
 
 	public SupplyOrder getSupplyOrder() {

@@ -214,12 +214,17 @@ public class ResupplyGUI extends JPanel {
 	}
 	
 	private String createOrderReceipt() {
-		String messageToShow = "Your order";
-		for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
-			messageToShow += System.lineSeparator() 
-			+ "Name: " + lineItem.getItem().getName()
-			+ System.lineSeparator()
-			+ "Quantity: " + lineItem.getQuantity();
+		String messageToShow = "";
+		if (!supplyOrderController.getSupplyOrder().getListOfItems().isEmpty()) {
+			messageToShow += "Your order:";
+			for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
+				messageToShow += System.lineSeparator() 
+				+ "Name: " + lineItem.getItem().getName()
+				+ System.lineSeparator()
+				+ "Quantity: " + lineItem.getQuantity();
+			}
+		} else {
+			messageToShow += "Your order is empty";
 		}
 		return messageToShow;
 	}
