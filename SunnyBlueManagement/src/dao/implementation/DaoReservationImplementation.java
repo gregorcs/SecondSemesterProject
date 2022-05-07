@@ -87,7 +87,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 
 	@Override
 	public Reservation read(int id) throws Exception {
-		// TODO Auto-generated method stub
+		String readString = "SELECT * FROM Reservation WHERE reservationId = " + id;
+		Statement stmt;
+		stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(readString);
+		Reservation fetchedReservation = new Reservation(); //INSERT SHIT HERE IN CORRECT ORDER
 		return null;
 	}
 

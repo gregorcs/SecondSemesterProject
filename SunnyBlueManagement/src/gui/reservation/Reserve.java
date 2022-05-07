@@ -77,6 +77,17 @@ public class Reserve extends JPanel {
 				else {
 					switchReservePanels(ChooseTablePanel);
 					//GET ALL TABLES WITH DETAILS
+					int numOfPeople = Integer.parseInt(textNumOfPeople.getText());
+					String date = textDate.getText();
+					String reservationName = textName.getText();
+					String specificRequests = ""; 				//ADD SPECIFIC REQUESTS HERE !!!! 
+					int phoneNo = Integer.parseInt(textPhoneNum.getText());
+					
+					try {
+						reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo);
+					} catch (Exception e1) {
+						e1.printStackTrace();
+					}
 					//Update the panel
 				}
 			}

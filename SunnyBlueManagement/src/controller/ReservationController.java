@@ -1,15 +1,25 @@
 package controller;
 
+import java.util.Collection;
+
+import dao.DaoFactory;
+import dao.interfaces.DaoIF;
 import model.Item;
 import model.ReservationFolder.Reservation;
+import model.ReservationFolder.Table;
 
 public class ReservationController {
 	
 	Reservation reservation;
 	
 	//creates reservation??? - should be in DAO
-	public void enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) {	
+	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) throws Exception {	
 		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo);
+				
+		DaoIF daoReservation = DaoFactory.createDaoReservation();
+		Collection<Table> availableTables = daoReservation.readAll();
+		
+		return availableTables;
 	}
 
 	//select table(s) for the reservation
