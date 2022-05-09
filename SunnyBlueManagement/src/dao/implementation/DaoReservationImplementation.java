@@ -5,6 +5,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DBConnection;
@@ -91,8 +92,20 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		Statement stmt;
 		stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(readString);
-		Reservation fetchedReservation = new Reservation(); //INSERT SHIT HERE IN CORRECT ORDER
-		return null;
+		Reservation fetchedReservation = new Reservation(rs.getInt(1), rs.getInt(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getLong(6)); //INSERT SHIT HERE IN CORRECT ORDER
+		return fetchedReservation;
+	}
+	
+	public Collection<Table> readTablesByDate(String date) throws SQLException{
+		Collection<Table> fetchedTables = new ArrayList<>();
+		String readTableString = "SELECT * DinnerTable WHERE tableNo IN (SELECT tableNo FROM DinnerTable_Reservation WHERE NOT Date = ?)";
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(readTableString);
+		while(rs.next()) {
+			fetchedTables.add(new Table(rs.getInt(1)));
+		}
+		
+		return fetchedTables;
 	}
 
 	@Override
@@ -109,8 +122,14 @@ public class DaoReservationImplementation implements DaoReservationIF{
 
 	@Override
 	public Collection<Reservation> readAll() throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		Collection<Reservation> fetchedReservations = new ArrayList<>();
+		String readAllString = "SELECT * FROM Reservation";
+		Statement stmt = con.createStatement();
+		ResultSet rs = stmt.executeQuery(readAllString);
+		while(rs.next()) {
+			fetchedReservations.add(new Reservation(rs.getInt(1), rs.getInt(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getLong(6))); //DUPLICATE CODE WITH OTHER READ
+		}
+		return fetchedReservations;
 	}
 	
 	

@@ -3,6 +3,7 @@ package controller;
 import java.util.Collection;
 
 import dao.DaoFactory;
+import dao.implementation.DaoReservationImplementation;
 import dao.interfaces.DaoIF;
 import model.Item;
 import model.ReservationFolder.Reservation;
@@ -16,8 +17,8 @@ public class ReservationController {
 	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) throws Exception {	
 		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo);
 				
-		DaoIF daoReservation = DaoFactory.createDaoReservation();
-		Collection<Table> availableTables = daoReservation.readAll();
+		DaoReservationImplementation daoReservation = (DaoReservationImplementation) DaoFactory.createDaoReservation(); //CHANGE THIS FROM A CAST!
+		Collection<Table> availableTables = daoReservation.readTablesByDate(date);
 		
 		return availableTables;
 	}
