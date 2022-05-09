@@ -36,8 +36,8 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		String createDinnerTableReservation = "INSERT INTO DinnerTable_Reservation values (?, ?)";
 		PreparedStatement stmt = con.prepareStatement(createDinnerTableReservation, Statement.RETURN_GENERATED_KEYS);
 	//getReservationID needs to be implemented??
-		stmt.SetString(1, Integer.toString(reservation.getReservationId()));
-		stmt.SetString(2, Integer.toString(table.getTable().getTableNo()));
+		stmt.setString(1, Integer.toString(reservation.getReservationId()));
+		stmt.setString(2, Integer.toString(table.getTableNo()));
 		System.out.println(createDinnerTableReservation);
 		return stmt;
 	}
@@ -98,11 +98,12 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	
 	public Collection<Table> readTablesByDate(String date) throws SQLException{
 		Collection<Table> fetchedTables = new ArrayList<>();
-		String readTableString = "SELECT * DinnerTable WHERE tableNo IN (SELECT tableNo FROM DinnerTable_Reservation WHERE NOT Date = ?)";
+		String readTableString = "SELECT * FROM DinnerTable WHERE tableNo NOT IN (SELECT tableNo FROM DinnerTable_Reservation WHERE reservation_reservationId_FK IN "
+				+ "(SELECT reservationId FROM Reservation WHERE Date = " + date + "))";
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(readTableString);
 		while(rs.next()) {
-			fetchedTables.add(new Table(rs.getInt(1)));
+			fetchedTables.add(new Table(rs.getInt(1),rs.getInt(2), rs.getBoolean(3)));
 		}
 		
 		return fetchedTables;

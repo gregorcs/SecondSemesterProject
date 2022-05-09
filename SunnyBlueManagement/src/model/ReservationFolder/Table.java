@@ -1,14 +1,37 @@
 package model.ReservationFolder;
 
 public class Table {
-	int number;
+	private int tableNo;
+	private int noOfSeats;
+	private boolean isOutside;
 	
-	public Table(int number) {
-		this.number = number;
+	public Table(int tableNo, int noOfSeats, boolean isOutside) {
+		this.tableNo = tableNo;
+		this.noOfSeats = noOfSeats;
+		this.isOutside = isOutside;
 	}
 
-	public static Object getTable() {
-		// TODO Auto-generated method stub
-		return null;
+	public boolean isOutside() {
+		return isOutside;
+	}
+
+	public void setOutside(boolean isOutside) {
+		this.isOutside = isOutside;
+	}
+
+	public int getNoOfSeats() {
+		return noOfSeats;
+	}
+
+	public void setNoOfSeats(int noOfSeats) {
+		this.noOfSeats = noOfSeats;
+	}
+
+	public void setTableNo(int tableNo) {
+		this.tableNo = tableNo;
+	}
+	
+	public int getTableNo() {
+		return tableNo;
 	}
 }

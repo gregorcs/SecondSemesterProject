@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.Collection;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -20,6 +21,8 @@ import javax.swing.JTextField;
 
 import controller.ReservationController;
 import gui.MainFrame;
+import gui.table.TableScrollPane;
+import model.ReservationFolder.Table;
 import net.miginfocom.swing.MigLayout;
 
 public class Reserve extends JPanel {
@@ -37,6 +40,7 @@ public class Reserve extends JPanel {
 	private JTextField textNumOfPeople;
 	private JTextField textDate;
 	private JTextField textPhoneNum;
+	private JScrollPane scrollPane;
 	
 	//Panel creation
 	
@@ -84,7 +88,8 @@ public class Reserve extends JPanel {
 					int phoneNo = Integer.parseInt(textPhoneNum.getText());
 					
 					try {
-						reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo);
+						Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo);
+						updateScrollPane(tables);
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -154,7 +159,7 @@ public class Reserve extends JPanel {
 		});
 		ChooseTablePanel.add(btnSelectTable, "cell 1 1,alignx left,aligny bottom");
 		
-		JScrollPane scrollPane = new JScrollPane();
+		scrollPane = new JScrollPane();
 		ChooseTablePanel.add(scrollPane, "cell 0 2 5 1, grow");
 		
 		JList list = new JList();
@@ -184,6 +189,10 @@ public class Reserve extends JPanel {
 		layeredPane.add(panel);
 		layeredPane.repaint();
 		layeredPane.revalidate();
+	}
+	
+	public void updateScrollPane(Collection<Table> tables) {
+		scrollPane = new TableScrollPane(tables);
 	}
 	
 }
