@@ -10,8 +10,6 @@ import model.Item;
 public class ItemController {
 	
 	private DaoItemIF daoItem;
-	
-	
 
 	public ItemController() {
 		super();
