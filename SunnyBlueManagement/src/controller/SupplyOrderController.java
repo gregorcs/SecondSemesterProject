@@ -21,17 +21,29 @@ public class SupplyOrderController {
 		this.supplyOrder = new SupplyOrder();
 	}
 
-	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) throws Exception {
-		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
-		if (listOfItems.isEmpty()) {
-			throw new Exception();
-		} else {daoSupplyOrder.create(supplyOrder);}
+	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgency, listOfItems);
+
+		try {
+			if (listOfItems.isEmpty()) {
+				throw new Exception("List is empty");
+			} else {
+				daoSupplyOrder.create(supplyOrderToCreate);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
-	
-	public void createSupplyOrder() throws Exception {
-		if (supplyOrder.getListOfItems().isEmpty()) {
-			throw new Exception();
-		} else {daoSupplyOrder.create(supplyOrder);}
+
+	public void createSupplyOrder()  {
+		try {
+			if (supplyOrder.getListOfItems().isEmpty()) {
+				throw new Exception();
+			} else {daoSupplyOrder.create(supplyOrder);}	
+		} catch(Exception e) {
+			//TODO do something
+		}
 	}
 
 	public SupplyOrder getSupplyOrder() {

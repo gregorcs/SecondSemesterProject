@@ -1,10 +1,6 @@
 package dao.implementation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -32,39 +28,66 @@ public class DaoItemImplementation implements DaoItemIF {
 		System.out.println(readAllString);
 		return stmt;
 	}
+	
+	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
+		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(readItemString);
+		stmt.setString(1, Integer.toString(itemId));
+		System.out.println(readItemString);
+		return stmt;
+	}
+	
+	private PreparedStatement buildDeleteItemString(Item item) throws SQLException {
+		String deleteItemString = "DELETE FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(deleteItemString);
+		stmt.setString(1, Integer.toString(item.getItemId()));
+		System.out.println(deleteItemString);
+		return stmt;
 
-	/**
-	 * TODO return more type of exceptions here
-	 */
+	}
+	
+
 	@Override
-	public int create(Item obj) throws Exception {
+	public void create(Item obj) throws Exception {
 		PreparedStatement stmt = buildCreateString(obj);
-		int insertedKey = 1;
 
 		try {
-			ResultSet rs = stmt.executeQuery();
-			// TODO RETURN THE CREATED SUPPLY ORDER
+			stmt.executeQuery();
 
 		} catch (SQLException e) {
-			insertedKey = -1;
 			throw new Exception("SQL exception");
 		} catch (NullPointerException e) {
-			insertedKey = -2;
 			throw new Exception("Null pointer exception, possible connection problems");
 		} catch (Exception e) {
-			insertedKey = -3;
 			throw new Exception("Technical error");
 		} finally {
 			DBConnection.closeConnection();
 		}
 
-		return insertedKey;
 	}
 
 	@Override
 	public Item read(int id) throws Exception {
-		// TODO Auto-generated method stub
-		return null;
+		PreparedStatement stmt = buildReadItemString(id);
+		Item item = new Item();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				item = new Item(rs.getInt(1), rs.getString(2), rs.getString(3));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception");
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems");
+		} catch (Exception e) {
+			throw new Exception("Technical error");
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return item;
 	}
 
 	@Override
@@ -75,7 +98,20 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	@Override
 	public void delete(Item obj) throws Exception {
-		// TODO Auto-generated method stub
+		//TODO
+		PreparedStatement stmt = buildDeleteItemString(obj);
+		try {
+			stmt.executeQuery();
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception");
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems");
+		} catch (Exception e) {
+			throw new Exception("Technical error");
+		} finally {
+			DBConnection.closeConnection();
+		}
 
 	}
 
@@ -83,7 +119,6 @@ public class DaoItemImplementation implements DaoItemIF {
 	public Collection<Item> readAll() throws Exception {
 		PreparedStatement stmt = buildReadAllItemsString();
 		ArrayList<Item> itemsList = new ArrayList<>();
-		int insertedKey = 0;
 
 		try {
 			ResultSet rs = stmt.executeQuery();
@@ -93,13 +128,10 @@ public class DaoItemImplementation implements DaoItemIF {
 			}
 
 		} catch (SQLException e) {
-			insertedKey = -1;
 			throw new Exception("SQL exception");
 		} catch (NullPointerException e) {
-			insertedKey = -2;
 			throw new Exception("Null pointer exception, possible connection problems");
 		} catch (Exception e) {
-			insertedKey = -3;
 			throw new Exception("Technical error");
 		} finally {
 			DBConnection.closeConnection();

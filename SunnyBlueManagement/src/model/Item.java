@@ -19,6 +19,9 @@ public class Item {
 		this.departmentType = departmentType;
 	}
 	
+	public Item() {
+	}
+
 	public String getName() {
 		return name;
 	}

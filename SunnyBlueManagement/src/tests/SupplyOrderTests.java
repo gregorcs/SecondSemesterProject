@@ -29,16 +29,11 @@ class SupplyOrderTests {
 		Item item2 = new Item(2, "decoration", "restaurant");
 		LineItem lineItem = new LineItem(40, item);
 		LineItem lineItem2 = new LineItem(20, item2);
-		SupplyOrder supplyOrderCreated = null;
-		DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");  
 		LocalDateTime date = LocalDateTime.now();  
 		//Act
 		try {
-			resupplyOrderController.createSupplyOrder(date, "urgent", new ArrayList<LineItem>() {/**
-				 * 
-				 */
+			resupplyOrderController.createSupplyOrder(date, "urgent", new ArrayList<LineItem>() {
 				private static final long serialVersionUID = -1669512258082083176L;
-
 			{add(lineItem);
 			 add(lineItem2);}});
 		} catch (Exception e) {
@@ -47,6 +42,7 @@ class SupplyOrderTests {
 		}
 		
 		//Assert
-		assertEquals(true, true);
+		//TODO FIND BY NAME OR ID AND COMPARE
+		assertEquals(true, false);
 	}
 }

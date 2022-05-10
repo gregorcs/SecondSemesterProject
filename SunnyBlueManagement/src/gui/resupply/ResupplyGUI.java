@@ -69,7 +69,7 @@ public class ResupplyGUI extends JPanel {
 	private void constructResupplyMenuPanel() {
 		ResupplyMenuPanel = new JPanel();
 		layeredPane.add(ResupplyMenuPanel, "name_2798950394800");
-		ResupplyMenuPanel.setLayout(new MigLayout("", "[89px,center][89px][][][][][][]", "[23px][][][][][][][][][]"));
+		ResupplyMenuPanel.setLayout(new MigLayout("align 50% 50%", "[89px,center][89px][][][][][][]", "[23px][][][][][][][][][]"));
 
 		JLabel lblHeader = new JLabel("Resupply Menu");
 		ResupplyMenuPanel.add(lblHeader, "cell 0 0,alignx center");
@@ -102,7 +102,7 @@ public class ResupplyGUI extends JPanel {
 	private void constructResupplyRestaurantPanel() {
 		ResupplyRestaurantPanel = new JPanel();
 		layeredPane.add(ResupplyRestaurantPanel, "name_3150264217800");
-		ResupplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][]", "[14px][][][][][]"));
+		ResupplyRestaurantPanel.setLayout(new MigLayout("align 50% 50%", "[173.00px][113.00px,center][][][][]", "[14px][][][][][]"));
 
 		JLabel lblResupplyRestaurantHeader = new JLabel("Resupply Restaurant");
 		lblResupplyRestaurantHeader.setFont(new Font("Tahoma", Font.BOLD, 16));

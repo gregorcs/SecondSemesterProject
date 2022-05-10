@@ -34,7 +34,7 @@ public class ItemScrollPane extends JScrollPane {
 	
 	public void updateList() {
 		listRepresentation = new DefaultListModel<Item>();
-		Collection<Item> itemsFound = findAllItems();
+		Collection<Item> itemsFound = itemController.readAllItems();
 		
 		for(Item item : itemsFound) {
 			listRepresentation.addElement(item);
@@ -44,5 +44,4 @@ public class ItemScrollPane extends JScrollPane {
 	
 	public Item getSelectedItem() {return itemList.getSelectedValue();};
 	
-	private Collection<Item> findAllItems() {return itemController.readAll();}
 }

@@ -1,17 +1,15 @@
-package controller;
+package gui;
 
 import dao.DBConnection;
-import gui.MainMenu;
-
-import java.sql.SQLException;
 
 import javax.swing.*;
 
-public class CheckConnectionController extends SwingWorker<String, String>{
+//TODO put it in gui
+public class CheckConnectionWorker extends SwingWorker<String, String>{
 	
 	private MainMenu mainMenu;
 	
-	public CheckConnectionController(MainMenu mainMenu) {
+	public CheckConnectionWorker(MainMenu mainMenu) {
 		this.mainMenu = mainMenu;
 	}
 
@@ -26,11 +24,13 @@ public class CheckConnectionController extends SwingWorker<String, String>{
 					mainMenu.refresh();
 				} else {
 					mainMenu.updateConnectionOutput("failed");
+					
 					mainMenu.refresh();
 				}
-			} catch (SQLException e1) {
+			} catch (Exception e) {
 				// TODO Auto-generated catch block
-				e1.printStackTrace();
+				//TODO RETURN A MESSAGE TO THE USER
+				e.printStackTrace();
 			}
 			try {
 				Thread.sleep(15000);

@@ -6,11 +6,9 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import controller.CheckConnectionController;
 import gui.resupply.ResupplyGUI;
 
 import java.awt.Component;
@@ -33,7 +31,7 @@ public class MainMenu extends JPanel {
 	public MainMenu(final MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
 		setBounds(100, 100, 1920, 1080);
-		setLayout(new MigLayout("", "[][][center][]", "[][][][][][][][][]"));
+		setLayout(new MigLayout("align 50% 50%", "[][][center][]", "[][][][][][][][][]"));
 		//setLayout(new MigLayout("align 50% 50%"));
 		resupplyPanel = new ResupplyGUI(mainFrame);
 		
@@ -63,7 +61,7 @@ public class MainMenu extends JPanel {
 		
 		JLabel lblConnection = new JLabel("Connection:");
 		add(lblConnection, "cell 0 6");
-		CheckConnectionController connection = new CheckConnectionController(this);
+		CheckConnectionWorker connection = new CheckConnectionWorker(this);
 		connection.execute();
 		
 		lblConOutput = new JLabel("");
