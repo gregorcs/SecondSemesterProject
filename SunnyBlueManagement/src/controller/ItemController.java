@@ -12,8 +12,6 @@ public class ItemController {
 	
 	private DaoItemIF daoItem;
 	
-	
-
 	public ItemController() {
 		super();
 		this.daoItem = DaoFactory.createDaoItem();
@@ -57,6 +55,16 @@ public class ItemController {
 			e.printStackTrace();
 		}
 		// TODO SHOULD I JUST RETURN NULL HERE? IM SCARED OF IT CRASHING THE PROGRAM
+		return new ArrayList<Item>();
+	}
+	
+	public Collection<Item> readByNameItem(String name) {
+		try {
+			return daoItem.readByName(name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ArrayList<Item>();
 	}
 }

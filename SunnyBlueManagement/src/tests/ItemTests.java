@@ -2,6 +2,9 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+import java.util.Collection;
+
 import org.junit.jupiter.api.Test;
 
 import controller.ItemController;
@@ -24,6 +27,26 @@ class ItemTests {
 		assertEquals(itemName, itemFound.getName());
 	}
 	
+	@Test
+	public void itemIsCreated() {
+		//Arrange
+		ItemController itemController = new ItemController();
+		Collection<Item> itemsFound = new ArrayList<Item>();
+		String nameOfItem = "flower";
+		Item itemMatch = new Item();
+		//Act
+		itemController.createItem(nameOfItem, DepartmentEnum.KITCHEN);
+		itemController = new ItemController(); 		//gotta refresh the connection here
+		itemsFound = itemController.readByNameItem(nameOfItem);
+		
+		for (Item temp : itemsFound) {
+			if (temp.getName().equals(nameOfItem)) {
+				itemMatch = temp;
+			}
+		}
+		//Assert
+		assertEquals(nameOfItem, itemMatch.getName());
+	}
 	
 	public void itemIsDeleted() {
 		//Arrange

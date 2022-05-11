@@ -89,7 +89,7 @@ public class DBConnection {
     	try {
 			return con.isValid(3000);
 		} catch (SQLException e) {
-			throw new Exception("Failed to check connection");
+			throw new Exception("Failed to check connection" + e);
 		}
     }
     

@@ -24,12 +24,13 @@ public class CheckConnectionWorker extends SwingWorker<String, String>{
 					mainMenu.refresh();
 				} else {
 					mainMenu.updateConnectionOutput("failed");
-					
 					mainMenu.refresh();
 				}
 			} catch (Exception e) {
 				// TODO Auto-generated catch block
 				//TODO RETURN A MESSAGE TO THE USER
+				mainMenu.updateConnectionOutput("failed");
+				mainMenu.refresh();
 				e.printStackTrace();
 			}
 			try {

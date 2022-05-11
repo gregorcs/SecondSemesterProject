@@ -47,6 +47,14 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	}
 	
+	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
+		String readByNameItemString = "SELECT * FROM Item WHERE name LIKE  ?";
+		PreparedStatement stmt = con.prepareStatement(readByNameItemString);
+		stmt.setString(1, "%" + name + "%");
+		System.out.println(readByNameItemString);
+		return stmt;
+	}
+	
 
 	@Override
 	public void create(Item obj) throws Exception {
@@ -120,6 +128,30 @@ public class DaoItemImplementation implements DaoItemIF {
 	@Override
 	public Collection<Item> readAll() throws Exception {
 		PreparedStatement stmt = buildReadAllItemsString();
+		ArrayList<Item> itemsList = new ArrayList<>();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3))));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return itemsList;
+	}
+
+	@Override
+	public Collection<Item> readByName(String name) throws Exception {
+		PreparedStatement stmt = buildReadByNameItemString(name);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {

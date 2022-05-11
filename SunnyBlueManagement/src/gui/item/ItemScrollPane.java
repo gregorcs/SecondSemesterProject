@@ -29,12 +29,12 @@ public class ItemScrollPane extends JScrollPane {
 	public void initializeList() {
 		ItemListCellRenderer cellRenderer = new ItemListCellRenderer();
 		itemList.setCellRenderer(cellRenderer);
-		updateList();
+		updateList(itemController.readAllItems());
 	}
 	
-	public void updateList() {
+	public void updateList(Collection<Item> listToShow) {
 		listRepresentation = new DefaultListModel<Item>();
-		Collection<Item> itemsFound = itemController.readAllItems();
+		Collection<Item> itemsFound = listToShow;
 		
 		for(Item item : itemsFound) {
 			listRepresentation.addElement(item);

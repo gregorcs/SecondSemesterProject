@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import gui.resupply.ResupplyGUI;
+import gui.resupply.SupplyGUI;
 
 import java.awt.Component;
 import javax.swing.Box;
@@ -22,7 +22,7 @@ public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
 	private MainFrame mainFrame;
-	private ResupplyGUI resupplyPanel;
+	private SupplyGUI supplyPanel;
 	private JLabel lblConOutput;
 
 	/**
@@ -33,7 +33,7 @@ public class MainMenu extends JPanel {
 		setBounds(100, 100, 1920, 1080);
 		setLayout(new MigLayout("align 50% 50%", "[][][center][]", "[][][][][][][][][]"));
 		//setLayout(new MigLayout("align 50% 50%"));
-		resupplyPanel = new ResupplyGUI(mainFrame);
+		supplyPanel = new SupplyGUI(mainFrame);
 		
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -51,7 +51,7 @@ public class MainMenu extends JPanel {
 		JButton btnResupply = new JButton("Resupply ");
 		btnResupply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainFrame.switchPanels(resupplyPanel);
+				mainFrame.switchPanels(supplyPanel);
 			}
 		});
 		add(btnResupply, "cell 2 4");
