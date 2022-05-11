@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoItemIF;
+import model.DepartmentEnum;
 import model.Item;
 
 public class DaoItemImplementation implements DaoItemIF {
@@ -17,7 +18,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 		PreparedStatement stmt = con.prepareStatement(createItemString, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, item.getName());
-		stmt.setString(2, item.getDepartmentType());
+		stmt.setString(2, item.getDepartmentType().toString());
 		System.out.println(createItemString);
 		return stmt;
 	}
@@ -75,7 +76,8 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				item = new Item(rs.getInt(1), rs.getString(2), rs.getString(3));
+				//TODO ADD SOME ERROR HANDLING IN HERE FOR PARSING THE STRING INTO THE DEPARTMENT ENUM
+				item = new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3)));
 			}
 
 		} catch (SQLException e) {
@@ -124,7 +126,7 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.valueOf(rs.getString(3))));
 			}
 
 		} catch (SQLException e) {

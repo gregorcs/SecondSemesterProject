@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import dao.DaoFactory;
 import dao.interfaces.DaoItemIF;
+import model.DepartmentEnum;
 import model.Item;
 
 public class ItemController {
@@ -18,7 +19,7 @@ public class ItemController {
 		this.daoItem = DaoFactory.createDaoItem();
 	}
 
-	public void createItem(String name, String departmentType) {
+	public void createItem(String name, DepartmentEnum departmentType) {
 		Item itemToCreate = new Item(name, departmentType);
 		try {
 			daoItem.create(itemToCreate);

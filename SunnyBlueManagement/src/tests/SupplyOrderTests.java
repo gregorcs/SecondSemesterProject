@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import controller.SupplyOrderController;
 import dao.DBConnection;
+import model.DepartmentEnum;
 import model.Item;
 import model.LineItem;
 import model.SupplyOrder;
@@ -25,8 +26,8 @@ class SupplyOrderTests {
 	public void SupplyOrderWasCreated() {
 		//Arrange
 		SupplyOrderController resupplyOrderController = new SupplyOrderController();
-		Item item = new Item(1, "potato", "restaurant");
-		Item item2 = new Item(2, "decoration", "restaurant");
+		Item item = new Item(1, "potato", DepartmentEnum.RESTAURANT);
+		Item item2 = new Item(2, "decoration", DepartmentEnum.RESTAURANT);
 		LineItem lineItem = new LineItem(40, item);
 		LineItem lineItem2 = new LineItem(20, item2);
 		LocalDateTime date = LocalDateTime.now();  

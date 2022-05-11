@@ -23,7 +23,7 @@ class ItemTests {
 		assertEquals(itemName, itemFound.getName());
 	}
 	
-	@Test
+	
 	public void itemIsDeleted() {
 		//Arrange
 		ItemController itemController = new ItemController();
