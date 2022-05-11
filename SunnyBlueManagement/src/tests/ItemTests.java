@@ -37,7 +37,7 @@ class ItemTests {
 		//Act
 		itemController.createItem(nameOfItem, DepartmentEnum.KITCHEN);
 		itemController = new ItemController(); 		//gotta refresh the connection here
-		itemsFound = itemController.readByNameItem(nameOfItem);
+		itemsFound = itemController.readItemByNameOrDepartment(nameOfItem, "ANY");
 		
 		for (Item temp : itemsFound) {
 			if (temp.getName().equals(nameOfItem)) {

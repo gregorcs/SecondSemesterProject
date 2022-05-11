@@ -58,9 +58,14 @@ public class ItemController {
 		return new ArrayList<Item>();
 	}
 	
-	public Collection<Item> readByNameItem(String name) {
+	public Collection<Item> readItemByNameOrDepartment(String name, String departmentToConvert) {
+		DepartmentEnum departmentEnum = DepartmentEnum.fromString(departmentToConvert);
 		try {
-			return daoItem.readByName(name);
+			if (departmentEnum.equals(DepartmentEnum.ANY))
+				return daoItem.readByName(name);
+			else {
+				return daoItem.readByNameAndDepartment(name, departmentEnum);
+			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

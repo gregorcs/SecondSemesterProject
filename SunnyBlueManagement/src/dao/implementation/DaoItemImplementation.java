@@ -55,6 +55,15 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
+	private PreparedStatement buildReadByNameAndDepartment(String name, DepartmentEnum departmentEnum) throws SQLException {
+		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
+		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		stmt.setString(1, "%" + name + "%");
+		stmt.setString(2, departmentEnum.toString());
+		System.out.println(readByDepartmentItemString);
+		return stmt;
+	}
+	
 
 	@Override
 	public void create(Item obj) throws Exception {
@@ -173,4 +182,27 @@ public class DaoItemImplementation implements DaoItemIF {
 		return itemsList;
 	}
 
+	@Override
+	public Collection<Item> readByNameAndDepartment(String name, DepartmentEnum departmentEnum) throws Exception {
+		PreparedStatement stmt = buildReadByNameAndDepartment(name, departmentEnum);
+		ArrayList<Item> itemsList = new ArrayList<>();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3))));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return itemsList;
+	}
 }

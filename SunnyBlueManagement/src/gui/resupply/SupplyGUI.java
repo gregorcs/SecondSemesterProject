@@ -53,10 +53,7 @@ public class SupplyGUI extends JPanel {
 		this.supplyOrderController = new SupplyOrderController();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		constructLayeredPane();
-		constructSupplyMenuPanel();
 		constructSupplyRestaurantPanel();
-		constructResupplyKitchenPanel();
-
 	}
 
 	public void switchSupplyPanels(JPanel panel) {
@@ -72,9 +69,6 @@ public class SupplyGUI extends JPanel {
 		layeredPane.setLayout(new CardLayout(0, 0));
 	}
 	
-	private void constructSupplyMenuPanel() {
-	}
-	
 	private void constructSupplyRestaurantPanel() {
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
@@ -86,24 +80,19 @@ public class SupplyGUI extends JPanel {
 
 		JLabel lblEnterProduct = new JLabel("Enter product:");
 		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 0 1,alignx left,aligny center");
+		
+		JLabel lblCategory = new JLabel("Filter:");
+		supplyRestaurantPanel.add(lblCategory, "flowx,cell 1 1");
 
 		JButton btnSelectItem = new JButton("Search");
 		btnSelectItem.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				itemController = new ItemController();
-				readItemsByName();
+				readItems();
 			}
 		});
-		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 1 1,alignx left,aligny bottom");
-		
-		JLabel lblCategory = new JLabel("Filter:");
-		supplyRestaurantPanel.add(lblCategory, "cell 2 1");
-		
-		//TODO SHOW ENUMS IN THIS, MAKE A ANY CHOICE FOR ALL THE ENUMS TO BE SEARCHED
-		choiceDepartments = new Choice();
-		supplyRestaurantPanel.add(choiceDepartments, "cell 3 1");
-		constructChoiceDepartment();	//initialize the various strings inside it
+		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 5 1,growx,aligny bottom");
 
 		scrollPane = new ItemScrollPane();
 		supplyRestaurantPanel.add(scrollPane, "cell 0 2 6 1,grow");
@@ -144,11 +133,16 @@ public class SupplyGUI extends JPanel {
 		textFieldEnterQuantity = new JTextField();
 		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 4");
 		textFieldEnterQuantity.setColumns(10);
+		
+		//TODO SHOW ENUMS IN THIS, MAKE A ANY CHOICE FOR ALL THE ENUMS TO BE SEARCHED
+		choiceDepartments = new Choice();
+		supplyRestaurantPanel.add(choiceDepartments, "cell 1 1");
+		constructChoiceDepartment();	//initialize the various strings inside it
 
 	}
 
-	private void readItemsByName() {
-		Collection<Item> itemsFound = itemController.readByNameItem(getNameFromSearchTextField());
+	private void readItems() {
+		Collection<Item> itemsFound = itemController.readItemByNameOrDepartment(getNameFromSearchTextField(), getDepartmentFromChoice());
 		scrollPane.updateList(itemsFound);
 	}
 	
@@ -157,9 +151,6 @@ public class SupplyGUI extends JPanel {
 			choiceDepartments.add(tempEnum.toString());
 		}
 	}
-
-	private void constructResupplyKitchenPanel() {
-	}
 	
 	private int getQuantityFromTextField() throws Exception {
 		return Integer.parseInt(textFieldEnterQuantity.getText());
@@ -167,6 +158,11 @@ public class SupplyGUI extends JPanel {
 	
 	private String getNameFromSearchTextField() {
 		return textFieldSearch.getText();
+	}
+	
+	private String getDepartmentFromChoice() {
+		//getItem can only return type of string, so it will have to get converted back to an enum elsewhere
+		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex());
 	}
 	
 	private void addLineItems() {

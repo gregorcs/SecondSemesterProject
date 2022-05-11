@@ -1,6 +1,7 @@
 package model;
 
 public enum DepartmentEnum {
+	ANY("ANY"),
     RESTAURANT("RESTAURANT"),
     KITCHEN("KITCHEN");
 	
