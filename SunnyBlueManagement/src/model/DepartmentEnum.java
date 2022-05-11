@@ -15,7 +15,7 @@ public enum DepartmentEnum {
     }
 	
 	/**
-	 * used for finding out what enum the input text containts, regardless of case
+	 * used for finding out what enum the input text contains, regardless of case
 	 * @param text
 	 * @return
 	 */

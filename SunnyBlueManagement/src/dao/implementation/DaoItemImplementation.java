@@ -56,11 +56,11 @@ public class DaoItemImplementation implements DaoItemIF {
 			stmt.executeQuery();
 
 		} catch (SQLException e) {
-			throw new Exception("SQL exception");
+			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems");
+			throw new Exception("Null pointer exception, possible connection problems " + e);
 		} catch (Exception e) {
-			throw new Exception("Technical error");
+			throw new Exception("Technical error " + e);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -81,11 +81,11 @@ public class DaoItemImplementation implements DaoItemIF {
 			}
 
 		} catch (SQLException e) {
-			throw new Exception("SQL exception");
+			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems");
+			throw new Exception("Null pointer exception, possible connection problems " + e);
 		} catch (Exception e) {
-			throw new Exception("Technical error");
+			throw new Exception("Technical error " + e);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -106,11 +106,11 @@ public class DaoItemImplementation implements DaoItemIF {
 			stmt.executeQuery();
 
 		} catch (SQLException e) {
-			throw new Exception("SQL exception");
+			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems");
+			throw new Exception("Null pointer exception, possible connection problems " + e);
 		} catch (Exception e) {
-			throw new Exception("Technical error");
+			throw new Exception("Technical error " + e);
 		} finally {
 			DBConnection.closeConnection();
 		}
@@ -126,15 +126,15 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.valueOf(rs.getString(3))));
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3))));
 			}
 
 		} catch (SQLException e) {
-			throw new Exception("SQL exception");
+			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems");
+			throw new Exception("Null pointer exception, possible connection problems " + e);
 		} catch (Exception e) {
-			throw new Exception("Technical error");
+			throw new Exception("Technical error " + e);
 		} finally {
 			DBConnection.closeConnection();
 		}
