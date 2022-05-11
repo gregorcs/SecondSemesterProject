@@ -6,6 +6,8 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.Choice;
+
 import java.util.Collection;
 
 import javax.swing.Box;
@@ -19,12 +21,12 @@ import javax.swing.JTextField;
 
 import controller.ItemController;
 import controller.SupplyOrderController;
-import gui.MainFrame;
-import gui.item.ItemScrollPane;
+import model.DepartmentEnum;
 import model.Item;
 import model.LineItem;
+import gui.MainFrame;
+import gui.item.ItemScrollPane;
 import net.miginfocom.swing.MigLayout;
-import java.awt.Choice;
 
 public class SupplyGUI extends JPanel {
 
@@ -37,11 +39,10 @@ public class SupplyGUI extends JPanel {
 	private ItemController itemController;
 	private JLayeredPane layeredPane;
 	private JPanel supplyRestaurantPanel;
-	private JPanel ResupplyKitchenPanel;
-	private JPanel supplyMenuPanel;
 	private JTextField textFieldSearch;
 
 	private ItemScrollPane scrollPane;
+	private Choice choiceDepartments;
 	private JTextField textFieldEnterQuantity;
 
 	/**
@@ -72,36 +73,6 @@ public class SupplyGUI extends JPanel {
 	}
 	
 	private void constructSupplyMenuPanel() {
-		supplyMenuPanel = new JPanel();
-		layeredPane.add(supplyMenuPanel, "name_2798950394800");
-		supplyMenuPanel.setLayout(new MigLayout("", "[89px,center][89px][][][][][][]", "[23px][][][][][][][][][]"));
-
-		JLabel lblHeader = new JLabel("Resupply Menu");
-		supplyMenuPanel.add(lblHeader, "cell 0 0,alignx center");
-
-		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		supplyMenuPanel.add(rigidArea, "cell 0 1,alignx center");
-
-		JButton btnResupplyRestaurant = new JButton("Resupply restaurant");
-		btnResupplyRestaurant.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				switchSupplyPanels(supplyRestaurantPanel);
-			}
-		});
-		supplyMenuPanel.add(btnResupplyRestaurant, "cell 0 2,alignx center,aligny top");
-
-		JButton btnResupplyKitchen = new JButton("Resupply kitchen");
-		supplyMenuPanel.add(btnResupplyKitchen, "cell 0 3,alignx center,aligny top");
-
-		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				mainFrame.backToMainMenu();
-			}
-		});
-		supplyMenuPanel.add(btnBack, "cell 7 9");
 	}
 	
 	private void constructSupplyRestaurantPanel() {
@@ -109,9 +80,9 @@ public class SupplyGUI extends JPanel {
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
 		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][]", "[14px][][][][][]"));
 
-		JLabel lblResupplyRestaurantHeader = new JLabel("Resupply Restaurant");
-		lblResupplyRestaurantHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		supplyRestaurantPanel.add(lblResupplyRestaurantHeader, "cell 0 0,alignx left,aligny top");
+		JLabel lblResupplyHeader = new JLabel("Resupply ");
+		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
+		supplyRestaurantPanel.add(lblResupplyHeader, "cell 0 0,alignx left,aligny top");
 
 		JLabel lblEnterProduct = new JLabel("Enter product:");
 		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 0 1,alignx left,aligny center");
@@ -126,12 +97,13 @@ public class SupplyGUI extends JPanel {
 		});
 		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 1 1,alignx left,aligny bottom");
 		
-		JLabel lblCategory = new JLabel("In department:");
+		JLabel lblCategory = new JLabel("Filter:");
 		supplyRestaurantPanel.add(lblCategory, "cell 2 1");
 		
 		//TODO SHOW ENUMS IN THIS, MAKE A ANY CHOICE FOR ALL THE ENUMS TO BE SEARCHED
-		Choice choiceDepartments = new Choice();
+		choiceDepartments = new Choice();
 		supplyRestaurantPanel.add(choiceDepartments, "cell 3 1");
+		constructChoiceDepartment();	//initialize the various strings inside it
 
 		scrollPane = new ItemScrollPane();
 		supplyRestaurantPanel.add(scrollPane, "cell 0 2 6 1,grow");
@@ -144,7 +116,7 @@ public class SupplyGUI extends JPanel {
 		btnGoBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				switchSupplyPanels(supplyMenuPanel);
+				//switchSupplyPanels(supplyMenuPanel);
 			}
 		});
 		
@@ -163,15 +135,15 @@ public class SupplyGUI extends JPanel {
 			}
 		});
 		
-				JLabel lblEnterQuantity = new JLabel("Enter quantity:");
-				supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 0 4");
+		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
+		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 0 4");
 		supplyRestaurantPanel.add(btnProceed, "cell 5 5");
 
 		supplyRestaurantPanel.add(btnGoBack, "cell 6 5,growx,aligny bottom");
-				
-						textFieldEnterQuantity = new JTextField();
-						supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 4");
-						textFieldEnterQuantity.setColumns(10);
+
+		textFieldEnterQuantity = new JTextField();
+		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 4");
+		textFieldEnterQuantity.setColumns(10);
 
 	}
 
@@ -179,10 +151,14 @@ public class SupplyGUI extends JPanel {
 		Collection<Item> itemsFound = itemController.readByNameItem(getNameFromSearchTextField());
 		scrollPane.updateList(itemsFound);
 	}
+	
+	private void constructChoiceDepartment() {
+		for (DepartmentEnum tempEnum : DepartmentEnum.values()) {
+			choiceDepartments.add(tempEnum.toString());
+		}
+	}
 
 	private void constructResupplyKitchenPanel() {
-		ResupplyKitchenPanel = new JPanel();
-		layeredPane.add(ResupplyKitchenPanel, "name_3157677484000");
 	}
 	
 	private int getQuantityFromTextField() throws Exception {
