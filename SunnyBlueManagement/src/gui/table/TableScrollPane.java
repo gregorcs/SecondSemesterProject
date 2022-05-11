@@ -18,16 +18,15 @@ public class TableScrollPane extends JScrollPane{
 	private JList<Table> tableList;
 	private DefaultListModel<Table> listRepresentation;
 	
-	public TableScrollPane(Collection<Table> tables) {
+	public TableScrollPane() {
 		tableList = new JList<Table>();
 		setViewportView(tableList);
 		//setting style
 		tableList.setFixedCellHeight(20);
-		initializeList(tables);
 		//TODO initialize list here
 	}
 	
-	private void initializeList(Collection<Table> arrayToShow) {
+	public void initializeList(Collection<Table> arrayToShow) {
 		TableListCellRenderer cellRenderer = new TableListCellRenderer();
 		tableList.setCellRenderer(cellRenderer);
 		updateList(arrayToShow);

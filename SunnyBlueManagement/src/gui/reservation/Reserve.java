@@ -40,7 +40,7 @@ public class Reserve extends JPanel {
 	private JTextField textNumOfPeople;
 	private JTextField textDate;
 	private JTextField textPhoneNum;
-	private JScrollPane scrollPane;
+	private TableScrollPane scrollPane;
 	
 	//Panel creation
 	
@@ -72,6 +72,8 @@ public class Reserve extends JPanel {
 			}
 		});
 		
+		scrollPane = new TableScrollPane();
+		
 		JButton btnProceed = new JButton("Proceed");
 		btnProceed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -79,7 +81,6 @@ public class Reserve extends JPanel {
 			        JOptionPane.showMessageDialog(null, "Please enter all details", "Missing details", JOptionPane.ERROR_MESSAGE);
 				}
 				else {
-					switchReservePanels(ChooseTablePanel);
 					//GET ALL TABLES WITH DETAILS
 					int numOfPeople = Integer.parseInt(textNumOfPeople.getText());
 					String date = textDate.getText();
@@ -89,7 +90,10 @@ public class Reserve extends JPanel {
 					
 					try {
 						Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo);
+						switchReservePanels(ChooseTablePanel);
 						updateScrollPane(tables);
+						
+
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -158,12 +162,8 @@ public class Reserve extends JPanel {
 			}
 		});
 		ChooseTablePanel.add(btnSelectTable, "cell 1 1,alignx left,aligny bottom");
-		
-		scrollPane = new JScrollPane();
+				
 		ChooseTablePanel.add(scrollPane, "cell 0 2 5 1, grow");
-		
-		JList list = new JList();
-		scrollPane.setViewportView(list);
 		
 		textField = new JTextField();
 		ChooseTablePanel.add(textField, "cell 0 1,growx,aligny center");
@@ -192,7 +192,7 @@ public class Reserve extends JPanel {
 	}
 	
 	public void updateScrollPane(Collection<Table> tables) {
-		scrollPane = new TableScrollPane(tables);
+		scrollPane.initializeList(tables);
 	}
 	
 }
