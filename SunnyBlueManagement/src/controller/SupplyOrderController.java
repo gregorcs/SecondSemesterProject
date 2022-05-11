@@ -31,18 +31,21 @@ public class SupplyOrderController {
 				daoSupplyOrder.create(supplyOrderToCreate);
 			}
 		} catch (Exception e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
 
-	public void createSupplyOrder()  {
+	public boolean createSupplyOrder() {
 		try {
 			if (supplyOrder.getListOfItems().isEmpty()) {
-				throw new Exception();
-			} else {daoSupplyOrder.create(supplyOrder);}	
-		} catch(Exception e) {
-			//TODO do something
+				throw new Exception("List is empty");
+			} else {
+				daoSupplyOrder.create(supplyOrder);
+				return false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
 	}
 

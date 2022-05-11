@@ -192,18 +192,15 @@ public class SupplyGUI extends JPanel {
 	private void finalizeOrder() {	
 		String messageToShow = createOrderReceipt();
 		JOptionPane.showMessageDialog(mainFrame, messageToShow);
-		boolean orderSuccess = true;
+		//TODO FIX URGENCY
 		supplyOrderController.getSupplyOrder().setUrgency("low");
-		try {
-			supplyOrderController.createSupplyOrder();
-		} catch (Exception e) {
-			orderSuccess = false;
-			JOptionPane.showMessageDialog(mainFrame, "Order creation failed");
-			e.printStackTrace();
-		}
-		if (orderSuccess) {
+		//TODO is this correct the best way?
+		if (supplyOrderController.createSupplyOrder()) {
 			supplyOrderController.emptySupplyOrder();
 			JOptionPane.showMessageDialog(mainFrame, "Order was created");
+		} else {
+			supplyOrderController.emptySupplyOrder();
+			JOptionPane.showMessageDialog(mainFrame, "Order creation failed");
 		}
 	}
 	
