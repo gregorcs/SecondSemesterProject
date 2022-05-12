@@ -4,16 +4,16 @@ public class Item {
 	
 	private int itemId;
 	private String name;
-	private DepartmentEnum departmentType;
+	private String departmentType;
 	
-	public Item(int itemId, String name, DepartmentEnum departmentType) {
+	public Item(int itemId, String name, String departmentType) {
 		super();
 		this.itemId = itemId;
 		this.name = name;
 		this.departmentType = departmentType;
 	}
 
-	public Item(String name, DepartmentEnum departmentType) {
+	public Item(String name, String departmentType) {
 		super();
 		this.name = name;
 		this.departmentType = departmentType;
@@ -28,10 +28,10 @@ public class Item {
 	public void setName(String name) {
 		this.name = name;
 	}
-	public DepartmentEnum getDepartmentType() {
+	public String getDepartmentType() {
 		return departmentType;
 	}
-	public void setDepartmentType(DepartmentEnum departmentType) {
+	public void setDepartmentType(String departmentType) {
 		this.departmentType = departmentType;
 	}
 

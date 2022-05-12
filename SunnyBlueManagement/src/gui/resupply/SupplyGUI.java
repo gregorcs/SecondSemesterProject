@@ -21,7 +21,6 @@ import javax.swing.JTextField;
 
 import controller.ItemController;
 import controller.SupplyOrderController;
-import model.DepartmentEnum;
 import model.Item;
 import model.LineItem;
 import gui.MainFrame;
@@ -147,9 +146,11 @@ public class SupplyGUI extends JPanel {
 	}
 	
 	private void constructChoiceDepartment() {
-		for (DepartmentEnum tempEnum : DepartmentEnum.values()) {
-			choiceDepartments.add(tempEnum.toString());
+		itemController = new ItemController();
+		for(String department: itemController.getAllDepartmentTypes()) {
+			choiceDepartments.add(department);
 		}
+		choiceDepartments.add("any");
 	}
 	
 	private int getQuantityFromTextField() throws Exception {

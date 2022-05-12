@@ -1,13 +1,13 @@
 package model;
 
-public enum DepartmentEnum {
+public enum UrgencyEnum {
 	ANY("ANY"),
     RESTAURANT("RESTAURANT"),
     KITCHEN("KITCHEN");
 	
     private String name;
 
-    DepartmentEnum(String text) {
+    UrgencyEnum(String text) {
         this.name = text;
     }
 
@@ -20,8 +20,8 @@ public enum DepartmentEnum {
 	 * @param text
 	 * @return
 	 */
-	public static DepartmentEnum fromString(String text) {
-	    for (DepartmentEnum tempEnum : DepartmentEnum.values()) {
+	public static UrgencyEnum fromString(String text) {
+	    for (UrgencyEnum tempEnum : UrgencyEnum.values()) {
 	        if (tempEnum.name.equalsIgnoreCase(text)) {
 	            return tempEnum;
 	        }

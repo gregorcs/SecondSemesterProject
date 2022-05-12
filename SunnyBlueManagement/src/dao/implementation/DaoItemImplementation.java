@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoItemIF;
-import model.DepartmentEnum;
 import model.Item;
 
 public class DaoItemImplementation implements DaoItemIF {
@@ -18,7 +17,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 		PreparedStatement stmt = con.prepareStatement(createItemString, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, item.getName());
-		stmt.setString(2, item.getDepartmentType().toString());
+		stmt.setString(2, item.getDepartmentType());
 		System.out.println(createItemString);
 		return stmt;
 	}
@@ -55,11 +54,11 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
-	private PreparedStatement buildReadByNameAndDepartment(String name, DepartmentEnum departmentEnum) throws SQLException {
+	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
 		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
 		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
 		stmt.setString(1, "%" + name + "%");
-		stmt.setString(2, departmentEnum.toString());
+		stmt.setString(2, department);
 		System.out.println(readByDepartmentItemString);
 		return stmt;
 	}
@@ -94,7 +93,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 			if (rs.next()) {
 				//TODO ADD SOME ERROR HANDLING IN HERE FOR PARSING THE STRING INTO THE DEPARTMENT ENUM
-				item = new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3)));
+				item = new Item(rs.getInt(1), rs.getString(2), rs.getString(3));
 			}
 
 		} catch (SQLException e) {
@@ -143,7 +142,7 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3))));
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
 
 		} catch (SQLException e) {
@@ -167,7 +166,7 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3))));
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
 
 		} catch (SQLException e) {
@@ -183,7 +182,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	}
 
 	@Override
-	public Collection<Item> readByNameAndDepartment(String name, DepartmentEnum departmentEnum) throws Exception {
+	public Collection<Item> readByNameAndDepartment(String name, String departmentEnum) throws Exception {
 		PreparedStatement stmt = buildReadByNameAndDepartment(name, departmentEnum);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
@@ -191,7 +190,7 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), DepartmentEnum.fromString(rs.getString(3))));
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
 
 		} catch (SQLException e) {

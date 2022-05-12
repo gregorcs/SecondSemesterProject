@@ -9,7 +9,6 @@ import org.junit.jupiter.api.Test;
 
 import controller.ItemController;
 import dao.DBConnection;
-import model.DepartmentEnum;
 import model.Item;
 
 class ItemTests {
@@ -35,7 +34,7 @@ class ItemTests {
 		String nameOfItem = "flower";
 		Item itemMatch = new Item();
 		//Act
-		itemController.createItem(nameOfItem, DepartmentEnum.KITCHEN);
+		itemController.createItem(nameOfItem, "kitchen");
 		itemController = new ItemController(); 		//gotta refresh the connection here
 		itemsFound = itemController.readItemByNameOrDepartment(nameOfItem, "ANY");
 		
@@ -56,16 +55,4 @@ class ItemTests {
 		//Assert
 		//TODO FINISH IT
 	}
-	
-	@Test
-	public void DepartmentEnumWorks() {
-		//Arrange
-		//Act
-		DepartmentEnum enumFoundKitchen = DepartmentEnum.fromString("kitChen");
-		DepartmentEnum enumFoundRestaurant = DepartmentEnum.fromString("ReStaUrant");
-		//Assert
-		assertEquals(DepartmentEnum.KITCHEN, enumFoundKitchen);
-		assertEquals(DepartmentEnum.RESTAURANT, enumFoundRestaurant);
-	}
-
 }

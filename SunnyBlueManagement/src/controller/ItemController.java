@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import dao.DaoFactory;
 import dao.interfaces.DaoItemIF;
-import model.DepartmentEnum;
 import model.Item;
 
 public class ItemController {
@@ -17,7 +16,7 @@ public class ItemController {
 		this.daoItem = DaoFactory.createDaoItem();
 	}
 
-	public void createItem(String name, DepartmentEnum departmentType) {
+	public void createItem(String name, String departmentType) {
 		Item itemToCreate = new Item(name, departmentType);
 		try {
 			daoItem.create(itemToCreate);
@@ -49,7 +48,10 @@ public class ItemController {
 	
 	public Collection<Item> readAllItems() {
 		try {
-			return daoItem.readAll();
+			Collection<Item> itemList;
+			itemList = daoItem.readAll();
+			itemList.forEach(item -> item.setDepartmentType(item.getDepartmentType().toLowerCase()));
+			return itemList;
 		} catch (Exception e) {
 			// TODO PRINT TO USER
 			e.printStackTrace();
@@ -58,18 +60,28 @@ public class ItemController {
 		return new ArrayList<Item>();
 	}
 	
-	public Collection<Item> readItemByNameOrDepartment(String name, String departmentToConvert) {
-		DepartmentEnum departmentEnum = DepartmentEnum.fromString(departmentToConvert);
+	public Collection<Item> readItemByNameOrDepartment(String name, String department) {
 		try {
-			if (departmentEnum.equals(DepartmentEnum.ANY))
+			if (department.equals("any"))
 				return daoItem.readByName(name);
 			else {
-				return daoItem.readByNameAndDepartment(name, departmentEnum);
+				return daoItem.readByNameAndDepartment(name, department);
 			}
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return new ArrayList<Item>();
+	}
+	
+	public Collection<String> getAllDepartmentTypes() {
+		Collection<String> departmentsList = new ArrayList<String>();
+		for (Item item : readAllItems()) {
+			if (!departmentsList.contains(item.getDepartmentType())) {
+				System.out.println(item.getDepartmentType());
+				departmentsList.add(item.getDepartmentType());
+			}
+		}
+		return departmentsList;
 	}
 }
