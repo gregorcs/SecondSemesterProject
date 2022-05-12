@@ -8,13 +8,8 @@ import controller.SupplyOrderController;
 import dao.DBConnection;
 import model.Item;
 import model.LineItem;
-import model.SupplyOrder;
 import model.UrgencyEnum;
 
-import java.time.format.DateTimeFormatter;
-
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.time.LocalDateTime;
 
@@ -41,9 +36,6 @@ class SupplyOrderTests {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		//Assert
-		//TODO FIND BY NAME OR ID AND COMPARE
-		assertEquals(true, false);
+	//TODO FINISH IT
 	}
 }

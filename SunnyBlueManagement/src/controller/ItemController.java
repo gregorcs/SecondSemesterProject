@@ -84,7 +84,6 @@ public class ItemController {
 		Collection<String> departmentsList = new ArrayList<String>();
 		for (Item item : readAllItems()) {
 			if (!departmentsList.contains(item.getDepartmentType())) {
-				System.out.println(item.getDepartmentType());
 				departmentsList.add(item.getDepartmentType());
 			}
 		}

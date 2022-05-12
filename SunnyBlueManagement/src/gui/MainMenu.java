@@ -21,7 +21,6 @@ import java.awt.event.ActionEvent;
 public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
-	private MainFrame mainFrame;
 	private SupplyGUI supplyPanel;
 	private JLabel lblConOutput;
 
@@ -29,7 +28,6 @@ public class MainMenu extends JPanel {
 	 * Create the panel.
 	 */
 	public MainMenu(final MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
 		setBounds(100, 100, 1920, 1080);
 		setLayout(new MigLayout("align 50% 50%", "[][][center][]", "[][][][][][][][][]"));
 		//setLayout(new MigLayout("align 50% 50%"));

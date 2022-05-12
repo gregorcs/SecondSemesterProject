@@ -1,8 +1,6 @@
 package gui.resupply;
 
 import java.awt.CardLayout;
-import java.awt.Component;
-import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -10,7 +8,6 @@ import java.awt.Choice;
 
 import java.util.Collection;
 
-import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
@@ -28,6 +25,9 @@ import model.UrgencyEnum;
 import gui.MainFrame;
 import gui.item.ItemScrollPane;
 import net.miginfocom.swing.MigLayout;
+import java.awt.Component;
+import javax.swing.Box;
+import java.awt.Dimension;
 
 public class SupplyGUI extends JPanel {
 
@@ -69,12 +69,13 @@ public class SupplyGUI extends JPanel {
 		add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 	}
-	
+
 	private void constructSupplyRestaurantPanel() {
 		supplyOrderController = new SupplyOrderController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
-		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][]", "[14px][][][][][]"));
+		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][][][][]",
+				"[14px][][][41.00][40.00][39.00][36.00][68.00][][][]"));
 
 		JLabel lblResupplyHeader = new JLabel("Resupply ");
 		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -82,7 +83,7 @@ public class SupplyGUI extends JPanel {
 
 		JLabel lblEnterProduct = new JLabel("Enter product:");
 		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 0 1,alignx left,aligny center");
-		
+
 		JLabel lblCategory = new JLabel("Filter:");
 		supplyRestaurantPanel.add(lblCategory, "flowx,cell 1 1");
 
@@ -96,50 +97,56 @@ public class SupplyGUI extends JPanel {
 		});
 		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 5 1,growx,aligny bottom");
 
+		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
+		supplyRestaurantPanel.add(rigidArea_1, "cell 0 2");
+
 		scrollPane = new ItemScrollPane();
-		supplyRestaurantPanel.add(scrollPane, "cell 0 2 6 1,grow");
+		supplyRestaurantPanel.add(scrollPane, "cell 0 3 6 5,grow");
 
 		textFieldSearch = new JTextField();
 		supplyRestaurantPanel.add(textFieldSearch, "cell 0 1,growx,aligny center");
 		textFieldSearch.setColumns(10);
 
-		JButton btnGoBack = new JButton("Back");
-		btnGoBack.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				//switchSupplyPanels(supplyMenuPanel);
-			}
-		});
-		
+		// TODO SHOW ENUMS IN THIS, MAKE A ANY CHOICE FOR ALL THE ENUMS TO BE SEARCHED
+		choiceDepartments = new Choice();
+		supplyRestaurantPanel.add(choiceDepartments, "cell 1 1,growx");
+
 		JButton btnAddItem = new JButton("Add");
 		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				addLineItems();
 			}
 		});
-		supplyRestaurantPanel.add(btnAddItem, "cell 5 3,growx,aligny bottom");
-		
+
+		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
+		supplyRestaurantPanel.add(rigidArea, "cell 5 8");
+
+		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
+		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 0 9");
+		supplyRestaurantPanel.add(btnAddItem, "cell 5 9,growx,aligny bottom");
+
+		JButton btnGoBack = new JButton("Back");
+		btnGoBack.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				// switchSupplyPanels(supplyMenuPanel);
+			}
+		});
+
 		JButton btnProceed = new JButton("Proceed");
 		btnProceed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				finalizeOrder();
 			}
 		});
-		
-		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
-		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 0 4");
-		supplyRestaurantPanel.add(btnProceed, "cell 5 5");
+		supplyRestaurantPanel.add(btnProceed, "cell 8 10");
 
-		supplyRestaurantPanel.add(btnGoBack, "cell 6 5,growx,aligny bottom");
+		supplyRestaurantPanel.add(btnGoBack, "cell 9 10,growx,aligny bottom");
 
 		textFieldEnterQuantity = new JTextField();
-		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 4");
+		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 9,growx");
 		textFieldEnterQuantity.setColumns(10);
-		
-		//TODO SHOW ENUMS IN THIS, MAKE A ANY CHOICE FOR ALL THE ENUMS TO BE SEARCHED
-		choiceDepartments = new Choice();
-		supplyRestaurantPanel.add(choiceDepartments, "cell 1 1");
-		constructChoiceDepartment();	//initialize the various strings inside it
+		constructChoiceDepartment(); // initialize the various strings inside it
 
 	}
 
@@ -148,35 +155,34 @@ public class SupplyGUI extends JPanel {
 		if (getDepartmentFromChoice().equals("any")) {
 			itemsFound = itemController.readItemByName(getNameFromSearchTextField());
 		} else {
-			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(), getDepartmentFromChoice());
+			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(),
+					getDepartmentFromChoice());
 		}
 		scrollPane.updateList(itemsFound);
 	}
-	
+
 	private void constructChoiceDepartment() {
 		choiceDepartments.add("any");
 		itemController = new ItemController();
-		for(String department: itemController.getAllDepartmentTypes()) {
+		for (String department : itemController.getAllDepartmentTypes()) {
 			choiceDepartments.add(department);
 		}
 	}
-	
+
 	private int getQuantityFromTextField() throws Exception {
 		return Integer.parseInt(textFieldEnterQuantity.getText());
 	}
-	
+
 	private String getNameFromSearchTextField() {
 		return textFieldSearch.getText();
 	}
-	
+
 	private String getDepartmentFromChoice() {
-		//getItem can only return type of string, so it will have to get converted back to an enum elsewhere
 		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex());
 	}
-	
+
 	private void addLineItems() {
 		LineItem lineItem = null;
-		// TODO Ask for quantity and make a lineItem
 		// TODO Maybe move LineItem into a controller so GUI doesn't see the model
 		// TODO Put into separate method
 		try {
@@ -184,27 +190,25 @@ public class SupplyGUI extends JPanel {
 			if (quantity > 0) {
 				lineItem = new LineItem(quantity, scrollPane.getSelectedItem());
 				supplyOrderController.getSupplyOrder().addLineItem(lineItem);
-			} else {throw new Exception();}
+			} else {
+				throw new Exception();
+			}
 		} catch (Exception e1) {
 			JOptionPane.showMessageDialog(mainFrame, "Item wasn't added, check your quantity");
 		}
-	
+
 		if (lineItem != null) {
-			JOptionPane.showMessageDialog(mainFrame, "Added item successfully" 
-													+ System.lineSeparator() 
-													+ "Name: " + lineItem.getItem().getName()
-													+ System.lineSeparator()
-													+ "Quantity: " + lineItem.getQuantity());
+			JOptionPane.showMessageDialog(mainFrame, "Added item successfully" + System.lineSeparator() + "Name: "
+					+ lineItem.getItem().getName() + System.lineSeparator() + "Quantity: " + lineItem.getQuantity());
 		}
 	}
-	
-	private void finalizeOrder() {	
-		String messageToShow = createOrderSummary();
-		JOptionPane.showMessageDialog(mainFrame, messageToShow);	
-		UrgencyEnum selectedUrgency = createUrgencyDialog();
 
+	private void finalizeOrder() {
+		String messageToShow = createOrderSummary();
+		JOptionPane.showMessageDialog(mainFrame, messageToShow);
+		UrgencyEnum selectedUrgency = createUrgencyDialog();
 		supplyOrderController.getSupplyOrder().setUrgencyEnum(selectedUrgency);
-		//TODO is this the best way?
+		// TODO is this the best way?
 		if (supplyOrderController.createSupplyOrder()) {
 			supplyOrderController.emptySupplyOrder();
 			JOptionPane.showMessageDialog(mainFrame, "Order was created");
@@ -213,56 +217,26 @@ public class SupplyGUI extends JPanel {
 			JOptionPane.showMessageDialog(mainFrame, "Order creation failed");
 		}
 	}
-	
+
 	private UrgencyEnum createUrgencyDialog() {
 		JList<UrgencyEnum> listOfUrgencyEnums = new JList<UrgencyEnum>(UrgencyEnum.values());
-		JOptionPane.showMessageDialog(
-		  null, listOfUrgencyEnums, "Urgency of your order", JOptionPane.PLAIN_MESSAGE);
+		JOptionPane.showMessageDialog(null, listOfUrgencyEnums, "Urgency of your order", JOptionPane.PLAIN_MESSAGE);
 		return listOfUrgencyEnums.getSelectedValue();
 	}
-	
+
 	private String createOrderSummary() {
 		String messageToShow = "";
 		if (!supplyOrderController.getSupplyOrder().getListOfItems().isEmpty()) {
 			messageToShow += "Your order:";
 			for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
-				messageToShow += System.lineSeparator() 
-				+ "Name: " + lineItem.getItem().getName()
-				+ System.lineSeparator()
-				+ "Quantity: " + lineItem.getQuantity();
+				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
+						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
 			}
 		} else {
 			messageToShow += "Your order is empty";
 		}
 		return messageToShow;
 	}
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
 	
 	
 	
