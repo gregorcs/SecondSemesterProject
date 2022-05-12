@@ -31,11 +31,22 @@ public class DaoTableImplementation implements DaoTableIF {
 		return stmt;
 	}
 
-	
 	@Override
-	public int create(Table obj) throws Exception {
+	public void create(Table obj) throws Exception {
 		PreparedStatement stmt = buildCreateString(obj);
-		return 0;
+		
+		try {
+			stmt.executeQuery();
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
 	}
 
 	@Override
