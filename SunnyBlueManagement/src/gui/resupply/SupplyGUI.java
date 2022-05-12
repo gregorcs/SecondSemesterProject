@@ -15,6 +15,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
@@ -199,9 +200,10 @@ public class SupplyGUI extends JPanel {
 	
 	private void finalizeOrder() {	
 		String messageToShow = createOrderSummary();
-		JOptionPane.showMessageDialog(mainFrame, messageToShow);
-		//TODO FIX URGENCY
-		supplyOrderController.getSupplyOrder().setUrgencyEnum(UrgencyEnum.LOW);
+		JOptionPane.showMessageDialog(mainFrame, messageToShow);	
+		UrgencyEnum selectedUrgency = createUrgencyDialog();
+
+		supplyOrderController.getSupplyOrder().setUrgencyEnum(selectedUrgency);
 		//TODO is this the best way?
 		if (supplyOrderController.createSupplyOrder()) {
 			supplyOrderController.emptySupplyOrder();
@@ -210,6 +212,13 @@ public class SupplyGUI extends JPanel {
 			supplyOrderController.emptySupplyOrder();
 			JOptionPane.showMessageDialog(mainFrame, "Order creation failed");
 		}
+	}
+	
+	private UrgencyEnum createUrgencyDialog() {
+		JList<UrgencyEnum> listOfUrgencyEnums = new JList<UrgencyEnum>(UrgencyEnum.values());
+		JOptionPane.showMessageDialog(
+		  null, listOfUrgencyEnums, "Urgency of your order", JOptionPane.PLAIN_MESSAGE);
+		return listOfUrgencyEnums.getSelectedValue();
 	}
 	
 	private String createOrderSummary() {
