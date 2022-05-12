@@ -13,12 +13,15 @@ public class Item {
 		this.departmentType = departmentType;
 	}
 
-	public Item(String name,String departmentType) {
+	public Item(String name, String departmentType) {
 		super();
 		this.name = name;
 		this.departmentType = departmentType;
 	}
 	
+	public Item() {
+	}
+
 	public String getName() {
 		return name;
 	}

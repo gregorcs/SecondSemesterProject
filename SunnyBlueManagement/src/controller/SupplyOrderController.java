@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 import model.LineItem;
 import model.SupplyOrder;
+import model.UrgencyEnum;
 
 public class SupplyOrderController {
 	
@@ -21,14 +22,32 @@ public class SupplyOrderController {
 		this.supplyOrder = new SupplyOrder();
 	}
 
-	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) throws Exception {
-		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
-	
-		daoSupplyOrder.create(supplyOrder);
+	public void createSupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
+		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgencyEnum, listOfItems);
+
+		try {
+			if (listOfItems.isEmpty()) {
+				throw new Exception("List is empty");
+			} else {
+				daoSupplyOrder.create(supplyOrderToCreate);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
-	
-	public void createSupplyOrder() throws Exception {
-		daoSupplyOrder.create(supplyOrder);
+
+	public boolean createSupplyOrder() {
+		try {
+			if (supplyOrder.getListOfItems().isEmpty()) {
+				throw new Exception("List is empty");
+			} else {
+				daoSupplyOrder.create(supplyOrder);
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	public SupplyOrder getSupplyOrder() {
@@ -37,5 +56,9 @@ public class SupplyOrderController {
 
 	public void setSupplyOrder(SupplyOrder supplyOrder) {
 		this.supplyOrder = supplyOrder;
+	}
+	
+	public void emptySupplyOrder() {
+		supplyOrder = new SupplyOrder();
 	}
 }
