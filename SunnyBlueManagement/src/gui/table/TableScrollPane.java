@@ -41,7 +41,7 @@ public class TableScrollPane extends JScrollPane{
 		tableList.setModel(listRepresentation);
 	}
 		
-	public Table getSelectedProduct() {
+	public Table getSelectedTable() {
 		return tableList.getSelectedValue();
 	}
 }

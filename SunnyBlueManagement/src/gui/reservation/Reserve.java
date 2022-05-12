@@ -6,6 +6,7 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.Box;
@@ -40,7 +41,8 @@ public class Reserve extends JPanel {
 	private JTextField textNumOfPeople;
 	private JTextField textDate;
 	private JTextField textPhoneNum;
-	private TableScrollPane scrollPane;
+	private TableScrollPane paneTablesAvailable;
+	private TableScrollPane paneTablesSelected;
 	
 	//Panel creation
 	
@@ -56,7 +58,7 @@ public class Reserve extends JPanel {
 		//TODO verify parameters for alignment and positioning
 		EnterDetailsPanel = new JPanel();
 		layeredPane.add(EnterDetailsPanel, "name_28904848226400");
-		EnterDetailsPanel.setLayout(new MigLayout("", "[89px,center][89px,grow][][][][][][]", "[23px][][][][][][][][][]"));
+		EnterDetailsPanel.setLayout(new MigLayout("", "[89px,center][295.00px,grow][304.00][][][][][]", "[23px][][][][][][][][][]"));
 		
 		JLabel lblHeader = new JLabel("Enter Details");
 		EnterDetailsPanel.add(lblHeader, "cell 0 0,alignx center");
@@ -72,7 +74,8 @@ public class Reserve extends JPanel {
 			}
 		});
 		
-		scrollPane = new TableScrollPane();
+		paneTablesAvailable = new TableScrollPane();
+		paneTablesSelected = new TableScrollPane();
 		
 		JButton btnProceed = new JButton("Proceed");
 		btnProceed.addActionListener(new ActionListener() {
@@ -91,7 +94,7 @@ public class Reserve extends JPanel {
 					try {
 						Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo);
 						switchReservePanels(ChooseTablePanel);
-						updateScrollPane(tables);
+						updateScrollPane(paneTablesAvailable ,tables);
 						
 
 					} catch (Exception e1) {
@@ -148,7 +151,7 @@ public class Reserve extends JPanel {
 		//Table Selection panel
 		ChooseTablePanel = new JPanel();
 		layeredPane.add(ChooseTablePanel, "name_54378967892300");
-		ChooseTablePanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][]", "[14px][][]"));
+		ChooseTablePanel.setLayout(new MigLayout("", "[173.00px][165.00px,center][42.00][264.00,grow][][][]", "[14px][69.00][43.00][184.00,top][grow]"));
 		
 		JLabel lblChooseTableHeader = new JLabel("Choose a table");
 		lblChooseTableHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -159,11 +162,35 @@ public class Reserve extends JPanel {
 		JButton btnSelectTable = new JButton("Select");
 		btnSelectTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				Table table = paneTablesAvailable.getSelectedTable();
+				if(table!=null) {
+					reservationController.selectTable(table);
+					updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
+				}
 			}
 		});
 		ChooseTablePanel.add(btnSelectTable, "cell 1 1,alignx left,aligny bottom");
+		
+		JButton btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Table table = paneTablesSelected.getSelectedTable();
+				if(table!=null) {
+					reservationController.removeTable(table);
+					updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
+				}
+			}
+		});
+		ChooseTablePanel.add(btnRemove, "cell 3 1");
+		
+		JLabel lblAvailable = new JLabel("Available");
+		ChooseTablePanel.add(lblAvailable, "cell 0 2");
+		
+		JLabel lblSelected = new JLabel("Selected");
+		ChooseTablePanel.add(lblSelected, "cell 3 2");
 				
-		ChooseTablePanel.add(scrollPane, "cell 0 2 5 1, grow");
+		ChooseTablePanel.add(paneTablesAvailable, "cell 0 3 2 1,grow");
+		ChooseTablePanel.add(paneTablesSelected, "cell 3 3,grow");
 		
 		textField = new JTextField();
 		ChooseTablePanel.add(textField, "cell 0 1,growx,aligny center");
@@ -175,7 +202,16 @@ public class Reserve extends JPanel {
 				switchReservePanels(EnterDetailsPanel);
 			}
 		});
-		ChooseTablePanel.add(btnBackFromChooseTable, "cell 5 2,aligny bottom");
+		
+		ChooseTablePanel.add(btnBackFromChooseTable, "cell 4 4,aligny bottom");
+		
+		JButton btnConfirmReservation = new JButton("Confirm");
+		btnConfirmReservation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				reservationController.confirmReservation();
+			}
+		});
+		ChooseTablePanel.add(btnConfirmReservation, "cell 6 4");
 		//end of Table Selection
 		
 		//Specific Requirements Panel
@@ -191,8 +227,8 @@ public class Reserve extends JPanel {
 		layeredPane.revalidate();
 	}
 	
-	public void updateScrollPane(Collection<Table> tables) {
-		scrollPane.initializeList(tables);
+	public void updateScrollPane(TableScrollPane pane, Collection<Table> tables) {
+		pane.initializeList(tables);
 	}
 	
 }
