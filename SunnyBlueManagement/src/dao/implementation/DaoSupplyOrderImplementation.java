@@ -18,7 +18,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
 		PreparedStatement stmt = con.prepareStatement(createSupplyOrder, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, supplyOrder.getDateString());
-		stmt.setString(2, supplyOrder.getUrgency());
+		stmt.setString(2, supplyOrder.getUrgencyEnum().toString());
 		System.out.println(createSupplyOrder);
 		return stmt;
 	}

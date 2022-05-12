@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 import model.LineItem;
 import model.SupplyOrder;
+import model.UrgencyEnum;
 
 public class SupplyOrderController {
 	
@@ -21,8 +22,8 @@ public class SupplyOrderController {
 		this.supplyOrder = new SupplyOrder();
 	}
 
-	public void createSupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
-		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgency, listOfItems);
+	public void createSupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
+		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgencyEnum, listOfItems);
 
 		try {
 			if (listOfItems.isEmpty()) {
@@ -41,7 +42,7 @@ public class SupplyOrderController {
 				throw new Exception("List is empty");
 			} else {
 				daoSupplyOrder.create(supplyOrder);
-				return false;
+				return true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

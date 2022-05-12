@@ -23,6 +23,7 @@ import controller.ItemController;
 import controller.SupplyOrderController;
 import model.Item;
 import model.LineItem;
+import model.UrgencyEnum;
 import gui.MainFrame;
 import gui.item.ItemScrollPane;
 import net.miginfocom.swing.MigLayout;
@@ -69,6 +70,7 @@ public class SupplyGUI extends JPanel {
 	}
 	
 	private void constructSupplyRestaurantPanel() {
+		supplyOrderController = new SupplyOrderController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
 		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][]", "[14px][][][][][]"));
@@ -141,16 +143,21 @@ public class SupplyGUI extends JPanel {
 	}
 
 	private void readItems() {
-		Collection<Item> itemsFound = itemController.readItemByNameOrDepartment(getNameFromSearchTextField(), getDepartmentFromChoice());
+		Collection<Item> itemsFound;
+		if (getDepartmentFromChoice().equals("any")) {
+			itemsFound = itemController.readItemByName(getNameFromSearchTextField());
+		} else {
+			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(), getDepartmentFromChoice());
+		}
 		scrollPane.updateList(itemsFound);
 	}
 	
 	private void constructChoiceDepartment() {
+		choiceDepartments.add("any");
 		itemController = new ItemController();
 		for(String department: itemController.getAllDepartmentTypes()) {
 			choiceDepartments.add(department);
 		}
-		choiceDepartments.add("any");
 	}
 	
 	private int getQuantityFromTextField() throws Exception {
@@ -191,11 +198,11 @@ public class SupplyGUI extends JPanel {
 	}
 	
 	private void finalizeOrder() {	
-		String messageToShow = createOrderReceipt();
+		String messageToShow = createOrderSummary();
 		JOptionPane.showMessageDialog(mainFrame, messageToShow);
 		//TODO FIX URGENCY
-		supplyOrderController.getSupplyOrder().setUrgency("low");
-		//TODO is this correct the best way?
+		supplyOrderController.getSupplyOrder().setUrgencyEnum(UrgencyEnum.LOW);
+		//TODO is this the best way?
 		if (supplyOrderController.createSupplyOrder()) {
 			supplyOrderController.emptySupplyOrder();
 			JOptionPane.showMessageDialog(mainFrame, "Order was created");
@@ -205,7 +212,7 @@ public class SupplyGUI extends JPanel {
 		}
 	}
 	
-	private String createOrderReceipt() {
+	private String createOrderSummary() {
 		String messageToShow = "";
 		if (!supplyOrderController.getSupplyOrder().getListOfItems().isEmpty()) {
 			messageToShow += "Your order:";

@@ -9,6 +9,7 @@ import dao.DBConnection;
 import model.Item;
 import model.LineItem;
 import model.SupplyOrder;
+import model.UrgencyEnum;
 
 import java.time.format.DateTimeFormatter;
 
@@ -32,7 +33,7 @@ class SupplyOrderTests {
 		LocalDateTime date = LocalDateTime.now();  
 		//Act
 		try {
-			resupplyOrderController.createSupplyOrder(date, "urgent", new ArrayList<LineItem>() {
+			resupplyOrderController.createSupplyOrder(date, UrgencyEnum.HIGH, new ArrayList<LineItem>() {
 				private static final long serialVersionUID = -1669512258082083176L;
 			{add(lineItem);
 			 add(lineItem2);}});

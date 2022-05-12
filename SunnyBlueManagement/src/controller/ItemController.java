@@ -17,7 +17,7 @@ public class ItemController {
 	}
 
 	public void createItem(String name, String departmentType) {
-		Item itemToCreate = new Item(name, departmentType);
+		Item itemToCreate = new Item(name, departmentType.toLowerCase());
 		try {
 			daoItem.create(itemToCreate);
 		} catch (Exception e) {
@@ -60,13 +60,19 @@ public class ItemController {
 		return new ArrayList<Item>();
 	}
 	
-	public Collection<Item> readItemByNameOrDepartment(String name, String department) {
+	public Collection<Item> readItemByName(String name) {
 		try {
-			if (department.equals("any"))
-				return daoItem.readByName(name);
-			else {
-				return daoItem.readByNameAndDepartment(name, department);
-			}
+			return daoItem.readByName(name);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return new ArrayList<Item>();
+	}
+	
+	public Collection<Item> readItemByNameAndDepartment(String name, String department) {
+		try {
+			return daoItem.readByNameAndDepartment(name, department);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

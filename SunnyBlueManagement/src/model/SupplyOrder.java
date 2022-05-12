@@ -3,35 +3,33 @@ package model;
 import java.time.LocalDateTime;  
 import java.time.format.DateTimeFormatter;  
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 public class SupplyOrder {
 
 	private int supplyOrderId;
 	private LocalDateTime date;
-	private String urgency;
+	private UrgencyEnum urgencyEnum;
 	private ArrayList<LineItem> listOfItems;
 	
-	public SupplyOrder(int supplyOrderId, LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+	public SupplyOrder(int supplyOrderId, LocalDateTime date, UrgencyEnum urgency, ArrayList<LineItem> listOfItems) {
 		super();
 		this.supplyOrderId = supplyOrderId;
 		this.date = date;
-		this.urgency = urgency;
+		this.urgencyEnum = urgency;
 		this.listOfItems = listOfItems;
 	}
 
 	/**
 	 * in case you need to create a supplyOrder before it is inserted into the database (you don't know the id yet)
 	 * @param date
-	 * @param urgency
+	 * @param urgencyEnum
 	 * @param listOfItems
 	 */
-	public SupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
+	public SupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
 		super();
 		this.date = date;
-		this.urgency = urgency;
+		this.urgencyEnum = urgencyEnum;
 		this.listOfItems = listOfItems;
 	}
 	
@@ -46,11 +44,11 @@ public class SupplyOrder {
 	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
-	public String getUrgency() {
-		return urgency;
+	public UrgencyEnum getUrgencyEnum() {
+		return urgencyEnum;
 	}
-	public void setUrgency(String urgency) {
-		this.urgency = urgency;
+	public void setUrgencyEnum(UrgencyEnum urgency) {
+		this.urgencyEnum = urgency;
 	}
 
 	public ArrayList<LineItem> getListOfItems() {

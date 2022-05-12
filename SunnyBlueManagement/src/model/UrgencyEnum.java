@@ -1,9 +1,9 @@
 package model;
 
 public enum UrgencyEnum {
-	ANY("ANY"),
-    RESTAURANT("RESTAURANT"),
-    KITCHEN("KITCHEN");
+	LOW("LOW"),
+    MEDIUM("MEDIUM"),
+    HIGH("HIGH");
 	
     private String name;
 
