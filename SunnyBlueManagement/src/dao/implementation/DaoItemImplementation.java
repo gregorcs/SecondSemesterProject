@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoItemIF;
+import model.Decoration;
 import model.Item;
 
 public class DaoItemImplementation implements DaoItemIF {
@@ -23,7 +24,10 @@ public class DaoItemImplementation implements DaoItemIF {
 	}
 
 	private PreparedStatement buildReadAllItemsString() throws SQLException {
-		String readAllString = "SELECT * FROM Item";
+		String readAllString = "SELECT t1.itemId, t2.decorationId, t1.name, t1.department, t2.quantityInStock "
+								+ "FROM Item t1 "
+								+ "LEFT JOIN Decoration t2 "
+								+ "ON t1.itemId = t2.item_itemId_FK";
 		PreparedStatement stmt = con.prepareStatement(readAllString);
 		System.out.println(readAllString);
 		return stmt;
@@ -142,7 +146,10 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
+				//check if the Item-Decoration join has a decoration id
+				if (rs.getInt(2) == 0) {
+					itemsList.add(new Item(rs.getInt(1), rs.getString(3), rs.getString(4)));
+				} 
 			}
 
 		} catch (SQLException e) {
@@ -203,5 +210,32 @@ public class DaoItemImplementation implements DaoItemIF {
 			DBConnection.closeConnection();
 		}
 		return itemsList;
+	}
+
+	public Collection<Decoration> readAllDecorations() throws Exception {
+			PreparedStatement stmt = buildReadAllItemsString();
+			ArrayList<Decoration> decorationsList = new ArrayList<>();
+
+			try {
+				ResultSet rs = stmt.executeQuery();
+
+				while (rs.next()) {
+					//check if the Item-Decoration join has a decoration id
+					if (rs.getInt(2) != 0) {
+						decorationsList.add(new Decoration(rs.getInt(1), rs.getString(3), rs.getString(4), 
+								rs.getInt(2), rs.getInt(5)));					
+						} 
+				}
+
+			} catch (SQLException e) {
+				throw new Exception("SQL exception " + e);
+			} catch (NullPointerException e) {
+				throw new Exception("Null pointer exception, possible connection problems " + e);
+			} catch (Exception e) {
+				throw new Exception("Technical error " + e);
+			} finally {
+				DBConnection.closeConnection();
+			}
+			return decorationsList;
 	}
 }

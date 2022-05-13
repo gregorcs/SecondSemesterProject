@@ -74,8 +74,7 @@ public class SupplyGUI extends JPanel {
 		supplyOrderController = new SupplyOrderController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
-		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][][][][]",
-				"[14px][][][41.00][40.00][39.00][36.00][68.00][][][]"));
+		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][][][][]", "[14px][][][41.00][40.00][39.00][36.00][68.00][][][]"));
 
 		JLabel lblResupplyHeader = new JLabel("Resupply ");
 		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -101,7 +100,7 @@ public class SupplyGUI extends JPanel {
 		supplyRestaurantPanel.add(rigidArea_1, "cell 0 2");
 
 		scrollPane = new ItemScrollPane();
-		supplyRestaurantPanel.add(scrollPane, "cell 0 3 6 5,grow");
+		supplyRestaurantPanel.add(scrollPane, "cell 0 3 9 5,grow");
 
 		textFieldSearch = new JTextField();
 		supplyRestaurantPanel.add(textFieldSearch, "cell 0 1,growx,aligny center");
@@ -152,13 +151,13 @@ public class SupplyGUI extends JPanel {
 
 	private void readItems() {
 		Collection<Item> itemsFound;
-		if (getDepartmentFromChoice().equals("any")) {
+		if (scrollPane.getDepartmentFromChoice().equals("any")) {
 			itemsFound = itemController.readItemByName(getNameFromSearchTextField());
 		} else {
 			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(),
-					getDepartmentFromChoice());
+			scrollPane.getDepartmentFromChoice());
 		}
-		scrollPane.updateList(itemsFound);
+		scrollPane.updateListItem(itemsFound);
 	}
 
 	private void constructChoiceDepartment() {
@@ -176,6 +175,7 @@ public class SupplyGUI extends JPanel {
 	private String getNameFromSearchTextField() {
 		return textFieldSearch.getText();
 	}
+
 
 	private String getDepartmentFromChoice() {
 		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex());
