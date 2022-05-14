@@ -58,13 +58,53 @@ public class Reserve extends JPanel {
 		//TODO verify parameters for alignment and positioning
 		EnterDetailsPanel = new JPanel();
 		layeredPane.add(EnterDetailsPanel, "name_28904848226400");
-		EnterDetailsPanel.setLayout(new MigLayout("", "[89px,center][295.00px,grow][304.00][][][][][]", "[23px][][][][][][][][][]"));
+		EnterDetailsPanel.setLayout(new MigLayout("", "[grow][89px][108.00px][70.00,grow][-109.00]", "[grow][23px][][][][][][][][][grow]"));
 		
 		JLabel lblHeader = new JLabel("Enter Details");
-		EnterDetailsPanel.add(lblHeader, "cell 0 0,alignx center");
+		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
+		EnterDetailsPanel.add(lblHeader, "cell 1 1,alignx center");
 		
 		Component rigidArea = Box.createRigidArea(new Dimension(20,20));
-		EnterDetailsPanel.add(rigidArea, "cell 0 1,alignx center");
+		EnterDetailsPanel.add(rigidArea, "cell 1 2,alignx center");
+		
+		paneTablesAvailable = new TableScrollPane();
+		paneTablesSelected = new TableScrollPane();
+		
+		//TEXT FIELDS AND LABELS 
+		
+		JLabel lblReservationName = new JLabel("Reservation Name:");
+		EnterDetailsPanel.add(lblReservationName, "cell 1 3,alignx trailing");
+				
+		textName = new JTextField();
+		EnterDetailsPanel.add(textName, "cell 2 3,alignx center");
+		textName.setColumns(10);
+		
+		
+		
+		JLabel lblNumOfPeople = new JLabel("No. of people:");
+		EnterDetailsPanel.add(lblNumOfPeople, "cell 1 4,alignx trailing");
+		
+		textNumOfPeople = new JTextField();
+		EnterDetailsPanel.add(textNumOfPeople, "cell 2 4,alignx center");
+		textNumOfPeople.setColumns(10);
+		
+		
+		
+		JLabel lblDate = new JLabel("Date:");
+		EnterDetailsPanel.add(lblDate, "cell 1 5,alignx trailing");
+		
+		textDate = new JTextField();
+		EnterDetailsPanel.add(textDate, "cell 2 5,alignx center");
+		textDate.setColumns(10);
+		
+		
+		
+		JLabel lblPhoneNo = new JLabel("Phone Number:");
+		EnterDetailsPanel.add(lblPhoneNo, "cell 1 6,alignx trailing");
+		
+		textPhoneNum = new JTextField();
+		EnterDetailsPanel.add(textPhoneNum, "cell 2 6,alignx center");
+		textPhoneNum.setColumns(10);
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
@@ -73,9 +113,6 @@ public class Reserve extends JPanel {
 				
 			}
 		});
-		
-		paneTablesAvailable = new TableScrollPane();
-		paneTablesSelected = new TableScrollPane();
 		
 		JButton btnProceed = new JButton("Proceed");
 		btnProceed.addActionListener(new ActionListener() {
@@ -105,47 +142,14 @@ public class Reserve extends JPanel {
 			}
 		});
 		
-		//TEXT FIELDS AND LABELS 
-		
-		JLabel lblReservationName = new JLabel("Reservation Name:");
-		EnterDetailsPanel.add(lblReservationName, "cell 0 2,alignx trailing");
-				
-		textName = new JTextField();
-		EnterDetailsPanel.add(textName, "cell 1 2,growx");
-		textName.setColumns(10);
-		
-		
-		
-		JLabel lblNumOfPeople = new JLabel("No. of people:");
-		EnterDetailsPanel.add(lblNumOfPeople, "cell 0 3,alignx trailing");
-		
-		textNumOfPeople = new JTextField();
-		EnterDetailsPanel.add(textNumOfPeople, "cell 1 3,growx");
-		textNumOfPeople.setColumns(10);
-		
-		
-		
-		JLabel lblDate = new JLabel("Date:");
-		EnterDetailsPanel.add(lblDate, "cell 0 4,alignx trailing");
-		
-		textDate = new JTextField();
-		EnterDetailsPanel.add(textDate, "cell 1 4,growx");
-		textDate.setColumns(10);
-		
-		
-		
-		JLabel lblPhoneNo = new JLabel("Phone Number:");
-		EnterDetailsPanel.add(lblPhoneNo, "cell 0 5,alignx trailing");
-		
-		textPhoneNum = new JTextField();
-		EnterDetailsPanel.add(textPhoneNum, "cell 1 5,growx");
-		textPhoneNum.setColumns(10);
+		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
+		EnterDetailsPanel.add(rigidArea_1, "cell 2 7");
 		
 		//
 		
-		EnterDetailsPanel.add(btnProceed, "cell 3 6,alignx center,aligny top");
+		EnterDetailsPanel.add(btnProceed, "cell 2 8,growx");
 		
-		EnterDetailsPanel.add(btnBack, "cell 7 9");
+		EnterDetailsPanel.add(btnBack, "cell 2 9,growx");
 		
 		
 		//Table Selection panel
