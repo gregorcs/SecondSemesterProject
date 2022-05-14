@@ -26,7 +26,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		stmt.setString(3, reservation.getReservationName());
 		stmt.setString(4, reservation.getSpecificRequests());
 		stmt.setString(5, Long.toString(reservation.getphoneNo()));
-
+		System.out.println(createReservation);
 		return stmt;
 	}
 	
@@ -73,12 +73,12 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				con.rollback();
 				System.out.println("Rolling back database");
 			} catch(SQLException excep) {
-				throw new SQLException("Error when rolling back database");
+				throw new SQLException("Error when rolling back database" + excep);
 			}
 		}
 	} catch (NullPointerException e) {
 		insertedKey = -2;
-		throw new Exception("Technical error");
+		throw new Exception("Technical error" + e);
 	} finally {
 		DBConnection.closeConnection();
 	}
@@ -98,8 +98,17 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	
 	public Collection<Table> readTablesByDate(String date) throws SQLException{
 		Collection<Table> fetchedTables = new ArrayList<>();
-		String readTableString = "SELECT * FROM DinnerTable WHERE tableNo NOT IN (SELECT tableNo FROM DinnerTable_Reservation WHERE reservation_reservationId_FK IN "
-				+ "(SELECT reservationId FROM Reservation WHERE Date = " + date + "))";
+		//sorry for changing it i was just having a hard time reading it in one line
+		//TODO btw this aint a prepared statement, I don't mind if it's here but they will ask us on the exam :)
+		String readTableString = 
+				"SELECT * FROM DinnerTable "
+				+ "WHERE tableNo "
+				+ "NOT IN "
+				+ "(SELECT dinnerTable_tableNo_FK FROM DinnerTable_Reservation "
+				+ "WHERE reservation_reservationId_FK IN "
+				+ "(SELECT reservationId "
+				+ "FROM Reservation "
+				+ "WHERE Date = '" + date + "'))";
 		Statement stmt = con.createStatement();
 		ResultSet rs = stmt.executeQuery(readTableString);
 		while(rs.next()) {
@@ -145,15 +154,14 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			//TODO RETURN THE CREATED RESERVATION
 		} catch (SQLException e) {
 			insertedKey = -1;
-			throw new SQLException("SQL exception");
+			throw new SQLException("SQL exception" + e);
 		} catch (NullPointerException e) {
 			insertedKey = -2;
-		throw new NullPointerException("Null pointer exception, possible connection problems");
+		throw new NullPointerException("Null pointer exception, possible connection problems" + e);
 		} catch (Exception e) {
 			insertedKey = -3;
-			throw new Exception ("Technical error");
+			throw new Exception ("Technical error" + e);
 		} finally {
-		//TODO REMOVED CLOSE.CONNECTION FROM HERE TO TEST IF TRANSACTION WORKS
 		}
 		
 		return insertedKey;
