@@ -24,6 +24,7 @@ public class CheckConnectionWorker extends SwingWorker<String, String>{
 					mainMenu.refresh();
 				} else {
 					mainMenu.updateConnectionOutput("failed");
+					DBConnection.resetConnection();
 					mainMenu.refresh();
 				}
 			} catch (Exception e) {
@@ -34,7 +35,7 @@ public class CheckConnectionWorker extends SwingWorker<String, String>{
 				e.printStackTrace();
 			}
 			try {
-				Thread.sleep(15000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();

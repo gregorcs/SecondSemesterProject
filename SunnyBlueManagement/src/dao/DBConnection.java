@@ -85,9 +85,14 @@ public class DBConnection {
         return instance;
     }
     
+    public static void resetConnection() {
+    	closeConnection();
+    	getInstance();
+    }
+    
     public boolean isConnectionValid() throws Exception {
     	try {
-			return con.isValid(3000);
+			return con.isValid(5000);
 		} catch (SQLException e) {
 			throw new Exception("Failed to check connection" + e);
 		}
