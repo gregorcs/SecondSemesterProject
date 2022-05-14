@@ -15,6 +15,7 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.Color;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
@@ -67,8 +68,15 @@ public class MainMenu extends JPanel {
 
 	}
 	
-	public void updateConnectionOutput(String status) {
-		lblConOutput.setText(status);
+	public void updateConnectionOutput(boolean isConnected) {
+		if (isConnected) {
+			lblConOutput.setText("valid");
+			lblConOutput.setForeground(Color.green);
+		} else {
+			lblConOutput.setText("failed");
+			lblConOutput.setForeground(Color.red);
+		}
+		
 	}
 	
 	public void refresh() {
