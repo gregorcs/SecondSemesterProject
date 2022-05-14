@@ -43,7 +43,6 @@ public class SupplyGUI extends JPanel {
 	private JTextField textFieldSearch;
 
 	private ItemScrollPane scrollPane;
-	private Choice choiceDepartments;
 	private JTextField textFieldEnterQuantity;
 
 	/**
@@ -57,13 +56,6 @@ public class SupplyGUI extends JPanel {
 		constructSupplyRestaurantPanel();
 	}
 
-	public void switchSupplyPanels(JPanel panel) {
-		layeredPane.removeAll();
-		layeredPane.add(panel);
-		layeredPane.repaint();
-		layeredPane.revalidate();
-	}
-
 	private void constructLayeredPane() {
 		layeredPane = new JLayeredPane();
 		add(layeredPane);
@@ -71,64 +63,45 @@ public class SupplyGUI extends JPanel {
 	}
 
 	private void constructSupplyRestaurantPanel() {
+		setBounds(100, 100, 1920, 1080);
 		supplyOrderController = new SupplyOrderController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
-		supplyRestaurantPanel.setLayout(new MigLayout("", "[173.00px][113.00px,center][][][][][][][][]", "[14px][][][41.00][40.00][39.00][36.00][68.00][][][]"));
+		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,center][][][][][][][][][grow]",
+				"[grow][][][14px][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
 
 		JLabel lblResupplyHeader = new JLabel("Resupply ");
 		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		supplyRestaurantPanel.add(lblResupplyHeader, "cell 0 0,alignx left,aligny top");
+		supplyRestaurantPanel.add(lblResupplyHeader, "cell 1 1 10 1,alignx center,aligny top");
 
 		JLabel lblEnterProduct = new JLabel("Enter product:");
-		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 0 1,alignx left,aligny center");
-
-		JLabel lblCategory = new JLabel("Filter:");
-		supplyRestaurantPanel.add(lblCategory, "flowx,cell 1 1");
-
-		JButton btnSelectItem = new JButton("Search");
-		btnSelectItem.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				itemController = new ItemController();
-				readItems();
-			}
-		});
-		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 5 1,growx,aligny bottom");
+		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 1 4,alignx left,aligny center");
+		
+				JButton btnSelectItem = new JButton("Search");
+				btnSelectItem.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						itemController = new ItemController();
+						readItems();
+					}
+				});
+				supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 4,growx,aligny bottom");
 
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea_1, "cell 0 2");
+		supplyRestaurantPanel.add(rigidArea_1, "cell 1 5");
 
 		scrollPane = new ItemScrollPane();
-		supplyRestaurantPanel.add(scrollPane, "cell 0 3 9 5,grow");
+		supplyRestaurantPanel.add(scrollPane, "cell 1 6 10 9,grow");
 
 		textFieldSearch = new JTextField();
-		supplyRestaurantPanel.add(textFieldSearch, "cell 0 1,growx,aligny center");
+		supplyRestaurantPanel.add(textFieldSearch, "cell 1 4,growx,aligny center");
 		textFieldSearch.setColumns(10);
-
-		// TODO SHOW ENUMS IN THIS, MAKE A ANY CHOICE FOR ALL THE ENUMS TO BE SEARCHED
-		choiceDepartments = new Choice();
-		supplyRestaurantPanel.add(choiceDepartments, "cell 1 1,growx");
-
-		JButton btnAddItem = new JButton("Add");
-		btnAddItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addLineItems();
-			}
-		});
-
-		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea, "cell 5 8");
-
-		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
-		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 0 9");
-		supplyRestaurantPanel.add(btnAddItem, "cell 5 9,growx,aligny bottom");
 
 		JButton btnGoBack = new JButton("Back");
 		btnGoBack.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// switchSupplyPanels(supplyMenuPanel);
+				mainFrame.backToMainMenu();
 			}
 		});
 
@@ -138,14 +111,27 @@ public class SupplyGUI extends JPanel {
 				finalizeOrder();
 			}
 		});
-		supplyRestaurantPanel.add(btnProceed, "cell 8 10");
 
-		supplyRestaurantPanel.add(btnGoBack, "cell 9 10,growx,aligny bottom");
+		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
+		supplyRestaurantPanel.add(rigidArea, "cell 6 15");
+
+		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
+		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 16");
 
 		textFieldEnterQuantity = new JTextField();
-		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 0 9,growx");
+		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 1 16,growx");
 		textFieldEnterQuantity.setColumns(10);
-		constructChoiceDepartment(); // initialize the various strings inside it
+		
+				JButton btnAddItem = new JButton("Add to order");
+				btnAddItem.addActionListener(new ActionListener() {
+					public void actionPerformed(ActionEvent e) {
+						addLineItems();
+					}
+				});
+				supplyRestaurantPanel.add(btnAddItem, "cell 2 16,growx,aligny bottom");
+		supplyRestaurantPanel.add(btnProceed, "cell 9 16");
+
+		supplyRestaurantPanel.add(btnGoBack, "cell 10 16,growx,aligny bottom");
 
 	}
 
@@ -155,17 +141,9 @@ public class SupplyGUI extends JPanel {
 			itemsFound = itemController.readItemByName(getNameFromSearchTextField());
 		} else {
 			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(),
-			scrollPane.getDepartmentFromChoice());
+					scrollPane.getDepartmentFromChoice());
 		}
 		scrollPane.updateListItem(itemsFound);
-	}
-
-	private void constructChoiceDepartment() {
-		choiceDepartments.add("any");
-		itemController = new ItemController();
-		for (String department : itemController.getAllDepartmentTypes()) {
-			choiceDepartments.add(department);
-		}
 	}
 
 	private int getQuantityFromTextField() throws Exception {
@@ -174,11 +152,6 @@ public class SupplyGUI extends JPanel {
 
 	private String getNameFromSearchTextField() {
 		return textFieldSearch.getText();
-	}
-
-
-	private String getDepartmentFromChoice() {
-		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex());
 	}
 
 	private void addLineItems() {

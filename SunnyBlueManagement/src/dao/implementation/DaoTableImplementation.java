@@ -33,9 +33,8 @@ public class DaoTableImplementation implements DaoTableIF {
 
 	
 	@Override
-	public int create(Table obj) throws Exception {
+	public void create(Table obj) throws Exception {
 		PreparedStatement stmt = buildCreateString(obj);
-		return 0;
 	}
 
 	@Override

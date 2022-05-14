@@ -39,12 +39,11 @@ public class ItemScrollPane extends JScrollPane {
 
 		JMenuBar menuBar = new JMenuBar();
 		setColumnHeaderView(menuBar);
-		
-		choiceDepartments = new Choice();
-		menuBar.add(choiceDepartments);
-		//constructChoiceDepartment();
 		JLabel lblSortBy = new JLabel("Sort by:");
 		menuBar.add(lblSortBy);
+		choiceDepartments = new Choice();
+		menuBar.add(choiceDepartments);
+		constructChoiceDepartment();
 		
 		initializeList();
 	}
@@ -52,6 +51,7 @@ public class ItemScrollPane extends JScrollPane {
 	public void initializeList() {
 		ItemListCellRenderer cellRenderer = new ItemListCellRenderer();
 		itemList.setCellRenderer(cellRenderer);
+		itemController = new ItemController();
 		updateListItem(itemController.readAllItems());
 	}
 	
@@ -76,15 +76,14 @@ public class ItemScrollPane extends JScrollPane {
 	}
 	
 	public Item getSelectedItem() {return itemList.getSelectedValue();};
-	/*
+	
 	private void constructChoiceDepartment() {
 		choiceDepartments.add("any");
-		itemController = new ItemController();
 		for (String department : itemController.getAllDepartmentTypes()) {
 			choiceDepartments.add(department);
 		}
 	}
-	*/
+	
 	public String getDepartmentFromChoice() {
 		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex()).toString();
 	}

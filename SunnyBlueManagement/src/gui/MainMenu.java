@@ -29,22 +29,22 @@ public class MainMenu extends JPanel {
 	 */
 	public MainMenu(final MainFrame mainFrame) {
 		setBounds(100, 100, 1920, 1080);
-		setLayout(new MigLayout("align 50% 50%", "[][][center][]", "[][][][][][][][][]"));
+		setLayout(new MigLayout("", "[grow][][][center][][grow]", "[grow][][][][][][][][grow]"));
 		//setLayout(new MigLayout("align 50% 50%"));
 		supplyPanel = new SupplyGUI(mainFrame);
 		
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblHeader, "cell 2 0");
+		add(lblHeader, "cell 3 1");
 		
 		Component rigidArea_2 = Box.createRigidArea(new Dimension(20, 20));
-		add(rigidArea_2, "cell 2 1");
+		add(rigidArea_2, "cell 3 2");
 		
 		JButton btnReserveTable = new JButton("Reserve Table");
-		add(btnReserveTable, "cell 2 2");
+		add(btnReserveTable, "cell 3 3");
 		
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
-		add(rigidArea_1, "cell 2 3");
+		add(rigidArea_1, "cell 3 4");
 		
 		JButton btnResupply = new JButton("Resupply ");
 		btnResupply.addActionListener(new ActionListener() {
@@ -52,18 +52,18 @@ public class MainMenu extends JPanel {
 				mainFrame.switchPanels(supplyPanel);
 			}
 		});
-		add(btnResupply, "cell 2 4");
+		add(btnResupply, "cell 3 5");
 		
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		add(rigidArea, "cell 2 5");
+		add(rigidArea, "cell 3 6");
 		
 		JLabel lblConnection = new JLabel("Connection:");
-		add(lblConnection, "cell 0 6");
+		add(lblConnection, "cell 1 7");
 		CheckConnectionWorker connection = new CheckConnectionWorker(this);
 		connection.execute();
 		
 		lblConOutput = new JLabel("");
-		add(lblConOutput, "cell 1 6");
+		add(lblConOutput, "cell 2 7");
 
 	}
 	
