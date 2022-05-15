@@ -62,6 +62,7 @@ public class SupplyOrder {
 	public void addLineItem(LineItem lineItem) {
 		boolean found = false;
 		for (LineItem temp : this.getListOfItems()) {
+			//TODO move this checking into a separate method
 			if (temp.getItem().getName().equals(lineItem.getItem().getName())) {
 				temp.setQuantity(temp.getQuantity() + lineItem.getQuantity());
 				found = true;

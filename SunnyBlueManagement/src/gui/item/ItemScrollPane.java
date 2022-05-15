@@ -4,18 +4,16 @@ import java.awt.Choice;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
-import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 
-import controller.DecorationController;
 import controller.ItemController;
-import model.Decoration;
+import gui.ScrollPaneIF;
 import model.Item;
 
-public class ItemScrollPane extends JScrollPane {
+public class ItemScrollPane extends JScrollPane implements ScrollPaneIF<Item>{
 
 	private static final long serialVersionUID = -4773670531023046534L;
 
@@ -23,12 +21,9 @@ public class ItemScrollPane extends JScrollPane {
 	
 	private JList<Item> itemList;
 	private DefaultListModel<Item> listRepresentationItem;
-	private JList<Decoration> decorationList;
-	private DefaultListModel<Decoration> listRepresentationDecoration;
 	
 	
 	private ItemController itemController;
-	private DecorationController decorationController;
 	
 	public ItemScrollPane() {
 		itemController = new ItemController();
@@ -39,7 +34,7 @@ public class ItemScrollPane extends JScrollPane {
 
 		JMenuBar menuBar = new JMenuBar();
 		setColumnHeaderView(menuBar);
-		JLabel lblSortBy = new JLabel("Sort by:");
+		JLabel lblSortBy = new JLabel("Sort by: ");
 		menuBar.add(lblSortBy);
 		choiceDepartments = new Choice();
 		menuBar.add(choiceDepartments);
@@ -48,6 +43,7 @@ public class ItemScrollPane extends JScrollPane {
 		initializeList();
 	}
 	
+	@Override
 	public void initializeList() {
 		ItemListCellRenderer cellRenderer = new ItemListCellRenderer();
 		itemList.setCellRenderer(cellRenderer);
@@ -55,6 +51,7 @@ public class ItemScrollPane extends JScrollPane {
 		updateListItem(itemController.readAllItems());
 	}
 	
+	@Override
 	public void updateListItem(Collection<Item> listToShow) {
 		listRepresentationItem = new DefaultListModel<Item>();
 		Collection<Item> itemsFound = listToShow;
@@ -65,16 +62,7 @@ public class ItemScrollPane extends JScrollPane {
 		itemList.setModel(listRepresentationItem);
 	}
 	
-	public void updateListDecoration(Collection<Decoration> listToShow) {
-		listRepresentationItem = new DefaultListModel<Item>();
-		Collection<Decoration> itemsFound = listToShow;
-		
-		for(Decoration decoration : itemsFound) {
-			listRepresentationItem.addElement(decoration);
-		}
-		decorationList.setModel(listRepresentationDecoration);
-	}
-	
+	@Override
 	public Item getSelectedItem() {return itemList.getSelectedValue();};
 	
 	private void constructChoiceDepartment() {
@@ -84,6 +72,7 @@ public class ItemScrollPane extends JScrollPane {
 		}
 	}
 	
+	@Override
 	public String getDepartmentFromChoice() {
 		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex()).toString();
 	}

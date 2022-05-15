@@ -2,20 +2,10 @@ package gui.resupply;
 
 import java.awt.CardLayout;
 import java.awt.Font;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.Choice;
-
+import java.awt.event.*;
 import java.util.Collection;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
-import javax.swing.JList;
-import javax.swing.JOptionPane;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
+import javax.swing.*;
 
 import controller.ItemController;
 import controller.SupplyOrderController;
@@ -35,6 +25,7 @@ public class SupplyGUI extends JPanel {
 	 *
 	 */
 	private static final long serialVersionUID = -7068038639929039542L;
+	
 	private MainFrame mainFrame;
 	private SupplyOrderController supplyOrderController;
 	private ItemController itemController;
@@ -42,13 +33,14 @@ public class SupplyGUI extends JPanel {
 	private JPanel supplyRestaurantPanel;
 	private JTextField textFieldSearch;
 
-	private ItemScrollPane scrollPane;
+	private ItemScrollPane itemScrollPane;
 	private JTextField textFieldEnterQuantity;
 
 	/**
 	 * Create the panel.
 	 */
 	public SupplyGUI(final MainFrame mainFrame) {
+		setBounds(100, 100, 1920, 1080);
 		this.mainFrame = mainFrame;
 		this.supplyOrderController = new SupplyOrderController();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
@@ -63,19 +55,18 @@ public class SupplyGUI extends JPanel {
 	}
 
 	private void constructSupplyRestaurantPanel() {
-		setBounds(100, 100, 1920, 1080);
 		supplyOrderController = new SupplyOrderController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
 		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,center][][][][][][][][][grow]",
-				"[grow][][][14px][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
+				"[grow][][][14px][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
 
 		JLabel lblResupplyHeader = new JLabel("Resupply ");
 		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		supplyRestaurantPanel.add(lblResupplyHeader, "cell 1 1 10 1,alignx center,aligny top");
-
-		JLabel lblEnterProduct = new JLabel("Enter product:");
-		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 1 4,alignx left,aligny center");
+		
+				JLabel lblEnterProduct = new JLabel("Enter product:");
+				supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 1 5,alignx left,aligny center");
 		
 				JButton btnSelectItem = new JButton("Search");
 				btnSelectItem.addActionListener(new ActionListener() {
@@ -85,17 +76,13 @@ public class SupplyGUI extends JPanel {
 						readItems();
 					}
 				});
-				supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 4,growx,aligny bottom");
+				supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 5,growx,aligny bottom");
 
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea_1, "cell 1 5");
+		supplyRestaurantPanel.add(rigidArea_1, "cell 1 6");
 
-		scrollPane = new ItemScrollPane();
-		supplyRestaurantPanel.add(scrollPane, "cell 1 6 10 9,grow");
-
-		textFieldSearch = new JTextField();
-		supplyRestaurantPanel.add(textFieldSearch, "cell 1 4,growx,aligny center");
-		textFieldSearch.setColumns(10);
+		itemScrollPane = new ItemScrollPane();
+		supplyRestaurantPanel.add(itemScrollPane, "cell 1 7 10 9,grow");
 
 		JButton btnGoBack = new JButton("Back");
 		btnGoBack.addActionListener(new ActionListener() {
@@ -113,37 +100,41 @@ public class SupplyGUI extends JPanel {
 		});
 
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea, "cell 6 15");
+		supplyRestaurantPanel.add(rigidArea, "cell 6 16");
 
 		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
-		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 16");
+		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 17");
 
 		textFieldEnterQuantity = new JTextField();
-		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 1 16,growx");
+		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 1 17,growx");
 		textFieldEnterQuantity.setColumns(10);
+
+		JButton btnAddItem = new JButton("Add to order");
+		btnAddItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addLineItems();
+			}
+		});
+		supplyRestaurantPanel.add(btnAddItem, "cell 2 17,growx,aligny bottom");
+		supplyRestaurantPanel.add(btnProceed, "cell 9 17");
+
+		supplyRestaurantPanel.add(btnGoBack, "cell 10 17,growx,aligny bottom");
 		
-				JButton btnAddItem = new JButton("Add to order");
-				btnAddItem.addActionListener(new ActionListener() {
-					public void actionPerformed(ActionEvent e) {
-						addLineItems();
-					}
-				});
-				supplyRestaurantPanel.add(btnAddItem, "cell 2 16,growx,aligny bottom");
-		supplyRestaurantPanel.add(btnProceed, "cell 9 16");
-
-		supplyRestaurantPanel.add(btnGoBack, "cell 10 16,growx,aligny bottom");
-
+				textFieldSearch = new JTextField();
+				supplyRestaurantPanel.add(textFieldSearch, "cell 1 5,growx,aligny center");
+				textFieldSearch.setColumns(10);
+		
 	}
 
 	private void readItems() {
 		Collection<Item> itemsFound;
-		if (scrollPane.getDepartmentFromChoice().equals("any")) {
+		if (itemScrollPane.getDepartmentFromChoice().equals("any")) {
 			itemsFound = itemController.readItemByName(getNameFromSearchTextField());
 		} else {
 			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(),
-					scrollPane.getDepartmentFromChoice());
+					itemScrollPane.getDepartmentFromChoice());
 		}
-		scrollPane.updateListItem(itemsFound);
+		itemScrollPane.updateListItem(itemsFound);
 	}
 
 	private int getQuantityFromTextField() throws Exception {
@@ -161,7 +152,7 @@ public class SupplyGUI extends JPanel {
 		try {
 			int quantity = getQuantityFromTextField();
 			if (quantity > 0) {
-				lineItem = new LineItem(quantity, scrollPane.getSelectedItem());
+				lineItem = new LineItem(quantity, itemScrollPane.getSelectedItem());
 				supplyOrderController.getSupplyOrder().addLineItem(lineItem);
 			} else {
 				throw new Exception();
@@ -211,11 +202,8 @@ public class SupplyGUI extends JPanel {
 		return messageToShow;
 	}
 	
-	
-	
-	
-	
-	
-	
-	
+	private void refresh() {
+		this.revalidate();
+		this.repaint();
+	}
 }

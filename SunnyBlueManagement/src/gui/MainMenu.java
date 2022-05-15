@@ -9,6 +9,7 @@ import javax.swing.JLabel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
+import gui.resupply.DecorationGUI;
 import gui.resupply.SupplyGUI;
 
 import java.awt.Component;
@@ -23,6 +24,7 @@ public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
 	private SupplyGUI supplyPanel;
+	private DecorationGUI decorationPanel;
 	private JLabel lblConOutput;
 
 	/**
@@ -30,9 +32,11 @@ public class MainMenu extends JPanel {
 	 */
 	public MainMenu(final MainFrame mainFrame) {
 		setBounds(100, 100, 1920, 1080);
-		setLayout(new MigLayout("", "[grow][][][center][][grow]", "[grow][][][][][][][][grow]"));
+		setLayout(new MigLayout("", "[grow][][][center][][grow]", "[grow][][][][][][][][][][grow]"));
 		//setLayout(new MigLayout("align 50% 50%"));
 		supplyPanel = new SupplyGUI(mainFrame);
+		decorationPanel = new DecorationGUI();
+		
 		
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -58,13 +62,24 @@ public class MainMenu extends JPanel {
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea, "cell 3 6");
 		
+		JButton btnManageDecorations = new JButton("Manage Decorations");
+		btnManageDecorations.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.switchPanels(decorationPanel);
+			}
+		});
+		add(btnManageDecorations, "cell 3 7");
+		
+		Component rigidArea_3 = Box.createRigidArea(new Dimension(20, 20));
+		add(rigidArea_3, "cell 3 8");
+		
 		JLabel lblConnection = new JLabel("Connection:");
-		add(lblConnection, "cell 1 7");
+		add(lblConnection, "cell 1 9");
 		CheckConnectionWorker connection = new CheckConnectionWorker(this);
 		connection.execute();
 		
 		lblConOutput = new JLabel("");
-		add(lblConOutput, "cell 2 7");
+		add(lblConOutput, "cell 2 9");
 
 	}
 	

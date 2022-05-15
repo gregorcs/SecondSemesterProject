@@ -6,7 +6,6 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoItemIF;
-import model.Decoration;
 import model.Item;
 
 public class DaoItemImplementation implements DaoItemIF {
@@ -23,6 +22,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 
+	//this will be duplicate code with daoDecoration, no time to make a shared class for queries rn
 	private PreparedStatement buildReadAllItemsString() throws SQLException {
 		String readAllString = "SELECT t1.itemId, t2.decorationId, t1.name, t1.department, t2.quantityInStock "
 								+ "FROM Item t1 "
@@ -210,32 +210,5 @@ public class DaoItemImplementation implements DaoItemIF {
 			DBConnection.closeConnection();
 		}
 		return itemsList;
-	}
-
-	public Collection<Decoration> readAllDecorations() throws Exception {
-			PreparedStatement stmt = buildReadAllItemsString();
-			ArrayList<Decoration> decorationsList = new ArrayList<>();
-
-			try {
-				ResultSet rs = stmt.executeQuery();
-
-				while (rs.next()) {
-					//check if the Item-Decoration join has a decoration id
-					if (rs.getInt(2) != 0) {
-						decorationsList.add(new Decoration(rs.getInt(1), rs.getString(3), rs.getString(4), 
-								rs.getInt(2), rs.getInt(5)));					
-						} 
-				}
-
-			} catch (SQLException e) {
-				throw new Exception("SQL exception " + e);
-			} catch (NullPointerException e) {
-				throw new Exception("Null pointer exception, possible connection problems " + e);
-			} catch (Exception e) {
-				throw new Exception("Technical error " + e);
-			} finally {
-				DBConnection.closeConnection();
-			}
-			return decorationsList;
 	}
 }
