@@ -87,7 +87,7 @@ public class ItemController {
 				departmentsList.add(item.getDepartmentType());
 			}
 		}
-		return null;
+		return departmentsList;
 	}
 
 

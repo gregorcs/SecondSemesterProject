@@ -67,6 +67,7 @@ public class ItemScrollPane extends JScrollPane implements ScrollPaneIF<Item>{
 	
 	private void constructChoiceDepartment() {
 		choiceDepartments.add("any");
+		itemController = new ItemController();
 		for (String department : itemController.getAllDepartmentTypes()) {
 			choiceDepartments.add(department);
 		}
