@@ -34,7 +34,7 @@ public class ItemController {
 			e.printStackTrace();
 		}
 		// TODO return null here too rather?
-		return new Item();
+		return null;
 	}
 	
 	public void deleteItem(Item item) {
@@ -57,7 +57,7 @@ public class ItemController {
 			e.printStackTrace();
 		}
 		// TODO SHOULD I JUST RETURN NULL HERE? IM SCARED OF IT CRASHING THE PROGRAM
-		return new ArrayList<Item>();
+		return null;
 	}
 	
 	public Collection<Item> readItemByName(String name) {
@@ -67,7 +67,7 @@ public class ItemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ArrayList<Item>();
+		return null;
 	}
 	
 	public Collection<Item> readItemByNameAndDepartment(String name, String department) {
@@ -77,7 +77,7 @@ public class ItemController {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return new ArrayList<Item>();
+		return null;
 	}
 	
 	public Collection<String> getAllDepartmentTypes() {
@@ -89,4 +89,28 @@ public class ItemController {
 		}
 		return departmentsList;
 	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 }

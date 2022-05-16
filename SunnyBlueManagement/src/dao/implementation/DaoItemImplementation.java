@@ -22,6 +22,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 
+	//this will be duplicate code with daoDecoration, no time to make a shared class for queries rn
 	private PreparedStatement buildReadAllItemsString() throws SQLException {
 		String readAllString = "SELECT * FROM Item";
 		PreparedStatement stmt = con.prepareStatement(readAllString);

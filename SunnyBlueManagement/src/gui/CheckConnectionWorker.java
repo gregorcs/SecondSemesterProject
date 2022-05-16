@@ -20,21 +20,20 @@ public class CheckConnectionWorker extends SwingWorker<String, String>{
 		while(true) {
 			try {
 				if (DBConnection.getInstance().isConnectionValid()) {
-					mainMenu.updateConnectionOutput("valid");
+					mainMenu.updateConnectionOutput(true);
 					mainMenu.refresh();
 				} else {
-					mainMenu.updateConnectionOutput("failed");
+					mainMenu.updateConnectionOutput(false);
+					DBConnection.resetConnection();
 					mainMenu.refresh();
 				}
 			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				//TODO RETURN A MESSAGE TO THE USER
-				mainMenu.updateConnectionOutput("failed");
+				mainMenu.updateConnectionOutput(false);
 				mainMenu.refresh();
 				e.printStackTrace();
 			}
 			try {
-				Thread.sleep(15000);
+				Thread.sleep(5000);
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
