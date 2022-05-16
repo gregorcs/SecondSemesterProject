@@ -9,18 +9,56 @@ import java.time.LocalDateTime;
 
 import model.LineItem;
 import model.SupplyOrder;
+import model.UrgencyEnum;
 
 public class SupplyOrderController {
 	
-	DaoSupplyOrderIF daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
+	private DaoSupplyOrderIF daoSupplyOrder;
+	private SupplyOrder supplyOrder;
+	
+	public SupplyOrderController() {
+		super();
+		this.daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
+		this.supplyOrder = new SupplyOrder();
+	}
 
-	public void createResupplyOrder(LocalDateTime date, String urgency, ArrayList<LineItem> listOfItems) {
-		SupplyOrder supplyOrder = new SupplyOrder(date, urgency, listOfItems);
+	public void createSupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
+		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgencyEnum, listOfItems);
+
 		try {
-			daoSupplyOrder.create(supplyOrder);
+			if (listOfItems.isEmpty()) {
+				throw new Exception("List is empty");
+			} else {
+				daoSupplyOrder.create(supplyOrderToCreate);
+			}
 		} catch (Exception e) {
-			// TODO RETURN SOME KIND OF ERROR TO THE USER
 			e.printStackTrace();
 		}
+	}
+
+	public boolean createSupplyOrder() {
+		try {
+			if (supplyOrder.getListOfItems().isEmpty()) {
+				throw new Exception("List is empty");
+			} else {
+				daoSupplyOrder.create(supplyOrder);
+				return true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
+	public SupplyOrder getSupplyOrder() {
+		return supplyOrder;
+	}
+
+	public void setSupplyOrder(SupplyOrder supplyOrder) {
+		this.supplyOrder = supplyOrder;
+	}
+	
+	public void emptySupplyOrder() {
+		supplyOrder = new SupplyOrder();
 	}
 }

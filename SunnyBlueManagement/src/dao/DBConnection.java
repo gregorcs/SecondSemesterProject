@@ -3,6 +3,7 @@ package dao;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.DriverManager;
+import java.sql.SQLException;
 
 
 public class DBConnection {   
@@ -50,7 +51,7 @@ public class DBConnection {
             System.out.println(url);
         }//end catch
     }//end  constructor
-	   
+    
   //closeDb: closes the connection to the database
     public static void closeConnection()
     {
@@ -83,5 +84,14 @@ public class DBConnection {
         }
         return instance;
     }
+    
+    public boolean isConnectionValid() throws Exception {
+    	try {
+			return con.isValid(3000);
+		} catch (SQLException e) {
+			throw new Exception("Failed to check connection" + e);
+		}
+    }
+    
 
 }//end DbConnection

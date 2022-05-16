@@ -1,10 +1,6 @@
 package dao.implementation;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.Collection;
 
 import dao.DBConnection;
@@ -22,7 +18,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
 		PreparedStatement stmt = con.prepareStatement(createSupplyOrder, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, supplyOrder.getDateString());
-		stmt.setString(2, supplyOrder.getUrgency());
+		stmt.setString(2, supplyOrder.getUrgencyEnum().toString());
 		System.out.println(createSupplyOrder);
 		return stmt;
 	}
@@ -38,15 +34,13 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 	}
 
 	@Override
-	public int create(SupplyOrder obj) throws Exception {
-
+	public void create(SupplyOrder obj) throws Exception {
+		con = DBConnection.getInstance().getDBcon();
 		PreparedStatement stmt = buildCreateSupplyOrderStatement(obj);
-		int insertedKey = 1;
 
 		try {
 		    con.setAutoCommit(false);
 			stmt.executeUpdate();
-			//TODO RETURN THE CREATED SUPPLY ORDER
 
 	        ResultSet generatedKeys = stmt.getGeneratedKeys();
 	        if (generatedKeys.next()) {
@@ -59,7 +53,6 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 			con.commit();
 
 		} catch (SQLException e) {
-			insertedKey = -1;
 			if (con != null) {
 		        try {
 		          con.rollback();
@@ -69,16 +62,12 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		        }
 			}
 		} catch (NullPointerException e) {
-			insertedKey = -2;
 			throw new Exception("Null pointer exception, possible connection problems");
 		} catch (Exception e) {
-			insertedKey = -3;
 			throw new Exception("Technical error");
 		} finally {
 			DBConnection.closeConnection();
 		}
-
-		return insertedKey;
 	}
 
 	@Override
@@ -105,29 +94,23 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		return null;
 	}
 
-	private int createSupplyOrderItem(SupplyOrder supplyOrder, LineItem lineItem) throws SQLException, NullPointerException, Exception{
+	private void createSupplyOrderItem(SupplyOrder supplyOrder, LineItem lineItem) throws SQLException, NullPointerException, Exception{
 
 		PreparedStatement stmt = buildCreateSupplyOrderItemStatement(supplyOrder, lineItem);
-		int insertedKey = 1;
 
 		try {
-			ResultSet rs = stmt.executeQuery();
-			//TODO RETURN THE CREATED SUPPLY ORDER
+			stmt.executeQuery();
 
 		} catch (SQLException e) {
-			insertedKey = -1;
-			throw new SQLException("SQL exception");
+			throw new Exception("SQL exception");
 		} catch (NullPointerException e) {
-			insertedKey = -2;
-			throw new NullPointerException("Null pointer exception, possible connection problems");
+			throw new Exception("Null pointer exception, possible connection problems");
 		} catch (Exception e) {
-			insertedKey = -3;
 			throw new Exception("Technical error");
 		} finally {
-			//TODO REMOVED CLOSE.CONNECTION FROM HERE TO TEST IF TRANSACTION WORKS
+			//TODO REMOVED CLOSE.CONNECTION FROM HERE 
 		}
 
-		return insertedKey;
 	}
 
 

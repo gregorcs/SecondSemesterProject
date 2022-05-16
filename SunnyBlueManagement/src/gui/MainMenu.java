@@ -6,12 +6,12 @@ import net.miginfocom.swing.MigLayout;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
-import javax.swing.JLayeredPane;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 import gui.reservation.Reserve;
-import gui.resupply.Resupply;
+
+import gui.resupply.SupplyGUI;
 
 import java.awt.Component;
 import javax.swing.Box;
@@ -20,23 +20,28 @@ import java.awt.Font;
 import java.awt.event.ActionListener;
 import java.awt.event.ActionEvent;
 
-public class MainMenu extends JPanel implements Runnable {
+public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
+
 	private MainFrame mainFrame;
-	private Resupply resupplyPanel;
 	private Reserve reservePanel;
+	private SupplyGUI supplyPanel;
+	private JLabel lblConOutput;
+
 
 	/**
 	 * Create the panel.
 	 */
 	public MainMenu(final MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
 		setBounds(100, 100, 1920, 1080);
-		setLayout(new MigLayout("", "[][][center][]", "[][][][][][][][][]"));
+		setLayout(new MigLayout("align 50% 50%", "[][][center][]", "[][][][][][][][][]"));
 		//setLayout(new MigLayout("align 50% 50%"));
-		resupplyPanel = new Resupply(mainFrame);
+
 		reservePanel = new Reserve(mainFrame);
+
+		supplyPanel = new SupplyGUI(mainFrame);
+
 		
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -60,7 +65,7 @@ public class MainMenu extends JPanel implements Runnable {
 		JButton btnResupply = new JButton("Resupply ");
 		btnResupply.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainFrame.switchPanels(resupplyPanel);
+				mainFrame.switchPanels(supplyPanel);
 			}
 		});
 		add(btnResupply, "cell 2 4");
@@ -68,19 +73,22 @@ public class MainMenu extends JPanel implements Runnable {
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea, "cell 2 5");
 		
-		JLabel lblConnection = new JLabel("Connection");
+		JLabel lblConnection = new JLabel("Connection:");
 		add(lblConnection, "cell 0 6");
+		CheckConnectionWorker connection = new CheckConnectionWorker(this);
+		connection.execute();
 		
-		JLabel lblConnectionOutput = new JLabel("");
-		add(lblConnectionOutput, "cell 1 8");
+		lblConOutput = new JLabel("");
+		add(lblConOutput, "cell 1 6");
 
 	}
-
-	@Override
-	public void run() {
-		
-		
+	
+	public void updateConnectionOutput(String status) {
+		lblConOutput.setText(status);
 	}
 	
-	
+	public void refresh() {
+		this.revalidate();
+		this.repaint();
+	}
 }
