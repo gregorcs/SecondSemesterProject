@@ -5,7 +5,6 @@ import java.util.Collection;
 
 import dao.DaoFactory;
 import dao.implementation.DaoReservationImplementation;
-import dao.interfaces.DaoIF;
 import model.Item;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
@@ -48,7 +47,7 @@ public class ReservationController {
 				reservation.addTable(table);
 			}
 			
-			System.out.println("KEY!!!" + DaoFactory.createDaoReservation().create(reservation));
+			DaoFactory.createDaoReservation().create(reservation);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

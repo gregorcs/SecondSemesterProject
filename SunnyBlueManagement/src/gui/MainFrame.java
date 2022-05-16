@@ -8,7 +8,6 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import gui.reservation.Reserve;
-import gui.resupply.Resupply;
 
 import gui.resupply.SupplyGUI;
 
