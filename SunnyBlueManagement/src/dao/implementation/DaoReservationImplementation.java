@@ -41,49 +41,48 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		System.out.println(createDinnerTableReservation);
 		return stmt;
 	}
-	
-	//Transaction
+
+	// Transaction
 	@Override
-	public int create(Reservation obj) throws Exception {
-		
+	public void create(Reservation obj) throws Exception {
+
 		PreparedStatement stmt = buildCreateReservationStatement(obj);
 		int insertedKey = 1;
-		
+
 		try {
-		con.setAutoCommit(false);
-		stmt.executeUpdate();
-		//TODO Return the created reservation
-		
-		ResultSet generatedKeys = stmt.getGeneratedKeys();
-		if (generatedKeys.next()) {
-			obj.setReservationID(generatedKeys.getInt(1));
-			
+			con.setAutoCommit(false);
+			stmt.executeUpdate();
+			// TODO Return the created reservation
+
+			ResultSet generatedKeys = stmt.getGeneratedKeys();
+			if (generatedKeys.next()) {
+				obj.setReservationID(generatedKeys.getInt(1));
+
 			}
-		
-		for (Table table : obj.getListOfTables()) {
-			createDinnerTableReservation(obj, table);
+
+			for (Table table : obj.getListOfTables()) {
+				createDinnerTableReservation(obj, table);
 			}
-		con.commit();
-	
-	//Error handling
-	} catch (SQLException e) {
-		insertedKey = -1;
-		if (con != null) {
-			try {
-				con.rollback();
-				System.out.println("Rolling back database");
-			} catch(SQLException excep) {
-				throw new SQLException("Error when rolling back database" + excep);
+			con.commit();
+
+			// Error handling
+		} catch (SQLException e) {
+			insertedKey = -1;
+			if (con != null) {
+				try {
+					con.rollback();
+					System.out.println("Rolling back database");
+				} catch (SQLException excep) {
+					throw new SQLException("Error when rolling back database" + excep);
+				}
 			}
+		} catch (NullPointerException e) {
+			insertedKey = -2;
+			throw new Exception("Technical error" + e);
+		} finally {
+			DBConnection.closeConnection();
 		}
-	} catch (NullPointerException e) {
-		insertedKey = -2;
-		throw new Exception("Technical error" + e);
-	} finally {
-		DBConnection.closeConnection();
-	}
-	
-	return insertedKey;
+
 	}
 
 	@Override
