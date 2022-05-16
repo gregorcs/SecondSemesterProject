@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import gui.resupply.DecorationGUI;
+import gui.reservation.Reserve;
 import gui.resupply.SupplyGUI;
+
 
 import java.awt.GridBagLayout;
 import javax.swing.JLayeredPane;
@@ -20,6 +22,7 @@ public class MainFrame extends JFrame {
 	private JPanel contentPane;
 	private MainMenu mainMenuPanel;
 	private JPanel resupplyPanel;
+	private JPanel reservePanel;
 	private JLayeredPane layeredPane;
 	private DecorationGUI decorationPanel;
 
@@ -76,7 +79,9 @@ public class MainFrame extends JFrame {
 		
 		decorationPanel = new DecorationGUI();
 		layeredPane.add(decorationPanel, "name_98119803398600");
-		
+    
+		reservePanel = new Reserve(this);
+		layeredPane.add(reservePanel, "name_79832769847600");
 	}
 
 	public JLayeredPane getLayeredPane() {
