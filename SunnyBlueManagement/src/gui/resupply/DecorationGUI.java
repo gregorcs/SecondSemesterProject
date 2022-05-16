@@ -59,7 +59,7 @@ public class DecorationGUI extends JPanel {
 		
 	}
 	
-	private void refresh() {
+	public void refresh() {
 		this.revalidate();
 		this.repaint();
 	}

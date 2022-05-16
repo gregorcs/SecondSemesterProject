@@ -1,6 +1,8 @@
 package gui.decoration;
 
 import java.awt.Choice;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
@@ -13,6 +15,7 @@ import javax.swing.JToggleButton;
 import controller.DecorationController;
 import controller.ItemController;
 import model.Decoration;
+import model.DecorationStatistics;
 public class DecorationScrollPane extends JScrollPane{
 
 	private static final long serialVersionUID = -4773670531023046534L;
@@ -22,7 +25,9 @@ public class DecorationScrollPane extends JScrollPane{
 	private enum SortStockEnum {LOWEST, HIGHEST;};
 	
 	private JList<Decoration> decorationList;
+	//private JList<DecorationStatistics> decorationStatsList;
 	private DefaultListModel<Decoration> listRepresentationDecoration;
+	//private DefaultListModel<DecorationStatistics> listRepresentationDecorationStats;
 	
 	private DecorationController decorationController;
 	private ItemController itemController;
@@ -53,7 +58,16 @@ public class DecorationScrollPane extends JScrollPane{
 		}
 		decorationList.setModel(listRepresentationDecoration);
 	}
-	
+	/*
+	public void updateListStatistics(Collection<DecorationStatistics> listToShow) {
+		listRepresentationDecorationStats = new DefaultListModel<DecorationStatistics>();
+		
+		for(DecorationStatistics decorationStats : listToShow) {
+			listRepresentationDecorationStats.addElement(decorationStats);
+		}
+		decorationStatsList.setModel(listRepresentationDecorationStats);
+	}
+	*/
 	public Decoration getSelectedDecoration() {return decorationList.getSelectedValue();};
 	
 	public String getDepartmentFromChoice() {
@@ -64,6 +78,17 @@ public class DecorationScrollPane extends JScrollPane{
 		return choiceLowOrHigh.getItem(choiceLowOrHigh.getSelectedIndex()).toString();
 	}
 	
+	/*
+	private void switchToMonthlyView() {
+		this.remove(decorationList);
+		decorationController = new DecorationController();
+		DecorationStatisticsListCellRenderer cellRendererStats = new DecorationStatisticsListCellRenderer();
+		decorationStatsList = new JList<DecorationStatistics>();
+		decorationStatsList.setCellRenderer(cellRendererStats);
+		updateListStatistics(decorationController.readSumDecorationsPerMonth());
+		this.add(decorationStatsList);
+	}
+	*/
 	private void constructChoiceDepartment() {
 		JLabel lblSortByDepartment = new JLabel("By department:  ");
 		menuBar.add(lblSortByDepartment);
@@ -91,6 +116,11 @@ public class DecorationScrollPane extends JScrollPane{
 		constructChoiceDepartment();
 		constructChoiceLowOrHigh();
 		JToggleButton monthlyView = new JToggleButton("Monthly view");
+		monthlyView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//switchToMonthlyView();
+			}
+		});
 		menuBar.add(monthlyView);
 	}
 }
