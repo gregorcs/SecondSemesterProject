@@ -33,11 +33,17 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	//prepared statement for DinnerTable - Reservation Join Table
 	//should we name it like it is in the relational model or should it still just be table
 	private PreparedStatement buildCreateDinnerTableReservationStatement(Reservation reservation, Table table) throws SQLException{
-		String createDinnerTableReservation = "INSERT INTO DinnerTable_Reservation values (?, ?)";
+		System.out.println("hello there");
+		System.out.println(reservation.getDate() + " " + table.getTableNo()
+		+ " " + reservation.getReservationId() + " " + table.getTableNo());
+		String createDinnerTableReservation = "BEGIN IF NOT EXISTS(SELECT reservation.reservationId, reservation.date 'reservation date', t2.dinnerTable_tableNo_FK 'table number fk' FROM Reservation reservation INNER JOIN DinnerTable_Reservation t2 ON reservation.reservationId = t2.reservation_reservationId_FK WHERE reservation.date = ? AND (? IN (t2.dinnerTable_tableNo_FK))) BEGIN INSERT INTO DinnerTable_Reservation (reservation_reservationId_FK, dinnerTable_tableNo_FK) VALUES (?, ?) END END";
 		PreparedStatement stmt = con.prepareStatement(createDinnerTableReservation, Statement.RETURN_GENERATED_KEYS);
 	//getReservationID needs to be implemented??
-		stmt.setString(1, Integer.toString(reservation.getReservationId()));
+		stmt.setString(1, reservation.getDate());
 		stmt.setString(2, Integer.toString(table.getTableNo()));
+		stmt.setString(3, Integer.toString(reservation.getReservationId()));
+		stmt.setString(4, Integer.toString(table.getTableNo()));
+		
 		System.out.println(createDinnerTableReservation);
 		return stmt;
 	}
@@ -50,7 +56,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		int insertedKey = 1;
 
 		try {
-			con.setAutoCommit(false);
+			//con.setAutoCommit(false);
 			stmt.executeUpdate();
 			// TODO Return the created reservation
 
@@ -63,10 +69,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			for (Table table : obj.getListOfTables()) {
 				createDinnerTableReservation(obj, table);
 			}
-			con.commit();
+			//con.commit();
 
 			// Error handling
 		} catch (SQLException e) {
+			/*
 			insertedKey = -1;
 			if (con != null) {
 				try {
@@ -76,6 +83,9 @@ public class DaoReservationImplementation implements DaoReservationIF{
 					throw new SQLException("Error when rolling back database" + excep);
 				}
 			}
+			*/
+			System.out.println(e);
+			throw new Exception("sql expcetion" + e);
 		} catch (NullPointerException e) {
 			insertedKey = -2;
 			throw new Exception("Technical error" + e);

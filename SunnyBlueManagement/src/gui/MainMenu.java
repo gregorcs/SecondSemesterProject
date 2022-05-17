@@ -46,7 +46,7 @@ public class MainMenu extends JPanel {
 
 		supplyPanel = new SupplyGUI(mainFrame);
 
-		decorationPanel = new DecorationGUI();
+		decorationPanel = new DecorationGUI(mainFrame);
 
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -58,7 +58,7 @@ public class MainMenu extends JPanel {
 		// It needs to go to the EnterDetails Panel instead - halp
 		JButton btnReserveTable = new JButton("Reserve Table");
 
-		add(btnReserveTable, "cell 3 3");
+		add(btnReserveTable, "cell 3 3,growx");
 		btnReserveTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				mainFrame.switchPanels(reservePanel);
@@ -74,7 +74,7 @@ public class MainMenu extends JPanel {
 				mainFrame.switchPanels(supplyPanel);
 			}
 		});
-		add(btnResupply, "cell 3 5");
+		add(btnResupply, "cell 3 5,growx");
 
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea, "cell 3 6");
@@ -85,7 +85,7 @@ public class MainMenu extends JPanel {
 				mainFrame.switchPanels(decorationPanel);
 			}
 		});
-		add(btnManageDecorations, "cell 3 7");
+		add(btnManageDecorations, "cell 3 7,growx");
 
 		Component rigidArea_3 = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea_3, "cell 3 8");

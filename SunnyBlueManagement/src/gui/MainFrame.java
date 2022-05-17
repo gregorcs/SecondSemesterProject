@@ -77,7 +77,7 @@ public class MainFrame extends JFrame {
 		resupplyPanel = new SupplyGUI(this);
 		layeredPane.add(resupplyPanel, "name_1894438046500");
 		
-		decorationPanel = new DecorationGUI();
+		decorationPanel = new DecorationGUI(this);
 		layeredPane.add(decorationPanel, "name_98119803398600");
     
 		reservePanel = new Reserve(this);
