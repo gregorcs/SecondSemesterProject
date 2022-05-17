@@ -37,7 +37,6 @@ public class DaoTableImplementation implements DaoTableIF {
 		
 		try {
 			stmt.executeQuery();
-
 		} catch (SQLException e) {
 			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {

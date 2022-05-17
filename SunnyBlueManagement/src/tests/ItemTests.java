@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 
 import controller.ItemController;
 import dao.DBConnection;
+import model.Decoration;
 import model.Item;
 
 class ItemTests {
@@ -54,5 +55,9 @@ class ItemTests {
 		itemController.deleteItem(null);
 		//Assert
 		//TODO FINISH IT
+	}
+	
+	public void decorationWorks() {
+		Item item = new Decoration("confetti", "restaurant", 5);
 	}
 }
