@@ -3,6 +3,7 @@ package gui.decoration;
 import java.awt.Choice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
@@ -40,14 +41,24 @@ public class DecorationScrollPane extends JScrollPane{
 		setViewportView(decorationList);
 		decorationList.setFixedCellHeight(20);
 		constructScrollPaneHeader();
-		initializeList();
+		initializeList(decorationController.readAllDecorations());
 	}
 	
-	public void initializeList() {
+	public DecorationScrollPane(Collection<Decoration> decorationsToShow) {
+		decorationController = new DecorationController();
+		itemController = new ItemController();
+		decorationList = new JList<Decoration>();
+		setViewportView(decorationList);
+		decorationList.setFixedCellHeight(20);
+		constructScrollPaneHeader();
+		initializeList(decorationsToShow);
+	}
+	
+	public void initializeList(Collection<Decoration> decorationsToShow) {
 		DecorationListCellRenderer cellRenderer = new DecorationListCellRenderer();
 		decorationList.setCellRenderer(cellRenderer);
 		decorationController = new DecorationController();
-		updateList(decorationController.readAllDecorations());
+		updateList(decorationsToShow);
 	}
 	
 	public void updateList(Collection<Decoration> listToShow) {
