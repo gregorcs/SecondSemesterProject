@@ -23,6 +23,9 @@ public class Reservation {
 		this.setPhoneNo(phoneNo);
 	}
 	
+	public Reservation() {
+		
+	}
 	/**
 	 * if you need to create a reservation before it is inserted into the database
 	 * @param numOfPeople

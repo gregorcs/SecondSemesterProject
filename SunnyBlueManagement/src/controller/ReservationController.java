@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import dao.DaoFactory;
 import dao.implementation.DaoReservationImplementation;
+import dao.interfaces.DaoReservationIF;
 import model.Item;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
@@ -19,7 +20,7 @@ public class ReservationController {
 		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo);
 		selectedTables = new ArrayList<>();
 		
-		DaoReservationImplementation daoReservation = (DaoReservationImplementation) DaoFactory.createDaoReservation(); //CHANGE THIS FROM A CAST!
+		DaoReservationIF daoReservation = DaoFactory.createDaoReservation();
 		Collection<Table> availableTables = daoReservation.readTablesByDate(date);
 		
 		return availableTables;
@@ -41,16 +42,18 @@ public class ReservationController {
 		}
 	
 	//confirms the reservation
-	public void confirmReservation() {
+	public boolean confirmReservation() {
 		try {
 			for(Table table : selectedTables) {
 				reservation.addTable(table);
 			}
-			
 			DaoFactory.createDaoReservation().create(reservation);
+			reservation = new Reservation();
+			selectedTables.removeAll(selectedTables);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		return true;
 	}
 	
 	public void selectTable(Table table) {

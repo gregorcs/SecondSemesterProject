@@ -22,9 +22,11 @@ import javax.swing.JTextField;
 
 import controller.ReservationController;
 import gui.MainFrame;
+import gui.decoration.DecorationScrollPane;
 import gui.table.TableScrollPane;
 import model.ReservationFolder.Table;
 import net.miginfocom.swing.MigLayout;
+import javax.swing.JRadioButton;
 
 public class Reserve extends JPanel {
 
@@ -35,14 +37,13 @@ public class Reserve extends JPanel {
 	private JPanel EnterDetailsPanel;
 	private JPanel ChooseTablePanel;
 	private JPanel SpecificRequirementsPanel;
-	//Should Event panels be implemented here or in a separate class?
-	private JTextField textField;
 	private JTextField textName;
 	private JTextField textNumOfPeople;
 	private JTextField textDate;
 	private JTextField textPhoneNum;
 	private TableScrollPane paneTablesAvailable;
 	private TableScrollPane paneTablesSelected;
+	private DecorationScrollPane paneDecorations;
 	
 	//Panel creation
 	
@@ -69,6 +70,7 @@ public class Reserve extends JPanel {
 		
 		paneTablesAvailable = new TableScrollPane();
 		paneTablesSelected = new TableScrollPane();
+		paneDecorations = new DecorationScrollPane();
 		
 		//TEXT FIELDS AND LABELS 
 		
@@ -114,6 +116,9 @@ public class Reserve extends JPanel {
 			}
 		});
 		
+		JRadioButton rdbtnIsEvent = new JRadioButton("Event");
+		EnterDetailsPanel.add(rdbtnIsEvent, "cell 1 8");
+		
 		JButton btnProceed = new JButton("Proceed");
 		btnProceed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -131,9 +136,18 @@ public class Reserve extends JPanel {
 					try {
 						Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo);
 						switchReservePanels(ChooseTablePanel);
-						updateScrollPane(paneTablesAvailable ,tables);
+						updateScrollPane(paneTablesAvailable ,tables);						
+						updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
 						
-
+						if(rdbtnIsEvent.isSelected()) {
+							paneDecorations.setEnabled(true);
+							paneDecorations.setVisible(true);
+						}
+						else{
+							paneDecorations.setEnabled(false);
+							paneDecorations.setVisible(false);
+						}
+						
 					} catch (Exception e1) {
 						e1.printStackTrace();
 					}
@@ -145,6 +159,8 @@ public class Reserve extends JPanel {
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		EnterDetailsPanel.add(rigidArea_1, "cell 2 7");
 		
+		
+		
 		//
 		
 		EnterDetailsPanel.add(btnProceed, "cell 2 8,growx");
@@ -155,11 +171,22 @@ public class Reserve extends JPanel {
 		//Table Selection panel
 		ChooseTablePanel = new JPanel();
 		layeredPane.add(ChooseTablePanel, "name_54378967892300");
-		ChooseTablePanel.setLayout(new MigLayout("", "[173.00px][165.00px,center][42.00][264.00,grow][][][]", "[14px][69.00][43.00][184.00,top][grow]"));
+		ChooseTablePanel.setLayout(new MigLayout("", "[173.00px,grow][165.00px,center][42.00][264.00,grow][][][]", "[14px][32.00][43.00][184.00,top][][grow]"));
 		
 		JLabel lblChooseTableHeader = new JLabel("Choose a table");
 		lblChooseTableHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		ChooseTablePanel.add(lblChooseTableHeader, "cell 0 0,alignx left,aligny top");
+		
+		JButton btnRemove = new JButton("Remove");
+		btnRemove.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				Table table = paneTablesSelected.getSelectedTable();
+				if(table!=null) {
+					reservationController.removeTable(table);
+					updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
+				}
+			}
+		});
 		
 		//Maybe one more JLabel?
 		
@@ -173,18 +200,7 @@ public class Reserve extends JPanel {
 				}
 			}
 		});
-		ChooseTablePanel.add(btnSelectTable, "cell 1 1,alignx left,aligny bottom");
-		
-		JButton btnRemove = new JButton("Remove");
-		btnRemove.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				Table table = paneTablesSelected.getSelectedTable();
-				if(table!=null) {
-					reservationController.removeTable(table);
-					updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
-				}
-			}
-		});
+		ChooseTablePanel.add(btnSelectTable, "cell 0 1,alignx left,aligny bottom");
 		ChooseTablePanel.add(btnRemove, "cell 3 1");
 		
 		JLabel lblAvailable = new JLabel("Available");
@@ -195,10 +211,8 @@ public class Reserve extends JPanel {
 				
 		ChooseTablePanel.add(paneTablesAvailable, "cell 0 3 2 1,grow");
 		ChooseTablePanel.add(paneTablesSelected, "cell 3 3,grow");
+		ChooseTablePanel.add(paneDecorations, "cell 0 5 2 1,grow");
 		
-		textField = new JTextField();
-		ChooseTablePanel.add(textField, "cell 0 1,growx,aligny center");
-		textField.setColumns(10);
 		
 		JButton btnBackFromChooseTable = new JButton("Back");
 		btnBackFromChooseTable.addActionListener(new ActionListener(){
@@ -212,10 +226,18 @@ public class Reserve extends JPanel {
 		JButton btnConfirmReservation = new JButton("Confirm");
 		btnConfirmReservation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				reservationController.confirmReservation();
+				if(reservationController.confirmReservation()) {
+			        JOptionPane.showMessageDialog(null, "Reservation confirmed!");
+			        cleanReservationPanel();
+			        mainFrame.backToMainMenu();
+				}
+				else {
+					
+				}
 			}
 		});
 		ChooseTablePanel.add(btnConfirmReservation, "cell 6 4");
+	
 		//end of Table Selection
 		
 		//Specific Requirements Panel
@@ -233,6 +255,15 @@ public class Reserve extends JPanel {
 	
 	public void updateScrollPane(TableScrollPane pane, Collection<Table> tables) {
 		pane.initializeList(tables);
+	}
+	
+	private void cleanReservationPanel() {
+		textName.setText("");
+        textNumOfPeople.setText("");
+        textPhoneNum.setText("");
+        textDate.setText("");
+        switchReservePanels(EnterDetailsPanel);
+        updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
 	}
 	
 }
