@@ -12,6 +12,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	Connection con = DBConnection.getInstance().getDBcon();
 
+	// ******* CREATE *******
 	private PreparedStatement buildCreateString(Item item) throws SQLException {
 		String createItemString = "INSERT INTO Item values (?, ?)";
 
@@ -21,50 +22,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		System.out.println(createItemString);
 		return stmt;
 	}
-
-	//this will be duplicate code with daoDecoration, no time to make a shared class for queries rn
-	private PreparedStatement buildReadAllItemsString() throws SQLException {
-		String readAllString = "SELECT * FROM Item";
-		PreparedStatement stmt = con.prepareStatement(readAllString);
-		System.out.println(readAllString);
-		return stmt;
-	}
 	
-	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
-		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
-		PreparedStatement stmt = con.prepareStatement(readItemString);
-		stmt.setString(1, Integer.toString(itemId));
-		System.out.println(readItemString);
-		return stmt;
-	}
-	
-	private PreparedStatement buildDeleteItemString(Item item) throws SQLException {
-		String deleteItemString = "DELETE FROM Item WHERE itemId = ?";
-		PreparedStatement stmt = con.prepareStatement(deleteItemString);
-		stmt.setString(1, Integer.toString(item.getItemId()));
-		System.out.println(deleteItemString);
-		return stmt;
-
-	}
-	
-	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
-		String readByNameItemString = "SELECT * FROM Item WHERE name LIKE  ?";
-		PreparedStatement stmt = con.prepareStatement(readByNameItemString);
-		stmt.setString(1, "%" + name + "%");
-		System.out.println(readByNameItemString);
-		return stmt;
-	}
-	
-	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
-		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
-		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
-		stmt.setString(1, "%" + name + "%");
-		stmt.setString(2, department);
-		System.out.println(readByDepartmentItemString);
-		return stmt;
-	}
-	
-
 	@Override
 	public void create(Item obj) throws Exception {
 		PreparedStatement stmt = buildCreateString(obj);
@@ -81,9 +39,17 @@ public class DaoItemImplementation implements DaoItemIF {
 		} finally {
 			DBConnection.closeConnection();
 		}
-
 	}
-
+	
+	// ******* READ *******
+	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
+		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(readItemString);
+		stmt.setString(1, Integer.toString(itemId));
+		System.out.println(readItemString);
+		return stmt;
+	}
+	
 	@Override
 	public Item read(int id) throws Exception {
 		PreparedStatement stmt = buildReadItemString(id);
@@ -109,31 +75,15 @@ public class DaoItemImplementation implements DaoItemIF {
 		return item;
 	}
 
-	@Override
-	public void update(Item obj) throws Exception {
-		// TODO Auto-generated method stub
-
+	// ******* READ ALL*******
+	//this will be duplicate code with daoDecoration, no time to make a shared class for queries rn
+	private PreparedStatement buildReadAllItemsString() throws SQLException {
+		String readAllString = "SELECT * FROM Item";
+		PreparedStatement stmt = con.prepareStatement(readAllString);
+		System.out.println(readAllString);
+		return stmt;
 	}
-
-	@Override
-	public void delete(Item obj) throws Exception {
-		//TODO
-		PreparedStatement stmt = buildDeleteItemString(obj);
-		try {
-			stmt.executeQuery();
-
-		} catch (SQLException e) {
-			throw new Exception("SQL exception " + e);
-		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems " + e);
-		} catch (Exception e) {
-			throw new Exception("Technical error " + e);
-		} finally {
-			DBConnection.closeConnection();
-		}
-
-	}
-
+	
 	@Override
 	public Collection<Item> readAll() throws Exception {
 		PreparedStatement stmt = buildReadAllItemsString();
@@ -157,7 +107,16 @@ public class DaoItemImplementation implements DaoItemIF {
 		}
 		return itemsList;
 	}
-
+	
+	// ******* READ BY NAME *******
+	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
+		String readByNameItemString = "SELECT * FROM Item WHERE name LIKE  ?";
+		PreparedStatement stmt = con.prepareStatement(readByNameItemString);
+		stmt.setString(1, "%" + name + "%");
+		System.out.println(readByNameItemString);
+		return stmt;
+	}
+	
 	@Override
 	public Collection<Item> readByName(String name) throws Exception {
 		PreparedStatement stmt = buildReadByNameItemString(name);
@@ -180,6 +139,16 @@ public class DaoItemImplementation implements DaoItemIF {
 			DBConnection.closeConnection();
 		}
 		return itemsList;
+	}
+	
+	// ******* READ BY NAME & DEPARTMENT *******
+	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
+		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
+		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		stmt.setString(1, "%" + name + "%");
+		stmt.setString(2, department);
+		System.out.println(readByDepartmentItemString);
+		return stmt;
 	}
 
 	@Override
@@ -204,5 +173,37 @@ public class DaoItemImplementation implements DaoItemIF {
 			DBConnection.closeConnection();
 		}
 		return itemsList;
+	}
+	
+	// ******* UPDATE *******
+	@Override
+	public void update(Item obj) throws Exception {
+		// TODO Auto-generated method stub
+
+	}
+	
+	// ******* DELETE *******
+	private PreparedStatement buildDeleteItemString(Item item) throws SQLException {
+		String deleteItemString = "DELETE FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(deleteItemString);
+		stmt.setString(1, Integer.toString(item.getItemId()));
+		System.out.println(deleteItemString);
+		return stmt;
+	}
+		
+	@Override
+	public void delete(Item obj) throws Exception {
+		PreparedStatement stmt = buildDeleteItemString(obj);
+		try {
+			stmt.executeQuery();
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
 	}
 }
