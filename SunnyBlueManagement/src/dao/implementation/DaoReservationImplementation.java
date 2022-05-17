@@ -36,7 +36,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		System.out.println("hello there");
 		System.out.println(reservation.getDate() + " " + table.getTableNo()
 		+ " " + reservation.getReservationId() + " " + table.getTableNo());
-		String createDinnerTableReservation = "BEGIN IF NOT EXISTS(SELECT reservation.reservationId, reservation.date 'reservation date', t2.dinnerTable_tableNo_FK 'table number fk' FROM Reservation reservation INNER JOIN DinnerTable_Reservation t2 ON reservation.reservationId = t2.reservation_reservationId_FK WHERE reservation.date = ? AND (? IN (t2.dinnerTable_tableNo_FK))) BEGIN INSERT INTO DinnerTable_Reservation (reservation_reservationId_FK, dinnerTable_tableNo_FK) VALUES (?, ?) END END";
+		String createDinnerTableReservation = "BEGIN IF NOT EXISTS"
+				+ "(SELECT reservation.reservationId, reservation.date 'reservation date', t2.dinnerTable_tableNo_FK 'table number fk' "
+				+ "FROM Reservation reservation INNER JOIN DinnerTable_Reservation t2 ON reservation.reservationId = t2.reservation_reservationId_FK WHERE reservation.date = ? "
+				+ "AND (? IN (t2.dinnerTable_tableNo_FK))) BEGIN INSERT INTO DinnerTable_Reservation (reservation_reservationId_FK, dinnerTable_tableNo_FK) VALUES (?, ?) END END "
+				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
 		PreparedStatement stmt = con.prepareStatement(createDinnerTableReservation, Statement.RETURN_GENERATED_KEYS);
 	//getReservationID needs to be implemented??
 		stmt.setString(1, reservation.getDate());
@@ -56,7 +60,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		int insertedKey = 1;
 
 		try {
-			//con.setAutoCommit(false);
+			con.setAutoCommit(false);
 			stmt.executeUpdate();
 			// TODO Return the created reservation
 
@@ -69,11 +73,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			for (Table table : obj.getListOfTables()) {
 				createDinnerTableReservation(obj, table);
 			}
-			//con.commit();
+			con.commit();
 
 			// Error handling
 		} catch (SQLException e) {
-			/*
+
 			insertedKey = -1;
 			if (con != null) {
 				try {
@@ -83,7 +87,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 					throw new SQLException("Error when rolling back database" + excep);
 				}
 			}
-			*/
+
 			System.out.println(e);
 			throw new Exception("sql expcetion" + e);
 		} catch (NullPointerException e) {
