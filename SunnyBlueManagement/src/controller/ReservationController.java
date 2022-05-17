@@ -6,6 +6,7 @@ import java.util.Collection;
 import dao.DaoFactory;
 import dao.implementation.DaoReservationImplementation;
 import dao.interfaces.DaoReservationIF;
+import model.Decoration;
 import model.Item;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
@@ -13,12 +14,10 @@ import model.ReservationFolder.Table;
 public class ReservationController {
 	
 	Reservation reservation;
-	Collection<Table> selectedTables;
 	
 	//creates reservation??? - should be in DAO
-	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) throws Exception {	
-		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo);
-		selectedTables = new ArrayList<>();
+	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo, boolean isEvent) throws Exception {	
+		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo, isEvent);
 		
 		DaoReservationIF daoReservation = DaoFactory.createDaoReservation();
 		Collection<Table> availableTables = daoReservation.readTablesByDate(date);
@@ -44,12 +43,8 @@ public class ReservationController {
 	//confirms the reservation
 	public boolean confirmReservation() {
 		try {
-			for(Table table : selectedTables) {
-				reservation.addTable(table);
-			}
 			DaoFactory.createDaoReservation().create(reservation);
 			reservation = new Reservation();
-			selectedTables.removeAll(selectedTables);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -57,18 +52,34 @@ public class ReservationController {
 	}
 	
 	public void selectTable(Table table) {
-		if(!selectedTables.contains(table)) {
-			selectedTables.add(table);
+		if(!reservation.getListOfTables().contains(table)) {
+			reservation.addTable(table);
 		}
 	}
 	
 	public void removeTable(Table table) {
-		if(selectedTables.contains(table)) {
-			selectedTables.remove(table);
+		if(reservation.getListOfTables().contains(table)) {
+			reservation.removeTable(table);
 		}
 	}
 	
 	public Collection<Table> getSelectedTables() {
-		return selectedTables;
+		return reservation.getListOfTables();
+	}
+	
+	public void selectDecoration(Decoration decoration) {
+		if(!reservation.getListOfDecorations().contains(decoration)) {
+			reservation.addDecoration(decoration);
+		}
+	}
+	
+	public void removeDecoration(Decoration decoration) {
+		if(reservation.getListOfDecorations().contains(decoration)) {
+			reservation.removeDecoration(decoration);
+		}
+	}
+	
+	public Collection<Decoration> getSelectedDecorations() {
+		return reservation.getListOfDecorations();
 	}
 }

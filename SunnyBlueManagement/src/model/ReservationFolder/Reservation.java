@@ -1,6 +1,9 @@
 package model.ReservationFolder;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
+import model.Decoration;
 
 public class Reservation {
 	
@@ -11,8 +14,9 @@ public class Reservation {
 	private String specificRequests;
 	// ^^^^ these should be either a boolean isEvent or we can have event tags for different events
 	private long phoneNo;
-	private ArrayList<Table> listOfTables = new ArrayList<>();
-
+	private Collection<Table> listOfTables = new ArrayList<>();
+	private boolean isEvent;
+	private Collection<Decoration> listOfDecorations = new ArrayList<>();
 	
 	//constructor
 	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
@@ -23,6 +27,14 @@ public class Reservation {
 		this.setPhoneNo(phoneNo);
 	}
 	
+	public boolean isEvent() {
+		return isEvent;
+	}
+
+	public void setEvent(boolean isEvent) {
+		this.isEvent = isEvent;
+	}
+
 	public Reservation() {
 		
 	}
@@ -34,12 +46,13 @@ public class Reservation {
 	 * @param specificRequests
 	 * @param phoneNo
 	 */
-	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
 		this.setNumOfPeople(numOfPeople);
 		this.setDate(date);
 		this.setReservationName(reservationName);
 		this.setSpecificRequests(specificRequests);
 		this.setPhoneNo(phoneNo);
+		this.setEvent(isEvent);
 	}
 
 	public int getnumOfPeople() {
@@ -86,8 +99,24 @@ public class Reservation {
 		listOfTables.add(table);
 	}
 	
-	public ArrayList<Table> getListOfTables(){
+	public void removeTable(Table table) {
+		listOfTables.remove(table);
+	}
+	
+	public Collection<Table> getListOfTables(){
 		return listOfTables;
+	}
+	
+	public void addDecoration(Decoration decoration) {
+		listOfDecorations.add(decoration);
+	}
+	
+	public void removeDecoration(Decoration decoration) {
+		listOfDecorations.remove(decoration);
+	}
+	
+	public Collection<Decoration> getListOfDecorations(){
+		return listOfDecorations;
 	}
 
 	public int getReservationId() {
