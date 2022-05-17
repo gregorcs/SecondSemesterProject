@@ -18,25 +18,22 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	Connection con = DBConnection.getInstance().getDBcon();
 	
 	private PreparedStatement buildCreateReservationStatement(Reservation reservation) throws SQLException {
-		String createReservation = "INSERT INTO Reservation values(?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Reservation values(?, ?, ?, ?, ?)";
 		
-		PreparedStatement stmt = con.prepareStatement(createReservation, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, reservation.getDate());
 		stmt.setString(2, Integer.toString(reservation.getnumOfPeople()));
 		stmt.setString(3, reservation.getReservationName());
 		stmt.setString(4, reservation.getSpecificRequests());
 		stmt.setString(5, Long.toString(reservation.getphoneNo()));
-		System.out.println(createReservation);
+		System.out.println(query);
 		return stmt;
 	}
 	
-	//prepared statement for DinnerTable - Reservation Join Table
-	//should we name it like it is in the relational model or should it still just be table
 	private PreparedStatement buildCreateDinnerTableReservationStatement(Reservation reservation, Table table) throws SQLException{
-		System.out.println("hello there");
-		System.out.println(reservation.getDate() + " " + table.getTableNo()
-		+ " " + reservation.getReservationId() + " " + table.getTableNo());
-		String createDinnerTableReservation = 
+		//under high load it could fail (very high load though),  since there is a window between the first and second 'begin', 
+		//could be rather done with locks or try catch inside sql
+		String query = 
 				"BEGIN "
 						+ "IF NOT EXISTS "
 							+ "(SELECT reservation.reservationId, reservation.date 'reservation date', t2.dinnerTable_tableNo_FK 'table number fk' "
@@ -50,22 +47,37 @@ public class DaoReservationImplementation implements DaoReservationIF{
 						+ "END "
 				+ "END "
 				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
-		PreparedStatement stmt = con.prepareStatement(createDinnerTableReservation, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, reservation.getDate());
 		stmt.setString(2, Integer.toString(table.getTableNo()));
 		stmt.setString(3, Integer.toString(reservation.getReservationId()));
 		stmt.setString(4, Integer.toString(table.getTableNo()));
 		
-		System.out.println(createDinnerTableReservation);
+		System.out.println(query);
 		return stmt;
 	}
 
+	private PreparedStatement buildReadTablesByDateStatement(String date) throws SQLException {
+		String query = 
+				"SELECT * FROM DinnerTable "
+				+ "WHERE tableNo "
+				+ "NOT IN "
+				+ "(SELECT dinnerTable_tableNo_FK FROM DinnerTable_Reservation "
+				+ "WHERE reservation_reservationId_FK IN "
+				+ "(SELECT reservationId "
+				+ "FROM Reservation "
+				+ "WHERE Date = ?))";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setString(1, date);
+		System.out.println(query);
+		return stmt;
+	}
+	
 	// Transaction
 	@Override
 	public void create(Reservation obj) throws Exception {
 
 		PreparedStatement stmt = buildCreateReservationStatement(obj);
-		int insertedKey = 1;
 
 		try {
 			con.setAutoCommit(false);
@@ -83,8 +95,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			}
 			con.commit();
 		} catch (SQLException e) {
-
-			insertedKey = -1;
 			if (con != null) {
 				try {
 					con.rollback();
@@ -93,10 +103,8 @@ public class DaoReservationImplementation implements DaoReservationIF{
 					throw new SQLException("Error when rolling back database" + excep);
 				}
 			}
-			System.out.println(e);
 			throw new Exception("sql expcetion" + e);
 		} catch (NullPointerException e) {
-			insertedKey = -2;
 			throw new Exception("Technical error" + e);
 		} finally {
 			DBConnection.closeConnection();
@@ -114,25 +122,15 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return fetchedReservation;
 	}
 	
-	public Collection<Table> readTablesByDate(String date) throws SQLException{
+	public Collection<Table> readTablesByDate(String date) throws Exception{
+		PreparedStatement stmt = buildReadTablesByDateStatement(date);
 		Collection<Table> fetchedTables = new ArrayList<>();
-		//sorry for changing it i was just having a hard time reading it in one line
-		//TODO btw this aint a prepared statement, I don't mind if it's here but they will ask us on the exam :)
-		String readTableString = 
-				"SELECT * FROM DinnerTable "
-				+ "WHERE tableNo "
-				+ "NOT IN "
-				+ "(SELECT dinnerTable_tableNo_FK FROM DinnerTable_Reservation "
-				+ "WHERE reservation_reservationId_FK IN "
-				+ "(SELECT reservationId "
-				+ "FROM Reservation "
-				+ "WHERE Date = '" + date + "'))";
-		Statement stmt = con.createStatement();
-		ResultSet rs = stmt.executeQuery(readTableString);
+		
+		ResultSet rs = stmt.executeQuery();
+		
 		while(rs.next()) {
 			fetchedTables.add(new Table(rs.getInt(1),rs.getInt(2), rs.getBoolean(3)));
 		}
-		
 		return fetchedTables;
 	}
 
@@ -159,7 +157,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		}
 		return fetchedReservations;
 	}
-	
 	
 	//Reservation - Table Join Table Insertion 
 	private int createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{

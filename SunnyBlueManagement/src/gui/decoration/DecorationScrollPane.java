@@ -35,12 +35,13 @@ public class DecorationScrollPane extends JScrollPane{
 	private JMenuBar menuBar;
 	
 	public DecorationScrollPane() {
-		decorationController = new DecorationController();
 		itemController = new ItemController();
 		decorationList = new JList<Decoration>();
 		setViewportView(decorationList);
 		decorationList.setFixedCellHeight(20);
 		constructScrollPaneHeader();
+		decorationController = new DecorationController();
+
 		initializeList(decorationController.readAllDecorations());
 	}
 	
