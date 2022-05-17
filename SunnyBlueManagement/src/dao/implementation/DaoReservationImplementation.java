@@ -51,7 +51,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				+ "END "
 				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
 		PreparedStatement stmt = con.prepareStatement(createDinnerTableReservation, Statement.RETURN_GENERATED_KEYS);
-	//getReservationID needs to be implemented??
 		stmt.setString(1, reservation.getDate());
 		stmt.setString(2, Integer.toString(table.getTableNo()));
 		stmt.setString(3, Integer.toString(reservation.getReservationId()));
@@ -83,8 +82,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				createDinnerTableReservation(obj, table);
 			}
 			con.commit();
-
-			// Error handling
 		} catch (SQLException e) {
 
 			insertedKey = -1;
@@ -96,7 +93,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 					throw new SQLException("Error when rolling back database" + excep);
 				}
 			}
-
 			System.out.println(e);
 			throw new Exception("sql expcetion" + e);
 		} catch (NullPointerException e) {
@@ -167,28 +163,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	
 	//Reservation - Table Join Table Insertion 
 	private int createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{
-		
 		PreparedStatement stmt = buildCreateDinnerTableReservationStatement(reservation, table);
 		int insertedKey = 1;
-		
-		try {
-			ResultSet rs = stmt.executeQuery();
-			//TODO RETURN THE CREATED RESERVATION
-		} catch (SQLException e) {
-			insertedKey = -1;
-			throw new SQLException("SQL exception" + e);
-		} catch (NullPointerException e) {
-			insertedKey = -2;
-		throw new NullPointerException("Null pointer exception, possible connection problems" + e);
-		} catch (Exception e) {
-			insertedKey = -3;
-			throw new Exception ("Technical error" + e);
-		} finally {
-		}
-		
+		ResultSet rs = stmt.executeQuery();
 		return insertedKey;
 	}
-	
 }
 
 
