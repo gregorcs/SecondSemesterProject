@@ -146,13 +146,13 @@ public class SupplyGUI extends JPanel {
 	}
 
 	private void addLineItems() {
-		LineItem lineItem = null;
+		LineItem<Item> lineItem = null;
 		// TODO Maybe move LineItem into a controller so GUI doesn't see the model
 		// TODO Put into separate method
 		try {
 			int quantity = getQuantityFromTextField();
 			if (quantity > 0) {
-				lineItem = new LineItem(quantity, itemScrollPane.getSelectedItem());
+				lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedItem());
 				supplyOrderController.getSupplyOrder().addLineItem(lineItem);
 			} else {
 				throw new Exception();
@@ -192,7 +192,7 @@ public class SupplyGUI extends JPanel {
 		String messageToShow = "";
 		if (!supplyOrderController.getSupplyOrder().getListOfItems().isEmpty()) {
 			messageToShow += "Your order:";
-			for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
+			for (LineItem<Item> lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
 				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
 						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
 			}
@@ -200,10 +200,5 @@ public class SupplyGUI extends JPanel {
 			messageToShow += "Your order is empty";
 		}
 		return messageToShow;
-	}
-	
-	private void refresh() {
-		this.revalidate();
-		this.repaint();
 	}
 }

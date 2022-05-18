@@ -3,6 +3,8 @@ package gui.resupply;
 import javax.swing.JPanel;
 
 import controller.DecorationController;
+import gui.MainFrame;
+import gui.decoration.DecorationListCellRenderer;
 import gui.decoration.DecorationScrollPane;
 import model.Decoration;
 import net.miginfocom.swing.MigLayout;
@@ -23,10 +25,12 @@ public class DecorationGUI extends JPanel {
 	 * 
 	 */
 	private static final long serialVersionUID = -4802415561708298203L;
-	private DecorationScrollPane list;
+	private MainFrame mainFrame;
+	private DecorationScrollPane<Decoration> list;
 	private DecorationController decorationController;
 	
-	public DecorationGUI() {
+	public DecorationGUI(final MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
 		setBounds(100, 100, 1920, 1080);
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		decorationController = new DecorationController();
@@ -43,7 +47,7 @@ public class DecorationGUI extends JPanel {
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel.add(lblHeader, "cell 1 1 6 1,alignx center,aligny center");
 		
-		list = new DecorationScrollPane();
+		list = new DecorationScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
 		panel.add(list, "cell 1 3 7 5,grow");
 		
 		JButton btnSearch = new JButton("Search");
@@ -57,9 +61,17 @@ public class DecorationGUI extends JPanel {
 		});
 		panel.add(btnSearch, "cell 1 8");
 		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.backToMainMenu();
+			}
+		});
+		panel.add(btnBack, "cell 8 9,alignx right,aligny bottom");
+		
 	}
 	
-	private void refresh() {
+	public void refresh() {
 		this.revalidate();
 		this.repaint();
 	}

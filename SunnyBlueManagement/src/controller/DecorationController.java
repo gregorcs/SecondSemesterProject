@@ -1,11 +1,11 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DaoFactory;
 import dao.interfaces.DaoDecorationIF;
 import model.Decoration;
+import model.DecorationStatistics;
 
 public class DecorationController {
 
@@ -51,6 +51,16 @@ public class DecorationController {
 	public Collection<Decoration> readAllByDepartmentSortByHighestStock() {
 		try {
 			return daoDecoration.readAllByDepartmentSortByHighestStock();
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
+	public Collection<DecorationStatistics> readSumDecorationsPerMonth() {
+		try {
+			return daoDecoration.readSumDecorationsPerMonth();
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
