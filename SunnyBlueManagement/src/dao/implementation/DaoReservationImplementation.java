@@ -45,9 +45,8 @@ public class DaoReservationImplementation implements DaoReservationIF{
 							+ "INSERT INTO DinnerTable_Reservation (reservation_reservationId_FK, dinnerTable_tableNo_FK) "
 							+ "VALUES (?, ?) "
 						+ "END "
-				+ "END "
-				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
-		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				+ "END;";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, reservation.getDate());
 		stmt.setString(2, Integer.toString(table.getTableNo()));
 		stmt.setString(3, Integer.toString(reservation.getReservationId()));
@@ -193,10 +192,12 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	}
 	
 	//Reservation - Table Join Table Insertion 
-	private int createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{
+	private void createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{
 		PreparedStatement stmt = buildCreateDinnerTableReservationStatement(reservation, table);
 		int rowsUpdated = stmt.executeUpdate();
-		return rowsUpdated;
+		if (rowsUpdated != 1) {
+			throw new SQLException("Your table reservation has not been created");
+		}
 	}
 
 
