@@ -6,7 +6,13 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Collection;
+import java.util.Date;
+import java.util.regex.Pattern;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -52,6 +58,8 @@ public class Reserve extends JPanel {
 	
 	private JButton btnRemoveDecoration;
 	private JButton btnSelectDecoration;
+	
+	private JRadioButton rdbtnIsEvent;
 	
 	//Panel creation
 	
@@ -99,43 +107,13 @@ public class Reserve extends JPanel {
 			}
 		});
 		
-		JRadioButton rdbtnIsEvent = new JRadioButton("Event");
+		rdbtnIsEvent = new JRadioButton("Event");
 		EnterDetailsPanel.add(rdbtnIsEvent, "cell 1 8");
 		
 		JButton btnProceed = new JButton("Proceed");
 		btnProceed.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(textDate.getText().equals("") || textName.getText().equals("") || textNumOfPeople.getText().equals("") || textPhoneNum.getText().equals("")) {   /////CHANGE HERE IF YOU WANT TO CHECK FOR DIFFERENT THINGS LIKE "IS INT....
-			        JOptionPane.showMessageDialog(null, "Please enter all details", "Missing details", JOptionPane.ERROR_MESSAGE);
-				}
-				else {
-					//GET ALL TABLES WITH DETAILS
-					int numOfPeople = Integer.parseInt(textNumOfPeople.getText());
-					String date = textDate.getText();
-					String reservationName = textName.getText();
-					String specificRequests = ""; 				//ADD SPECIFIC REQUESTS HERE !!!! 
-					boolean isEvent = rdbtnIsEvent.isSelected();
-					int phoneNo = Integer.parseInt(textPhoneNum.getText());
-					
-					try {
-						Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo, isEvent);
-						switchReservePanels(ChooseTablePanel);
-						updateScrollPane(paneTablesAvailable ,tables);						
-						updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
-						updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
-						
-						if(rdbtnIsEvent.isSelected()) {
-							toggleDecorations(true);
-						}
-						else{
-							toggleDecorations(false);
-						}
-						
-					} catch (Exception e1) {
-						e1.printStackTrace();
-					}
-					//Update the panel
-				}
+				createReservation();
 			}
 		});
 		EnterDetailsPanel.add(btnProceed, "cell 2 8,growx");
@@ -184,11 +162,7 @@ public class Reserve extends JPanel {
 		JButton btnRemove = new JButton("Remove");
 		btnRemove.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Table table = paneTablesSelected.getSelectedTable();
-				if(table!=null) {
-					reservationController.removeTable(table);
-					updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
-				}
+				removeTable();
 			}
 		});
 		
@@ -197,11 +171,7 @@ public class Reserve extends JPanel {
 		JButton btnSelectTable = new JButton("Select");
 		btnSelectTable.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Table table = paneTablesAvailable.getSelectedTable();
-				if(table!=null) {
-					reservationController.selectTable(table);
-					updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
-				}
+				selectTable();
 			}
 		});
 		ChooseTablePanel.add(btnSelectTable, "cell 0 1,alignx left,aligny bottom");
@@ -211,13 +181,7 @@ public class Reserve extends JPanel {
 		btnSelectDecoration = new JButton("Select");
 		btnSelectDecoration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
-				if(decoration!=null) {
-					reservationController.selectDecoration(decoration);
-					askForDecorationAmount();
-					updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
-				}
-				
+				selectDecoration();
 			}
 		});
 		ChooseTablePanel.add(btnSelectDecoration, "cell 0 4");
@@ -225,11 +189,7 @@ public class Reserve extends JPanel {
 		btnRemoveDecoration = new JButton("Remove");
 		btnRemoveDecoration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
-				if(decoration!=null) {
-					reservationController.removeDecoration(decoration);
-					updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
-				}
+				removeDecoration();
 			}
 		});
 		ChooseTablePanel.add(btnRemoveDecoration, "cell 3 4");
@@ -247,23 +207,10 @@ public class Reserve extends JPanel {
 		JButton btnConfirmReservation = new JButton("Confirm");
 		btnConfirmReservation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if(reservationController.getSelectedTables().size()==0) {
-			        JOptionPane.showMessageDialog(null, "You didn't select any tables!", "Table selection", JOptionPane.ERROR_MESSAGE);
-				}
-				if(reservationController.confirmReservation()) {
-			        JOptionPane.showMessageDialog(null, "Reservation confirmed!");
-			        cleanReservationPanel();
-			        mainFrame.backToMainMenu();
-				}
-				else {
-			        JOptionPane.showMessageDialog(null, "Reservation failed");
-				}
+				confirmReservation();
 			}
 		});
 		ChooseTablePanel.add(btnConfirmReservation, "cell 6 4");
-		
-	
-		
 	}
 	
 	private void constructReservationCreation() {
@@ -326,6 +273,130 @@ public class Reserve extends JPanel {
         switchReservePanels(EnterDetailsPanel);
         updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
         updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
+	}
+	
+	public boolean isValid(String dateStr) {
+        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+        sdf.setLenient(false);
+        try {
+            sdf.parse(dateStr);
+        } catch (ParseException e) {
+            return false;
+        }
+        return true;
+    }
+	
+	private void createReservation() {
+		if(textDate.getText().equals("") || textName.getText().equals("") || textNumOfPeople.getText().equals("") || textPhoneNum.getText().equals("")) {   /////CHANGE HERE IF YOU WANT TO CHECK FOR DIFFERENT THINGS LIKE "IS INT....
+	        JOptionPane.showMessageDialog(null, "Please enter all details", "Missing details", JOptionPane.ERROR_MESSAGE);
+	        return;
+		}
+		if(!isValid(textDate.getText())) {
+	        JOptionPane.showMessageDialog(null, "Please use following date format: 'dd/mm/yyyy' !", "Incorrect date format", JOptionPane.ERROR_MESSAGE);
+	        return;
+		}
+		
+        DateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		try {
+			Date date1 = sdf.parse(textDate.getText());
+			Date date2 = new Date();
+			
+			if(!date1.after(date2)) {
+		        JOptionPane.showMessageDialog(null, "You can only make a reservation for a future date!", "Incorrect date format", JOptionPane.ERROR_MESSAGE);
+		        return;
+			}
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+		
+		
+		if (!Pattern.matches("[0-9]+", textPhoneNum.getText())) {
+			JOptionPane.showMessageDialog(null, "Phone number cannot contain a letter!", "Incorrect phoneNo format", JOptionPane.ERROR_MESSAGE);
+	        return;
+		}
+		
+		if(!Pattern.matches("[0-9]+", textNumOfPeople.getText())) {
+			JOptionPane.showMessageDialog(null, "Number of people cannot be a letter!", "Incorrect numOfPeople format", JOptionPane.ERROR_MESSAGE);
+	        return;
+		}
+		
+		/*if (textPhoneNum.getText().length()>10) {
+			JOptionPane.showMessageDialog(null, "Phone number shouldn't be longer than 10 digits!", "Incorrect phoneNo format", JOptionPane.ERROR_MESSAGE);
+	        return;
+		}*/
+			//GET ALL TABLES WITH DETAILS
+		int numOfPeople = Integer.parseInt(textNumOfPeople.getText());
+		String date = textDate.getText();
+		String reservationName = textName.getText();
+		String specificRequests = ""; 				//ADD SPECIFIC REQUESTS HERE !!!! 
+		boolean isEvent = rdbtnIsEvent.isSelected();
+		int phoneNo = Integer.parseInt(textPhoneNum.getText());
+		
+		try {
+			Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo, isEvent);
+			switchReservePanels(ChooseTablePanel);
+			updateScrollPane(paneTablesAvailable ,tables);						
+			updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
+			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
+			
+			if(rdbtnIsEvent.isSelected()) {
+				toggleDecorations(true);
+			}
+				else{
+				toggleDecorations(false);
+			}
+			
+		} catch (Exception e1) {
+				e1.printStackTrace();
+		}
+			//Update the panel
+	}
+	
+	private void confirmReservation() {
+		if(reservationController.getSelectedTables().size()==0) {
+	        JOptionPane.showMessageDialog(null, "You didn't select any tables!", "Table selection", JOptionPane.ERROR_MESSAGE);
+		}
+		if(reservationController.confirmReservation()) {
+	        JOptionPane.showMessageDialog(null, "Reservation confirmed!");
+	        cleanReservationPanel();
+	        mainFrame.backToMainMenu();
+		}
+		else {
+	        JOptionPane.showMessageDialog(null, "Reservation failed");
+		}
+	}
+	
+	private void selectTable() {
+		Table table = paneTablesAvailable.getSelectedTable();
+		if(table!=null) {
+			reservationController.selectTable(table);
+			updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
+		}
+	}
+	
+	private void removeTable() {
+		Table table = paneTablesSelected.getSelectedTable();
+		if(table!=null) {
+			reservationController.removeTable(table);
+			updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
+		}
+	}
+	
+	private void selectDecoration() {
+		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
+		if(decoration!=null) {
+			reservationController.selectDecoration(decoration);
+			askForDecorationAmount();
+			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
+		}
+	}
+	
+	private void removeDecoration() {
+		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
+		if(decoration!=null) {
+			reservationController.removeDecoration(decoration);
+			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
+		}
 	}
 	
 	private void toggleDecorations(boolean b) {
