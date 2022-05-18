@@ -227,6 +227,7 @@ public class Reserve extends JPanel {
 				Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
 				if(decoration!=null) {
 					reservationController.selectDecoration(decoration);
+					askForDecorationAmount();
 					updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
 				}
 				
@@ -268,7 +269,7 @@ public class Reserve extends JPanel {
 			        mainFrame.backToMainMenu();
 				}
 				else {
-					//RESERVATION DIDNT GOT CONFIRMATION
+			        JOptionPane.showMessageDialog(null, "Reservation failed");
 				}
 			}
 		});
@@ -297,6 +298,13 @@ public class Reserve extends JPanel {
 	public void updateScrollPane(DecorationScrollPane pane, Collection<Decoration> decorations) {//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
 		pane.updateList(decorations);
 	}
+	
+	private int askForDecorationAmount() {
+        String input = JOptionPane.showInputDialog("Enter amount of decoration");
+        //todo edge case handling here
+        return Integer.parseInt(input);
+	}
+	
 	
 	private void cleanReservationPanel() {
 		textName.setText("");

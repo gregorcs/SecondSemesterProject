@@ -49,6 +49,7 @@ public class ReservationController {
 			reservation = new Reservation();
 		} catch (Exception e) {
 			e.printStackTrace();
+			return false;
 		}
 		return true;
 	}

@@ -244,16 +244,15 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		PreparedStatement stmt = buildCreateDinnerTableReservationStatement(reservation, table);
 		int rowsUpdated = stmt.executeUpdate();
 		if (rowsUpdated != 1) {
-			throw new SQLException("Your table reservation has not been created");
+			throw new SQLException("Table reservations could be created");
 		}
 	}
-
 
 	private void createReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException, NullPointerException, Exception {
 		PreparedStatement stmt = buildCreateReservation_Decoration(reservation, decoration);
 		int rowsUpdated = stmt.executeUpdate();
 		if (rowsUpdated != 1) {
-			throw new SQLException("Your decoration order has not been created");
+			throw new SQLException("Decoration could not be created");
 		}
 	}
 }
