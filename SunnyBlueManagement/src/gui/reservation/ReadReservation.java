@@ -15,6 +15,9 @@ import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
+import java.awt.Component;
+import javax.swing.Box;
+import java.awt.Dimension;
 
 public class ReadReservation extends JPanel {
 	private MainFrame mainFrame;
@@ -29,11 +32,11 @@ public class ReadReservation extends JPanel {
 		this.mainFrame = mainFrame;
 		this.reservationController = new ReservationController();
 
-		setLayout(new MigLayout("", "[grow][212.00px][245.00][grow]", "[grow][][][][158.00,top][20px][][grow]"));
+		setLayout(new MigLayout("", "[grow][212.00px][245.00][grow]", "[grow][][][][][][158.00,grow,top][20px][][grow]"));
 		
 		JLabel lblHeader = new JLabel("Search reservations");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		add(lblHeader, "cell 1 1,aligny center");
+		add(lblHeader, "cell 1 1 2 1,alignx center,aligny center");
 		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
@@ -45,13 +48,19 @@ public class ReadReservation extends JPanel {
 				}
 			}
 		});
-		add(btnSearch, "cell 2 2");
+		
+		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
+		add(rigidArea, "cell 1 2");
+		add(btnSearch, "cell 2 3");
+		
+		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
+		add(rigidArea_1, "cell 1 4");
 		
 		scrollPane = new ReservationScrollPane();
-		add(scrollPane, "cell 1 3 2 3,grow");
+		add(scrollPane, "cell 1 5 2 3,grow");
 		
 		textSearch = new JTextField();
-		add(textSearch, "cell 1 2,growx");
+		add(textSearch, "cell 1 3,growx");
 		textSearch.setColumns(10);
 		
 		JButton btnBack = new JButton("Back");
@@ -61,7 +70,7 @@ public class ReadReservation extends JPanel {
 				mainFrame.backToMainMenu();
 			}
 		});
-		add(btnBack, "cell 2 6,alignx center,aligny baseline");
+		add(btnBack, "cell 2 8,alignx right,aligny baseline");
 		
 
 	}
