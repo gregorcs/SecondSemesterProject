@@ -73,6 +73,26 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
+	private PreparedStatement buildReadReservationsByDateStatement(String date) throws SQLException {
+		String query = 
+				"SELECT * FROM Reservation "
+				+ "WHERE date  = ?";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setString(1, date);
+		System.out.println(query);
+		return stmt;
+	}
+	
+	private PreparedStatement buildReadTablesByIDStatement(int id) throws SQLException{
+		String query = 
+				"SELECT * FROM DinnerTable WHERE tableNo IN("
+				+ "SELECT dinnerTable_tableNo_FK FROM DinnerTable_Reservation WHERE reservation_reservationId_FK = ?)";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, id);
+		System.out.println(query);
+		return stmt;
+	}
+	
 	// Transaction
 	@Override
 	public void create(Reservation obj) throws Exception {
@@ -132,6 +152,35 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			fetchedTables.add(new Table(rs.getInt(1),rs.getInt(2), rs.getBoolean(3)));
 		}
 		return fetchedTables;
+	}
+	
+	private Collection<Table> readTablesById(int id) throws SQLException{
+		PreparedStatement stmt = buildReadTablesByIDStatement(id);
+		Collection<Table> fetchedTables = new ArrayList<>();
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+			fetchedTables.add(new Table(rs.getInt(1),rs.getInt(2), rs.getBoolean(3)));
+		}
+		return fetchedTables;
+	}
+	
+	public Collection<Reservation> readReservationsByDate(String date) throws Exception{
+		PreparedStatement stmt = buildReadReservationsByDateStatement(date);
+		Collection<Reservation> fetchedReservations = new ArrayList<>();
+		
+		ResultSet rs = stmt.executeQuery();
+		
+		while(rs.next()) {
+			Reservation reservation = new Reservation(rs.getInt(1), rs.getInt(3), rs.getString(2), rs.getString(4), rs.getString(5), rs.getLong(6));
+			fetchedReservations.add(reservation);
+			for(Table table : readTablesById(reservation.getReservationId())){
+				reservation.addTable(table);
+			}
+		}		
+		System.out.println(fetchedReservations.size());
+		return fetchedReservations;
 	}
 
 	@Override

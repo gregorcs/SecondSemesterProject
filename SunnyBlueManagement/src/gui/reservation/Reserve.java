@@ -259,6 +259,9 @@ public class Reserve extends JPanel {
 		JButton btnConfirmReservation = new JButton("Confirm");
 		btnConfirmReservation.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				if(reservationController.getSelectedTables().size()==0) {
+			        JOptionPane.showMessageDialog(null, "You didn't select any tables!", "Table selection", JOptionPane.ERROR_MESSAGE);
+				}
 				if(reservationController.confirmReservation()) {
 			        JOptionPane.showMessageDialog(null, "Reservation confirmed!");
 			        cleanReservationPanel();

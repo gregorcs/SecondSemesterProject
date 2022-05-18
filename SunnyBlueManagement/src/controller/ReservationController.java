@@ -25,6 +25,10 @@ public class ReservationController {
 		return availableTables;
 	}
 
+	public Collection<Reservation> readReservationsByDate(String date) throws Exception{
+		return DaoFactory.createDaoReservation().readReservationsByDate(date);
+	}
+	
 	//select table(s) for the reservation
 	public void addTable(int tableNo) {
 		//reservation.addTable(tableController.getTable(tableNo));

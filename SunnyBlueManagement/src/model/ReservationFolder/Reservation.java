@@ -20,6 +20,7 @@ public class Reservation {
 	
 	//constructor
 	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+		this.setReservationID(reservationID);
 		this.setNumOfPeople(numOfPeople);
 		this.setDate(date);
 		this.setReservationName(reservationName);

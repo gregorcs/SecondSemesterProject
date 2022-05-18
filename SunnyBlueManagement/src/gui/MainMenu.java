@@ -10,7 +10,7 @@ import javax.swing.JLabel;
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
 import gui.resupply.DecorationGUI;
-
+import gui.reservation.ReadReservation;
 import gui.reservation.Reserve;
 
 import gui.resupply.SupplyGUI;
@@ -31,6 +31,7 @@ public class MainMenu extends JPanel {
 	private Reserve reservePanel;
 	private SupplyGUI supplyPanel;
 	private DecorationGUI decorationPanel;
+	private ReadReservation readReservationPanel;
 	private JLabel lblConOutput;
 
 
@@ -39,7 +40,7 @@ public class MainMenu extends JPanel {
 	 */
 	public MainMenu(final MainFrame mainFrame) {
 		setBounds(100, 100, 1920, 1080);
-		setLayout(new MigLayout("", "[grow][][][center][][grow]", "[grow][][][][][][][][][][grow]"));
+		setLayout(new MigLayout("", "[grow][][][center][][grow]", "[grow][][][][][][][][][][][][grow]"));
 		// setLayout(new MigLayout("align 50% 50%"));
 
 		reservePanel = new Reserve(mainFrame);
@@ -47,6 +48,8 @@ public class MainMenu extends JPanel {
 		supplyPanel = new SupplyGUI(mainFrame);
 
 		decorationPanel = new DecorationGUI(mainFrame);
+		
+		readReservationPanel = new ReadReservation(mainFrame);
 
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -86,17 +89,28 @@ public class MainMenu extends JPanel {
 			}
 		});
 		add(btnManageDecorations, "cell 3 7,growx");
+		
+		JButton btnReadReservation = new JButton("Find reservation");
+		btnReadReservation.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.switchPanels(readReservationPanel);
+			}
+		});
+		
+		Component rigidArea_3_1 = Box.createRigidArea(new Dimension(20, 20));
+		add(rigidArea_3_1, "cell 3 8");
+		add(btnReadReservation, "cell 3 9,growx");
 
 		Component rigidArea_3 = Box.createRigidArea(new Dimension(20, 20));
-		add(rigidArea_3, "cell 3 8");
+		add(rigidArea_3, "cell 3 10");
 		
 		JLabel lblConnection = new JLabel("Connection:");
-		add(lblConnection, "cell 1 9");
+		add(lblConnection, "cell 1 11");
 		CheckConnectionWorker connection = new CheckConnectionWorker(this);
 		connection.execute();
 		
 		lblConOutput = new JLabel("");
-		add(lblConOutput, "cell 2 9");
+		add(lblConOutput, "cell 2 11");
 
 	}
 	

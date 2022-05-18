@@ -8,6 +8,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import gui.resupply.DecorationGUI;
+import gui.reservation.ReadReservation;
 import gui.reservation.Reserve;
 import gui.resupply.SupplyGUI;
 
@@ -25,6 +26,7 @@ public class MainFrame extends JFrame {
 	private JPanel reservePanel;
 	private JLayeredPane layeredPane;
 	private DecorationGUI decorationPanel;
+	private JPanel readReservationPanel;
 
 	/**
 	 * Launch the application.
@@ -82,6 +84,9 @@ public class MainFrame extends JFrame {
     
 		reservePanel = new Reserve(this);
 		layeredPane.add(reservePanel, "name_79832769847600");
+		
+		readReservationPanel = new ReadReservation(this);
+		layeredPane.add(readReservationPanel, "name_81428270717000");
 	}
 
 	public JLayeredPane getLayeredPane() {
