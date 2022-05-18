@@ -167,7 +167,6 @@ public class Reserve extends JPanel {
 		createEnterDetailsButtons();
 	}
 	
-	
 	private void createReservationCreationLabels() {
 		JLabel lblAvailable = new JLabel("Available");
 		ChooseTablePanel.add(lblAvailable, "cell 0 2");

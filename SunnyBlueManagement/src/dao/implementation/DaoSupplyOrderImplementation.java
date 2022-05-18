@@ -5,6 +5,7 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoSupplyOrderIF;
+import model.Item;
 import model.LineItem;
 import model.SupplyOrder;
 
@@ -23,7 +24,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		return stmt;
 	}
 
-	private PreparedStatement buildCreateSupplyOrderItemStatement(SupplyOrder supplyOrder, LineItem lineItem) throws SQLException {
+	private PreparedStatement buildCreateSupplyOrderItemStatement(SupplyOrder supplyOrder, LineItem<Item> lineItem) throws SQLException {
 		String createSupplyOrderItem = "INSERT INTO SupplyOrder_Item values (?, ?, ?)";
 		PreparedStatement stmt = con.prepareStatement(createSupplyOrderItem, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, Integer.toString(supplyOrder.getSupplyOrderId()));
@@ -47,7 +48,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 	            obj.setSupplyOrderId(generatedKeys.getInt(1));
 	        }
 
-			for (LineItem lineItem : obj.getListOfItems()) {
+			for (LineItem<Item> lineItem : obj.getListOfItems()) {
 				createSupplyOrderItem(obj, lineItem);
 			}
 			con.commit();
@@ -94,7 +95,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		return null;
 	}
 
-	private void createSupplyOrderItem(SupplyOrder supplyOrder, LineItem lineItem) throws SQLException, NullPointerException, Exception{
+	private void createSupplyOrderItem(SupplyOrder supplyOrder, LineItem<Item> lineItem) throws SQLException, NullPointerException, Exception{
 
 		PreparedStatement stmt = buildCreateSupplyOrderItemStatement(supplyOrder, lineItem);
 

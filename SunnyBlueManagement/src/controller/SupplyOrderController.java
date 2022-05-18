@@ -5,8 +5,9 @@ import java.util.ArrayList;
 import dao.DaoFactory;
 import dao.interfaces.DaoSupplyOrderIF;
 
-import java.time.LocalDateTime;  
+import java.time.LocalDateTime;
 
+import model.Item;
 import model.LineItem;
 import model.SupplyOrder;
 import model.UrgencyEnum;
@@ -22,7 +23,7 @@ public class SupplyOrderController {
 		this.supplyOrder = new SupplyOrder();
 	}
 
-	public void createSupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
+	public void createSupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem<Item>> listOfItems) {
 		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgencyEnum, listOfItems);
 
 		try {
