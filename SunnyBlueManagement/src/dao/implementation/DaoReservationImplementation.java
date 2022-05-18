@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoReservationIF;
+import model.Decoration;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
 
@@ -30,16 +31,15 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
-	private PreparedStatement buildCreateDinnerTableReservationStatement(Reservation reservation, Table table) throws SQLException{
-		//under high load it could fail (very high load though),  since there is a window between the first and second 'begin', 
-		//could be rather done with locks or try catch inside sql
+	private PreparedStatement buildCreateDinnerTableReservationStatement(Reservation reservation, Table table) throws SQLException {
 		String query = 
 				"BEGIN "
 						+ "IF NOT EXISTS "
 							+ "(SELECT reservation.reservationId, reservation.date 'reservation date', t2.dinnerTable_tableNo_FK 'table number fk' "
 							+ "FROM Reservation reservation "
-							+ "INNER JOIN DinnerTable_Reservation t2 ON reservation.reservationId = t2.reservation_reservationId_FK "
-							+ "WHERE reservation.date = ? "
+							+ "INNER JOIN DinnerTable_Reservation t2 "
+								+ "ON reservation.reservationId = t2.reservation_reservationId_FK "
+								+ "WHERE reservation.date = ? "
 								+ "AND (? IN (t2.dinnerTable_tableNo_FK))) "
 						+ "BEGIN "
 							+ "INSERT INTO DinnerTable_Reservation (reservation_reservationId_FK, dinnerTable_tableNo_FK) "
@@ -73,6 +73,37 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
+	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException {
+		String query = 
+				 "INSERT INTO Reservation_Decoration "
+				+ "	(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
+				+ "	SELECT ?,?,? "
+				+ "		WHERE EXISTS (SELECT d.decorationId, d.quantityInStock, rd.quantity FROM Decoration d "
+				+ "		INNER JOIN Reservation_Decoration rd"
+				+ "		ON d.decorationId = rd.decoration_decorationId_FK "
+				+ "		WHERE d.decorationId = ? AND (d.quantityInStock - rd.quantity) > 0); "
+				+ "		IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1); "
+				+ "UPDATE Decoration "
+				+ "	SET quantityInStock = quantityInStock - 10 "
+				+ "	WHERE EXISTS (SELECT d.decorationId, d.quantityInStock, rd.quantity FROM Decoration d "
+				+ "		INNER JOIN Reservation_Decoration rd "
+				+ "		ON d.decorationId = rd.decoration_decorationId_FK "
+				+ "		WHERE d.decorationId = ? AND (d.quantityInStock - rd.quantity) > 0) "
+				+ "	AND decorationId = ?; "
+				+ "	IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1); ";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, reservation.getReservationId());
+		stmt.setInt(2, decoration.getDecorationId());
+		//TODO THIS IS HARDCODED
+		stmt.setInt(3, 5);
+		
+		stmt.setInt(4, decoration.getDecorationId());
+		stmt.setInt(5, decoration.getDecorationId());
+		stmt.setInt(6, decoration.getDecorationId());
+		System.out.println(query);
+		return stmt;
+	}
+	
 	// Transaction
 	@Override
 	public void create(Reservation obj) throws Exception {
@@ -93,6 +124,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			for (Table table : obj.getListOfTables()) {
 				createDinnerTableReservation(obj, table);
 			}
+			
+			for (Decoration decoration : obj.getListOfDecorations()) {
+				createReservation_Decoration(obj, decoration);
+			}
+			
 			con.commit();
 		} catch (SQLException e) {
 			if (con != null) {
@@ -161,9 +197,14 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	//Reservation - Table Join Table Insertion 
 	private int createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{
 		PreparedStatement stmt = buildCreateDinnerTableReservationStatement(reservation, table);
-		int insertedKey = 1;
-		ResultSet rs = stmt.executeQuery();
-		return insertedKey;
+		int rowsUpdated = stmt.executeUpdate();
+		return rowsUpdated;
+	}
+
+
+	private void createReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException, NullPointerException, Exception {
+		PreparedStatement stmt = buildCreateReservation_Decoration(reservation, decoration);
+		int rowsUpdated = stmt.executeUpdate();
 	}
 }
 
