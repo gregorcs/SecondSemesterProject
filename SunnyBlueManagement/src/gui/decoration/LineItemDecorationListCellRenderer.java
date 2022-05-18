@@ -17,7 +17,7 @@ public class LineItemDecorationListCellRenderer implements ListCellRenderer<Line
 	public Component getListCellRendererComponent(JList<? extends LineItem<Decoration>> list,
 			LineItem<Decoration> value, int index, boolean isSelected, boolean cellHasFocus) {
 		dlcr = new DefaultListCellRenderer();
-		String textToShow = ("Name: " + value.getItem().getName());
+		String textToShow = ("Name: " + value.getItem().getName() + ",   " + "Quantity: " + value.getQuantity());
 		return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 	}
 
