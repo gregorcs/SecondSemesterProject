@@ -8,8 +8,8 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import gui.resupply.DecorationGUI;
-import gui.reservation.ReadReservation;
-import gui.reservation.Reserve;
+import gui.reservation.ReadReservationGUI;
+import gui.reservation.ReserveGUI;
 import gui.resupply.SupplyGUI;
 
 
@@ -82,10 +82,10 @@ public class MainFrame extends JFrame {
 		decorationPanel = new DecorationGUI(this);
 		layeredPane.add(decorationPanel, "name_98119803398600");
     
-		reservePanel = new Reserve(this);
+		reservePanel = new ReserveGUI(this);
 		layeredPane.add(reservePanel, "name_79832769847600");
 		
-		readReservationPanel = new ReadReservation(this);
+		readReservationPanel = new ReadReservationGUI(this);
 		layeredPane.add(readReservationPanel, "name_81428270717000");
 	}
 
