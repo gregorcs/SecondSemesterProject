@@ -75,31 +75,31 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	
 	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException {
 		String query = 
-				 "INSERT INTO Reservation_Decoration "
-				+ "	(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
-				+ "	SELECT ?,?,? "
-				+ "		WHERE EXISTS (SELECT d.decorationId, d.quantityInStock, rd.quantity FROM Decoration d "
-				+ "		INNER JOIN Reservation_Decoration rd"
-				+ "		ON d.decorationId = rd.decoration_decorationId_FK "
-				+ "		WHERE d.decorationId = ? AND (d.quantityInStock - rd.quantity) > 0); "
-				+ "		IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1); "
-				+ "UPDATE Decoration "
-				+ "	SET quantityInStock = quantityInStock - 10 "
-				+ "	WHERE EXISTS (SELECT d.decorationId, d.quantityInStock, rd.quantity FROM Decoration d "
-				+ "		INNER JOIN Reservation_Decoration rd "
-				+ "		ON d.decorationId = rd.decoration_decorationId_FK "
-				+ "		WHERE d.decorationId = ? AND (d.quantityInStock - rd.quantity) > 0) "
-				+ "	AND decorationId = ?; "
-				+ "	IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1); ";
+				"INSERT INTO Reservation_Decoration "
+				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
+				+ "SELECT ?,?,? "
+					+ "WHERE EXISTS (SELECT * FROM Decoration d "
+					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0); "
+				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1); "
+
+			+ "UPDATE Decoration "
+				+ "SET quantityInStock = quantityInStock - ? "
+				+ "WHERE EXISTS (SELECT * FROM Decoration d "
+					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0) "
+					+ "AND decorationId = ?; "
+				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
+
 		PreparedStatement stmt = con.prepareStatement(query);
+		System.out.println(reservation.getReservationId() + " decId" + decoration.getDecorationId());
 		stmt.setInt(1, reservation.getReservationId());
 		stmt.setInt(2, decoration.getDecorationId());
 		//TODO THIS IS HARDCODED
 		stmt.setInt(3, 5);
 		
 		stmt.setInt(4, decoration.getDecorationId());
-		stmt.setInt(5, decoration.getDecorationId());
+		stmt.setInt(5, 5);
 		stmt.setInt(6, decoration.getDecorationId());
+		stmt.setInt(7, decoration.getDecorationId());
 		System.out.println(query);
 		return stmt;
 	}
