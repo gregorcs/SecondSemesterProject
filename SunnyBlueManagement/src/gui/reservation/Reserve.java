@@ -10,6 +10,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.regex.Pattern;
@@ -23,11 +24,15 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
+import controller.DecorationController;
 import controller.ReservationController;
 import gui.MainFrame;
+import gui.decoration.DecorationListCellRenderer;
 import gui.decoration.DecorationScrollPane;
+import gui.decoration.LineItemDecorationListCellRenderer;
 import gui.table.TableScrollPane;
 import model.Decoration;
+import model.LineItem;
 import model.ReservationFolder.Table;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JRadioButton;
@@ -53,13 +58,15 @@ public class Reserve extends JPanel {
 	
 	private TableScrollPane paneTablesAvailable;
 	private TableScrollPane paneTablesSelected;
-	private DecorationScrollPane paneDecorationsAvailable;
-	private DecorationScrollPane paneDecorationsSelected;
+	private DecorationScrollPane<Decoration> paneDecorationsAvailable;
+	private DecorationScrollPane<LineItem<Decoration>> paneDecorationsSelected;
 	
 	private JButton btnRemoveDecoration;
 	private JButton btnSelectDecoration;
 	
 	private JRadioButton rdbtnIsEvent;
+	
+	private DecorationController decorationController;
 	
 	//Panel creation
 	
@@ -138,8 +145,9 @@ public class Reserve extends JPanel {
 		
 		paneTablesAvailable = new TableScrollPane();
 		paneTablesSelected = new TableScrollPane();
-		paneDecorationsAvailable = new DecorationScrollPane();
-		paneDecorationsSelected = new DecorationScrollPane();
+		decorationController = new DecorationController();
+		paneDecorationsAvailable = new DecorationScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
+		paneDecorationsSelected = new DecorationScrollPane<LineItem<Decoration>>(new ArrayList<LineItem<Decoration>>(), new LineItemDecorationListCellRenderer());
 		
 		createEnterDetailsLabels();
 		createEnterDetailsButtons();
@@ -255,7 +263,7 @@ public class Reserve extends JPanel {
 		pane.initializeList(tables);
 	}
 	
-	public void updateScrollPane(DecorationScrollPane pane, Collection<Decoration> decorations) {//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
+	public <T> void updateScrollPane(DecorationScrollPane<T> pane, Collection<T> decorations) {//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
 		pane.updateList(decorations);
 	}
 	
@@ -385,8 +393,8 @@ public class Reserve extends JPanel {
 	private void selectDecoration() {
 		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
 		if(decoration!=null) {
-			reservationController.selectDecoration(decoration);
-			askForDecorationAmount();
+			int quantity = askForDecorationAmount();
+			reservationController.selectDecoration(decoration, quantity);
 			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
 		}
 	}
@@ -394,7 +402,7 @@ public class Reserve extends JPanel {
 	private void removeDecoration() {
 		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
 		if(decoration!=null) {
-			reservationController.removeDecoration(decoration);
+			reservationController.removeDecoration(null);
 			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
 		}
 	}

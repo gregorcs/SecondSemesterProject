@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 import model.Decoration;
+import model.LineItem;
 
 public class Reservation {
 	
@@ -12,11 +13,10 @@ public class Reservation {
 	private String date;
 	private String reservationName;
 	private String specificRequests;
-	// ^^^^ these should be either a boolean isEvent or we can have event tags for different events
 	private long phoneNo;
 	private Collection<Table> listOfTables = new ArrayList<>();
 	private boolean isEvent;
-	private Collection<Decoration> listOfDecorations = new ArrayList<>();
+	private Collection<LineItem<Decoration>> listOfDecorations = new ArrayList<>();
 	
 	//constructor
 	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
@@ -108,15 +108,15 @@ public class Reservation {
 		return listOfTables;
 	}
 	
-	public void addDecoration(Decoration decoration) {
+	public void addDecoration(LineItem<Decoration> decoration) {
 		listOfDecorations.add(decoration);
 	}
 	
-	public void removeDecoration(Decoration decoration) {
+	public void removeDecoration(LineItem<Decoration> decoration) {
 		listOfDecorations.remove(decoration);
 	}
 	
-	public Collection<Decoration> getListOfDecorations(){
+	public Collection<LineItem<Decoration>> getListOfDecorations(){
 		return listOfDecorations;
 	}
 

@@ -11,6 +11,7 @@ import java.util.Collection;
 import dao.DBConnection;
 import dao.interfaces.DaoReservationIF;
 import model.Decoration;
+import model.LineItem;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
 
@@ -92,7 +93,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
-	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException {
+	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException {
 		String query = 
 				"INSERT INTO Reservation_Decoration "
 				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
@@ -107,16 +108,15 @@ public class DaoReservationImplementation implements DaoReservationIF{
 						+ "AND decorationId = ?; ";
 
 		PreparedStatement stmt = con.prepareStatement(query);
-		System.out.println(reservation.getReservationId() + " decId" + decoration.getDecorationId());
+		System.out.println(reservation.getReservationId() + " decId" + lineItem.getItem().getDecorationId());
 		stmt.setInt(1, reservation.getReservationId());
-		stmt.setInt(2, decoration.getDecorationId());
-		//TODO THIS IS HARDCODED
-		stmt.setInt(3, 5);
+		stmt.setInt(2, lineItem.getItem().getDecorationId());
+		stmt.setInt(3, lineItem.getQuantity());
 		
-		stmt.setInt(4, decoration.getDecorationId());
-		stmt.setInt(5, 5);
-		stmt.setInt(6, decoration.getDecorationId());
-		stmt.setInt(7, decoration.getDecorationId());
+		stmt.setInt(4, lineItem.getItem().getDecorationId());
+		stmt.setInt(5, lineItem.getQuantity());
+		stmt.setInt(6, lineItem.getItem().getDecorationId());
+		stmt.setInt(7, lineItem.getItem().getDecorationId());
 		System.out.println(query);
 		return stmt;
 	}
@@ -142,8 +142,8 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				createDinnerTableReservation(obj, table);
 			}
 			
-			for (Decoration decoration : obj.getListOfDecorations()) {
-				createReservation_Decoration(obj, decoration);
+			for (LineItem<Decoration> lineItem : obj.getListOfDecorations()) {
+				createReservation_Decoration(obj, lineItem);
 			}
 			
 			con.commit();
@@ -249,8 +249,8 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		}
 	}
 
-	private void createReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException, NullPointerException, Exception {
-		PreparedStatement stmt = buildCreateReservation_Decoration(reservation, decoration);
+	private void createReservation_Decoration(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException, NullPointerException, Exception {
+		PreparedStatement stmt = buildCreateReservation_Decoration(reservation, lineItem);
 		int rowsUpdated = stmt.executeUpdate();
 		if (rowsUpdated != 1) {
 			throw new SQLException("Decoration could not be created");
