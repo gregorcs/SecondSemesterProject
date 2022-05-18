@@ -18,6 +18,14 @@ import controller.DecorationController;
 import controller.ItemController;
 import model.Decoration;
 import model.DecorationStatistics;
+
+/**
+ * This object displays any type of collection as long as you provide it 
+ * a Collection<any type> with a listCellRenderer<any type> to go with it
+ * @author Gregor
+ *
+ * @param <T> type the class should work with
+ */
 public class DecorationScrollPane<T> extends JScrollPane{
 
 	private static final long serialVersionUID = -4773670531023046534L;
@@ -34,8 +42,11 @@ public class DecorationScrollPane<T> extends JScrollPane{
 	private ItemController itemController;
 	private JMenuBar menuBar;
 	
-
-	
+	/**
+	 * constructor
+	 * @param decorationsToShow collection of any type
+	 * @param cellRenderToUse ListCellRenderer that can process the passed in decorationsToShow
+	 */
 	public DecorationScrollPane(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
 		decorationController = new DecorationController();
 		itemController = new ItemController();
@@ -52,8 +63,6 @@ public class DecorationScrollPane<T> extends JScrollPane{
 		decorationController = new DecorationController();
 		updateList(decorationsToShow);
 	}
-	
-	
 	
 	public void updateList(Collection<T> listToShow) {
 		listRepresentation = new DefaultListModel<T>();

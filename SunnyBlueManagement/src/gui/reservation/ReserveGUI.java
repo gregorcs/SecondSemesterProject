@@ -274,10 +274,22 @@ public class ReserveGUI extends JPanel {
 		layeredPane.revalidate();
 	}
 	
-	public void updateScrollPane(TableScrollPane pane, Collection<Table> tables) {				//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
+	/**
+	 * updates the parameter JPanel with the parameter Collection
+	 * @param pane
+	 * @param tables
+	 */
+	public void updateScrollPane(TableScrollPane pane, Collection<Table> tables) {
 		pane.initializeList(tables);
 	}
 	
+	/**
+	 * refreshes the passed in scrollPane, accepts DecorationScrollPane<any type>
+	 * updates it with a Collection<any type>
+	 * @param <T>
+	 * @param pane
+	 * @param decorations
+	 */
 	public <T> void updateScrollPane(DecorationScrollPane<T> pane, Collection<T> decorations) {//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
 		pane.updateList(decorations);
 	}
