@@ -1,10 +1,8 @@
 package controller;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DaoFactory;
-import dao.implementation.DaoReservationImplementation;
 import dao.interfaces.DaoReservationIF;
 import model.Decoration;
 import model.Item;

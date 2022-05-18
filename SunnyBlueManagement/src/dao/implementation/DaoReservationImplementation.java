@@ -10,6 +10,7 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoReservationIF;
+import model.Decoration;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
 
@@ -30,24 +31,22 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
-	private PreparedStatement buildCreateDinnerTableReservationStatement(Reservation reservation, Table table) throws SQLException{
-		//under high load it could fail (very high load though),  since there is a window between the first and second 'begin', 
-		//could be rather done with locks or try catch inside sql
+	private PreparedStatement buildCreateDinnerTableReservationStatement(Reservation reservation, Table table) throws SQLException {
 		String query = 
 				"BEGIN "
 						+ "IF NOT EXISTS "
 							+ "(SELECT reservation.reservationId, reservation.date 'reservation date', t2.dinnerTable_tableNo_FK 'table number fk' "
 							+ "FROM Reservation reservation "
-							+ "INNER JOIN DinnerTable_Reservation t2 ON reservation.reservationId = t2.reservation_reservationId_FK "
-							+ "WHERE reservation.date = ? "
+							+ "INNER JOIN DinnerTable_Reservation t2 "
+								+ "ON reservation.reservationId = t2.reservation_reservationId_FK "
+								+ "WHERE reservation.date = ? "
 								+ "AND (? IN (t2.dinnerTable_tableNo_FK))) "
 						+ "BEGIN "
 							+ "INSERT INTO DinnerTable_Reservation (reservation_reservationId_FK, dinnerTable_tableNo_FK) "
 							+ "VALUES (?, ?) "
 						+ "END "
-				+ "END "
-				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
-		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
+				+ "END;";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, reservation.getDate());
 		stmt.setString(2, Integer.toString(table.getTableNo()));
 		stmt.setString(3, Integer.toString(reservation.getReservationId()));
@@ -73,6 +72,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
+<<<<<<< HEAD
 	private PreparedStatement buildReadReservationsByDateStatement(String date) throws SQLException {
 		String query = 
 				"SELECT * FROM Reservation "
@@ -89,6 +89,33 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				+ "SELECT dinnerTable_tableNo_FK FROM DinnerTable_Reservation WHERE reservation_reservationId_FK = ?)";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setInt(1, id);
+=======
+	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException {
+		String query = 
+				"INSERT INTO Reservation_Decoration "
+				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
+				+ "SELECT ?,?,? "
+					+ "WHERE EXISTS (SELECT * FROM Decoration d "
+					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0); "
+
+				+ "UPDATE Decoration "
+					+ "SET quantityInStock = quantityInStock - ? "
+					+ "WHERE EXISTS (SELECT * FROM Decoration d "
+						+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0) "
+						+ "AND decorationId = ?; ";
+
+		PreparedStatement stmt = con.prepareStatement(query);
+		System.out.println(reservation.getReservationId() + " decId" + decoration.getDecorationId());
+		stmt.setInt(1, reservation.getReservationId());
+		stmt.setInt(2, decoration.getDecorationId());
+		//TODO THIS IS HARDCODED
+		stmt.setInt(3, 5);
+		
+		stmt.setInt(4, decoration.getDecorationId());
+		stmt.setInt(5, 5);
+		stmt.setInt(6, decoration.getDecorationId());
+		stmt.setInt(7, decoration.getDecorationId());
+>>>>>>> 8f810358585ce3239b2ad5880b97bf6080624ea7
 		System.out.println(query);
 		return stmt;
 	}
@@ -113,6 +140,11 @@ public class DaoReservationImplementation implements DaoReservationIF{
 			for (Table table : obj.getListOfTables()) {
 				createDinnerTableReservation(obj, table);
 			}
+			
+			for (Decoration decoration : obj.getListOfDecorations()) {
+				createReservation_Decoration(obj, decoration);
+			}
+			
 			con.commit();
 		} catch (SQLException e) {
 			if (con != null) {
@@ -208,11 +240,21 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	}
 	
 	//Reservation - Table Join Table Insertion 
-	private int createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{
+	private void createDinnerTableReservation(Reservation reservation, Table table) throws SQLException, NullPointerException, Exception{
 		PreparedStatement stmt = buildCreateDinnerTableReservationStatement(reservation, table);
-		int insertedKey = 1;
-		ResultSet rs = stmt.executeQuery();
-		return insertedKey;
+		int rowsUpdated = stmt.executeUpdate();
+		if (rowsUpdated != 1) {
+			throw new SQLException("Your table reservation has not been created");
+		}
+	}
+
+
+	private void createReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException, NullPointerException, Exception {
+		PreparedStatement stmt = buildCreateReservation_Decoration(reservation, decoration);
+		int rowsUpdated = stmt.executeUpdate();
+		if (rowsUpdated != 1) {
+			throw new SQLException("Your decoration order has not been created");
+		}
 	}
 }
 
