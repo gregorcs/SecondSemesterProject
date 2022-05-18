@@ -80,14 +80,12 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				+ "SELECT ?,?,? "
 					+ "WHERE EXISTS (SELECT * FROM Decoration d "
 					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0); "
-				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1); "
 
-			+ "UPDATE Decoration "
-				+ "SET quantityInStock = quantityInStock - ? "
-				+ "WHERE EXISTS (SELECT * FROM Decoration d "
-					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0) "
-					+ "AND decorationId = ?; "
-				+ "IF @@ROWCOUNT = 0 RAISERROR('No rows updated',16,1);";
+				+ "UPDATE Decoration "
+					+ "SET quantityInStock = quantityInStock - ? "
+					+ "WHERE EXISTS (SELECT * FROM Decoration d "
+						+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0) "
+						+ "AND decorationId = ?; ";
 
 		PreparedStatement stmt = con.prepareStatement(query);
 		System.out.println(reservation.getReservationId() + " decId" + decoration.getDecorationId());
@@ -205,6 +203,9 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	private void createReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException, NullPointerException, Exception {
 		PreparedStatement stmt = buildCreateReservation_Decoration(reservation, decoration);
 		int rowsUpdated = stmt.executeUpdate();
+		if (rowsUpdated != 1) {
+			throw new SQLException("Your decoration order has not been created");
+		}
 	}
 }
 
