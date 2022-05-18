@@ -72,7 +72,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
-<<<<<<< HEAD
 	private PreparedStatement buildReadReservationsByDateStatement(String date) throws SQLException {
 		String query = 
 				"SELECT * FROM Reservation "
@@ -89,7 +88,10 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				+ "SELECT dinnerTable_tableNo_FK FROM DinnerTable_Reservation WHERE reservation_reservationId_FK = ?)";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setInt(1, id);
-=======
+		System.out.println(query);
+		return stmt;
+	}
+	
 	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, Decoration decoration) throws SQLException {
 		String query = 
 				"INSERT INTO Reservation_Decoration "
@@ -115,7 +117,6 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		stmt.setInt(5, 5);
 		stmt.setInt(6, decoration.getDecorationId());
 		stmt.setInt(7, decoration.getDecorationId());
->>>>>>> 8f810358585ce3239b2ad5880b97bf6080624ea7
 		System.out.println(query);
 		return stmt;
 	}
