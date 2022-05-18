@@ -160,6 +160,16 @@ public class ReserveGUI extends JPanel {
 		JLabel lblSelectedTables = new JLabel("Selected tables");
 		lblSelectedTables.setFont(new Font("Tahoma", Font.BOLD, 12));
 		ChooseTablePanel.add(lblSelectedTables, "cell 4 3,alignx center");
+		
+		JLabel lblAvailableDecorations = new JLabel("Available decorations");
+		lblAvailableDecorations.setFont(new Font("Tahoma", Font.BOLD, 12));
+		ChooseTablePanel.add(lblAvailableDecorations, "cell 1 7,alignx center");
+		
+		JLabel lblSelectedDecorations = new JLabel("Selected decorations");
+		lblSelectedDecorations.setFont(new Font("Tahoma", Font.BOLD, 12));
+		ChooseTablePanel.add(lblSelectedDecorations, "cell 4 7,alignx center");
+		ChooseTablePanel.add(paneDecorationsSelected, "cell 4 8,grow");
+		ChooseTablePanel.add(paneDecorationsAvailable, "cell 1 8,grow");
 	}
 	
 	private void createReservationCreationButtons() {
@@ -175,7 +185,24 @@ public class ReserveGUI extends JPanel {
 			}
 		});
 		
-		//DECORATIONBUTTONS
+		
+		JButton btnSelectTable = new JButton("Select table");
+		btnSelectTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				selectTable();
+			}
+		});
+		ChooseTablePanel.add(btnSelectTable, "cell 1 5,alignx left,aligny bottom");
+		
+		JButton btnRemoveTable = new JButton("Remove table");
+		btnRemoveTable.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				removeTable();
+			}
+		});
+		ChooseTablePanel.add(btnRemoveTable, "cell 4 5");
+		
+		//DECORATION BUTTONS
 		btnSelectDecoration = new JButton("Select decoration");
 		btnSelectDecoration.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -209,7 +236,7 @@ public class ReserveGUI extends JPanel {
 		ChooseTablePanel = new JPanel();
 		ChooseTablePanel.setBounds(100, 100, 1920, 1080);
 		layeredPane.add(ChooseTablePanel, "name_54378967892300");
-		ChooseTablePanel.setLayout(new MigLayout("", "[grow][grow][center][][grow][grow]", "[grow][14px][32.00][43.00][184.00,grow,top][][][][grow][][grow]"));
+		ChooseTablePanel.setLayout(new MigLayout("", "[grow][grow][center][][grow][grow]", "[grow][14px][32.00][][184.00,grow,top][][][][grow][][grow]"));
 
 		createReservationCreationLabels();
 				
@@ -218,34 +245,8 @@ public class ReserveGUI extends JPanel {
 		
 		//Maybe one more JLabel?
 		
-		JButton btnSelectTable = new JButton("Select table");
-		btnSelectTable.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				selectTable();
-			}
-		});
-		ChooseTablePanel.add(btnSelectTable, "cell 1 5,alignx left,aligny bottom");
-		
-		JButton btnRemoveTable = new JButton("Remove table");
-		btnRemoveTable.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				removeTable();
-			}
-		});
-		ChooseTablePanel.add(btnRemoveTable, "cell 4 5");
-		
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		ChooseTablePanel.add(rigidArea, "cell 1 6");
-		
-		JLabel lblAvailableDecorations = new JLabel("Available decorations");
-		lblAvailableDecorations.setFont(new Font("Tahoma", Font.BOLD, 12));
-		ChooseTablePanel.add(lblAvailableDecorations, "cell 1 7,alignx center");
-		
-		JLabel lblSelectedDecorations = new JLabel("Selected decorations");
-		lblSelectedDecorations.setFont(new Font("Tahoma", Font.BOLD, 12));
-		ChooseTablePanel.add(lblSelectedDecorations, "cell 4 7,alignx center");
-		ChooseTablePanel.add(paneDecorationsSelected, "cell 4 8,grow");
-		ChooseTablePanel.add(paneDecorationsAvailable, "cell 1 8,grow");
 		
 		createReservationCreationButtons();
 	}
