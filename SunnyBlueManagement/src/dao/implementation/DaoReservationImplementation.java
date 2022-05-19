@@ -100,12 +100,12 @@ public class DaoReservationImplementation implements DaoReservationIF{
 				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
 				+ "SELECT ?,?,? "
 					+ "WHERE EXISTS (SELECT * FROM Decoration d "
-					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0); "
+					+ "WHERE d.decorationId = ? AND (d.quantityInStock - ?) > 0); "
 
 				+ "UPDATE Decoration "
 					+ "SET quantityInStock = quantityInStock - ? "
 					+ "WHERE EXISTS (SELECT * FROM Decoration d "
-						+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0) "
+						+ "WHERE d.decorationId = ? AND (d.quantityInStock - ?) > 0) "
 						+ "AND decorationId = ?; ";
 
 		PreparedStatement stmt = con.prepareStatement(query);
@@ -116,8 +116,10 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		
 		stmt.setInt(4, lineItem.getItem().getDecorationId());
 		stmt.setInt(5, lineItem.getQuantity());
-		stmt.setInt(6, lineItem.getItem().getDecorationId());
+		stmt.setInt(6, lineItem.getQuantity());
 		stmt.setInt(7, lineItem.getItem().getDecorationId());
+		stmt.setInt(8, lineItem.getQuantity());
+		stmt.setInt(9, lineItem.getItem().getDecorationId());
 		System.out.println(query);
 		return stmt;
 	}
