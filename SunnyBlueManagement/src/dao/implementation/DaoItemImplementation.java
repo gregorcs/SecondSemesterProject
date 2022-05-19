@@ -33,15 +33,19 @@ public class DaoItemImplementation implements DaoItemIF {
 	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
 		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
 		PreparedStatement stmt = con.prepareStatement(readItemString);
-		stmt.setString(1, Integer.toString(itemId));
+		stmt.setInt(1, itemId);
 		System.out.println(readItemString);
 		return stmt;
 	}
 	
 	private PreparedStatement buildDeleteItemString(Item item) throws SQLException {
-		String deleteItemString = "DELETE FROM Item WHERE itemId = ?";
+		String deleteItemString = "UPDATE SupplyOrder_Item "
+				+ "SET item_itemId_FK = NULL "
+				+ "WHERE item_itemId_FK = ?; "
+				+ "DELETE FROM Item WHERE itemId = ?;";
 		PreparedStatement stmt = con.prepareStatement(deleteItemString);
-		stmt.setString(1, Integer.toString(item.getItemId()));
+		stmt.setInt(1, item.getItemId());
+		stmt.setInt(2, item.getItemId());
 		System.out.println(deleteItemString);
 		return stmt;
 
@@ -80,14 +84,16 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 
-	
-
 	@Override
 	public void create(Item obj) throws Exception {
 		PreparedStatement stmt = buildCreateString(obj);
 
 		try {
-			stmt.executeQuery();
+			int insertedRows = stmt.executeUpdate();
+			
+			if(insertedRows != 1) {
+				throw new Exception("Item was not created");
+			}
 
 		} catch (SQLException e) {
 			throw new Exception("SQL exception " + e);
@@ -134,10 +140,9 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	@Override
 	public void delete(Item obj) throws Exception {
-		//TODO
 		PreparedStatement stmt = buildDeleteItemString(obj);
 		try {
-			stmt.executeQuery();
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new Exception("SQL exception " + e);

@@ -81,7 +81,7 @@ public class SupplyGUI extends JPanel {
 		JButton btnDeleteRow = new JButton("Delete row");
 		btnDeleteRow.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				itemController.deleteItem(itemScrollPane.getSelectedObj());
 			}
 		});
 		supplyRestaurantPanel.add(btnDeleteRow, "cell 6 6,growx");
