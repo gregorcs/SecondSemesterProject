@@ -12,8 +12,8 @@ import controller.SupplyOrderController;
 import model.Item;
 import model.LineItem;
 import model.UrgencyEnum;
+import gui.GenericScrollPane;
 import gui.MainFrame;
-import gui.decoration.GenericScrollPane;
 import gui.item.ItemListCellRenderer;
 import net.miginfocom.swing.MigLayout;
 import java.awt.Component;
@@ -74,7 +74,7 @@ public class SupplyGUI extends JPanel {
 				btnSelectItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						readItems();
+						//readItems();
 					}
 				});
 				supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 5,growx,aligny bottom");
@@ -120,13 +120,17 @@ public class SupplyGUI extends JPanel {
 		supplyRestaurantPanel.add(btnProceed, "cell 9 17");
 
 		supplyRestaurantPanel.add(btnGoBack, "cell 10 17,growx,aligny bottom");
-		
-				textFieldSearch = new JTextField();
-				supplyRestaurantPanel.add(textFieldSearch, "cell 1 5,growx,aligny center");
-				textFieldSearch.setColumns(10);
-		
-	}
 
+		textFieldSearch = new JTextField();
+		supplyRestaurantPanel.add(textFieldSearch, "cell 1 5,growx,aligny center");
+		textFieldSearch.setColumns(10);
+
+	}
+	
+	
+	
+	/*
+	 * replace this with a working version
 	private void readItems() {
 		Collection<Item> itemsFound;
 		if (itemScrollPane.getDepartmentFromChoice().equals("any")) {
@@ -137,15 +141,16 @@ public class SupplyGUI extends JPanel {
 		}
 		itemScrollPane.updateList(itemsFound);
 	}
-
+	*/
 	private int getQuantityFromTextField() throws Exception {
 		return Integer.parseInt(textFieldEnterQuantity.getText());
 	}
 
+	/*
 	private String getNameFromSearchTextField() {
 		return textFieldSearch.getText();
 	}
-
+	*/
 	private void addLineItems() {
 		LineItem<Item> lineItem = null;
 		// TODO Maybe move LineItem into a controller so GUI doesn't see the model
@@ -153,7 +158,7 @@ public class SupplyGUI extends JPanel {
 		try {
 			int quantity = getQuantityFromTextField();
 			if (quantity > 0) {
-				lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedDecoration());
+				lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedObj());
 				supplyOrderController.getSupplyOrder().addLineItem(lineItem);
 			} else {
 				throw new Exception();
@@ -169,7 +174,7 @@ public class SupplyGUI extends JPanel {
 	}
 
 	private void finalizeOrder() {
-		String messageToShow = createOrderSummary();
+		String messageToShow = supplyOrderController.createOrderSummary();
 		JOptionPane.showMessageDialog(mainFrame, messageToShow);
 		UrgencyEnum selectedUrgency = createUrgencyDialog();
 		supplyOrderController.getSupplyOrder().setUrgencyEnum(selectedUrgency);
@@ -187,19 +192,5 @@ public class SupplyGUI extends JPanel {
 		JList<UrgencyEnum> listOfUrgencyEnums = new JList<UrgencyEnum>(UrgencyEnum.values());
 		JOptionPane.showMessageDialog(null, listOfUrgencyEnums, "Urgency of your order", JOptionPane.PLAIN_MESSAGE);
 		return listOfUrgencyEnums.getSelectedValue();
-	}
-
-	private String createOrderSummary() {
-		String messageToShow = "";
-		if (!supplyOrderController.getSupplyOrder().getListOfItems().isEmpty()) {
-			messageToShow += "Your order:";
-			for (LineItem<Item> lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
-				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
-						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
-			}
-		} else {
-			messageToShow += "Your order is empty";
-		}
-		return messageToShow;
-	}
+	}	
 }

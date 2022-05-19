@@ -3,9 +3,9 @@ package gui.resupply;
 import javax.swing.JPanel;
 
 import controller.DecorationController;
+import gui.GenericScrollPane;
 import gui.MainFrame;
 import gui.decoration.DecorationListCellRenderer;
-import gui.decoration.GenericScrollPane;
 import model.Decoration;
 import net.miginfocom.swing.MigLayout;
 
@@ -53,10 +53,12 @@ public class DecorationGUI extends JPanel {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*
 				decorationController = new DecorationController();
 				Collection<Decoration> decorationsFound;
 				decorationsFound = decorationController.readAllSwitch(list.getDepartmentFromChoice(), list.getStockSortFromChoice());
 				list.updateList(decorationsFound);
+				*/
 			}
 		});
 		panel.add(btnSearch, "cell 1 8");

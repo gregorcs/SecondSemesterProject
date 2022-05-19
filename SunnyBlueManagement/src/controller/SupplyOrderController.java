@@ -62,4 +62,8 @@ public class SupplyOrderController {
 	public void emptySupplyOrder() {
 		supplyOrder = new SupplyOrder();
 	}
+	
+	public String createOrderSummary() {
+		return supplyOrder.createOrderSummary();
+	}
 }

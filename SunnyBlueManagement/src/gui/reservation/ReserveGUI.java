@@ -25,9 +25,9 @@ import javax.swing.JTextField;
 
 import controller.DecorationController;
 import controller.ReservationController;
+import gui.GenericScrollPane;
 import gui.MainFrame;
 import gui.decoration.DecorationListCellRenderer;
-import gui.decoration.GenericScrollPane;
 import gui.decoration.LineItemDecorationListCellRenderer;
 import gui.table.TableScrollPane;
 import model.Decoration;
@@ -419,7 +419,7 @@ public class ReserveGUI extends JPanel {
 	}
 	
 	private void selectDecoration() {
-		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
+		Decoration decoration = paneDecorationsAvailable.getSelectedObj();
 		if(decoration!=null) {
 			int quantity = askForDecorationAmount();
 			reservationController.getReservation().addDecoration(new LineItem<Decoration>(quantity, decoration));;
@@ -428,7 +428,7 @@ public class ReserveGUI extends JPanel {
 	}
 	
 	private void removeDecoration() {
-		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
+		Decoration decoration = paneDecorationsAvailable.getSelectedObj();
 		if(decoration!=null) {
 			reservationController.removeDecoration(null);
 			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());

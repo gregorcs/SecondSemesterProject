@@ -96,4 +96,19 @@ public class SupplyOrder {
 	public void setSupplyOrderId(int supplyOrderId) {
 		this.supplyOrderId = supplyOrderId;
 	}
+	
+	public String createOrderSummary() {
+		//put into controller
+		String messageToShow = "";
+		if (!getListOfItems().isEmpty()) {
+			messageToShow += "Your order:";
+			for (LineItem<Item> lineItem : getListOfItems()) {
+				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
+						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
+			}
+		} else {
+			messageToShow += "Your order is empty";
+		}
+		return messageToShow;
+	}
 }
