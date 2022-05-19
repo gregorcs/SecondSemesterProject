@@ -355,6 +355,7 @@ public class Reserve extends JPanel {
 	private void confirmReservation() {
 		if(reservationController.getSelectedTables().size()==0) {
 	        JOptionPane.showMessageDialog(null, "You didn't select any tables!", "Table selection", JOptionPane.ERROR_MESSAGE);
+	        return;
 		}
 		if(reservationController.confirmReservation()) {
 	        JOptionPane.showMessageDialog(null, "Reservation confirmed!");
