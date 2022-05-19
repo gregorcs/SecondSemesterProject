@@ -45,6 +45,10 @@ public class MainFrame extends JFrame {
 		});
 	}
 
+	public void start() {
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */

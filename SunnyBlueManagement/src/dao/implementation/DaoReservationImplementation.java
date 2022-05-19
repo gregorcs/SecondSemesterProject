@@ -94,6 +94,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	}
 	
 	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException {
+		//TODO CHECKING EDGE CASE IS HARDCODED
 		String query = 
 				"INSERT INTO Reservation_Decoration "
 				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
