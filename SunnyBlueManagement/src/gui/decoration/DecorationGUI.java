@@ -59,13 +59,32 @@ public class DecorationGUI extends JPanel {
 		});
 		
 		JButton btnAdd = new JButton("Add decoration");
+		btnAdd.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
 		panel.add(btnAdd, "cell 4 4");
 		
+		JButton btnAddStock = new JButton("Update decoration");
+		btnAddStock.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		panel.add(btnAddStock, "cell 4 5");
+		
 		JButton btnDelete = new JButton("Delete decoration");
-		panel.add(btnDelete, "cell 4 5");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				decorationController.deleteDecoration(list.getSelectedObj());
+			}
+		});
+		panel.add(btnDelete, "cell 4 6");
+		
+		JLabel lblSearch = new JLabel("Search:");
+		panel.add(lblSearch, "flowx,cell 1 8");
 		
 		textField = new JTextField();
-		panel.add(textField, "flowx,cell 1 8,alignx left");
+		panel.add(textField, "cell 1 8,alignx left");
 		textField.setColumns(10);
 		panel.add(btnBack, "cell 4 9,alignx right,aligny bottom");
 		
