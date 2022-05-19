@@ -1,11 +1,10 @@
-package gui.resupply;
+package gui.decoration;
 
 import javax.swing.JPanel;
 
 import controller.DecorationController;
 import gui.GenericScrollPane;
 import gui.MainFrame;
-import gui.decoration.DecorationListCellRenderer;
 import model.Decoration;
 import net.miginfocom.swing.MigLayout;
 
@@ -18,6 +17,7 @@ import javax.swing.JButton;
 import java.awt.event.ActionListener;
 import java.util.Collection;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class DecorationGUI extends JPanel {
 
@@ -28,6 +28,7 @@ public class DecorationGUI extends JPanel {
 	private MainFrame mainFrame;
 	private GenericScrollPane<Decoration> list;
 	private DecorationController decorationController;
+	private JTextField textField;
 	
 	public DecorationGUI(final MainFrame mainFrame) {
 		this.mainFrame = mainFrame;
@@ -40,15 +41,33 @@ public class DecorationGUI extends JPanel {
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
 		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("", "[grow][][][56.00][87.00,grow][][][][grow]", "[grow][][][grow][][][][][][grow]"));
+		panel.setLayout(new MigLayout("", "[grow][grow][87.00][][grow]", "[grow][][][grow][][][][][][grow]"));
 		layeredPane.add(panel, "name_97268705302100");
 		
 		JLabel lblHeader = new JLabel("Decoration management");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		panel.add(lblHeader, "cell 1 1 6 1,alignx center,aligny center");
+		panel.add(lblHeader, "cell 1 1 3 1,alignx center,aligny center");
 		
 		list = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
-		panel.add(list, "cell 1 3 7 5,grow");
+		panel.add(list, "cell 1 3 3 5,grow");
+		
+		JButton btnBack = new JButton("Back");
+		btnBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.backToMainMenu();
+			}
+		});
+		
+		JButton btnAdd = new JButton("Add decoration");
+		panel.add(btnAdd, "cell 4 4");
+		
+		JButton btnDelete = new JButton("Delete decoration");
+		panel.add(btnDelete, "cell 4 5");
+		
+		textField = new JTextField();
+		panel.add(textField, "flowx,cell 1 8,alignx left");
+		textField.setColumns(10);
+		panel.add(btnBack, "cell 4 9,alignx right,aligny bottom");
 		
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
@@ -61,15 +80,7 @@ public class DecorationGUI extends JPanel {
 				*/
 			}
 		});
-		panel.add(btnSearch, "cell 1 8");
-		
-		JButton btnBack = new JButton("Back");
-		btnBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainFrame.backToMainMenu();
-			}
-		});
-		panel.add(btnBack, "cell 8 9,alignx right,aligny bottom");
+		panel.add(btnSearch, "cell 1 8,alignx left");
 		
 	}
 	
