@@ -11,7 +11,6 @@ import javax.swing.ListCellRenderer;
  * This object displays any type of collection as long as you provide it a
  * Collection<any type> with a listCellRenderer<any type> to go with it
  * 
- * @author Gregor
  *
  * @param <T> type the class should work with
  */

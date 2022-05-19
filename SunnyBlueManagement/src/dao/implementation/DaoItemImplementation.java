@@ -64,6 +64,23 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
+	private PreparedStatement buildReadByNameSortByIdASC(String name) throws SQLException {
+		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId ASC";
+		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		stmt.setString(1, "%" + name + "%");
+		System.out.println(readByDepartmentItemString);
+		return stmt;
+	}
+	
+	private PreparedStatement buildReadByNameSortByIdDESC(String name) throws SQLException {
+		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId DESC";
+		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		stmt.setString(1, "%" + name + "%");
+		System.out.println(readByDepartmentItemString);
+		return stmt;
+	}
+
+	
 
 	@Override
 	public void create(Item obj) throws Exception {
@@ -185,6 +202,54 @@ public class DaoItemImplementation implements DaoItemIF {
 	@Override
 	public Collection<Item> readByNameAndDepartment(String name, String departmentEnum) throws Exception {
 		PreparedStatement stmt = buildReadByNameAndDepartment(name, departmentEnum);
+		ArrayList<Item> itemsList = new ArrayList<>();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return itemsList;
+	}
+
+	@Override
+	public Collection<Item> readByNameSortByIdASC(String name) throws Exception {
+		PreparedStatement stmt = buildReadByNameSortByIdASC(name);
+		ArrayList<Item> itemsList = new ArrayList<>();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return itemsList;
+	}
+	
+	@Override
+	public Collection<Item> readByNameSortByIdDESC(String name) throws Exception {
+		PreparedStatement stmt = buildReadByNameSortByIdDESC(name);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {

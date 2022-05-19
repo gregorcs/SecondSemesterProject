@@ -3,6 +3,7 @@ package gui.resupply;
 import java.awt.CardLayout;
 import java.awt.Font;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.*;
@@ -19,6 +20,7 @@ import net.miginfocom.swing.MigLayout;
 import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
+import java.awt.Choice;
 
 public class SupplyGUI extends JPanel {
 
@@ -33,6 +35,9 @@ public class SupplyGUI extends JPanel {
 	private JLayeredPane layeredPane;
 	private JPanel supplyRestaurantPanel;
 	private JTextField textFieldSearch;
+	
+	private enum SortStockEnum {LOWEST, HIGHEST;};
+	private Choice choiceLowOrHigh;
 
 	private GenericScrollPane<Item> itemScrollPane;
 	private JTextField textFieldEnterQuantity;
@@ -47,6 +52,7 @@ public class SupplyGUI extends JPanel {
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		constructLayeredPane();
 		constructSupplyRestaurantPanel();
+		constructChoiceLowOrHigh();
 	}
 
 	private void constructLayeredPane() {
@@ -54,37 +60,51 @@ public class SupplyGUI extends JPanel {
 		add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 	}
-
-	private void constructSupplyRestaurantPanel() {
-		supplyOrderController = new SupplyOrderController();
-		itemController = new ItemController();
-		supplyRestaurantPanel = new JPanel();
-		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
-		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,center][][][][][][][][][grow]",
-				"[grow][][][14px][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
-
-		JLabel lblResupplyHeader = new JLabel("Resupply ");
-		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		supplyRestaurantPanel.add(lblResupplyHeader, "cell 1 1 10 1,alignx center,aligny top");
+	
+	private void createSupplyRestaurantButtons() {
+		JButton btnSelectItem = new JButton("Search");
+		btnSelectItem.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				readItems();
+			}
+		});
+		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 3,alignx left,aligny bottom");
 		
-				JLabel lblEnterProduct = new JLabel("Enter product:");
-				supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 1 5,alignx left,aligny center");
+		JButton btnChangeToDecoration = new JButton("Change to decoration");
+		btnChangeToDecoration.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		supplyRestaurantPanel.add(btnChangeToDecoration, "cell 6 5,alignx center");
 		
-				JButton btnSelectItem = new JButton("Search");
-				btnSelectItem.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						//readItems();
-					}
-				});
-				supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 5,growx,aligny bottom");
+		JButton btnDeleteRow = new JButton("Delete row");
+		btnDeleteRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		supplyRestaurantPanel.add(btnDeleteRow, "cell 6 6,growx");
+		
+		JButton btnAddRow = new JButton("Add row");
+		btnAddRow.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+			}
+		});
+		supplyRestaurantPanel.add(btnAddRow, "cell 6 7,growx");
 
-		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea_1, "cell 1 6");
+		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
+		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 15");
+		
+		JButton btnAddItem = new JButton("Add to order");
+		btnAddItem.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addLineItems();
+			}
+		});
+		supplyRestaurantPanel.add(btnAddItem, "cell 2 15,alignx left,aligny bottom");
 
-		itemScrollPane = new GenericScrollPane<Item>(itemController.readAllItems(), new ItemListCellRenderer());
-		supplyRestaurantPanel.add(itemScrollPane, "cell 1 7 10 9,grow");
-
+		
 		JButton btnGoBack = new JButton("Back");
 		btnGoBack.addActionListener(new ActionListener() {
 			@Override
@@ -99,58 +119,63 @@ public class SupplyGUI extends JPanel {
 				finalizeOrder();
 			}
 		});
+		supplyRestaurantPanel.add(btnProceed, "flowx,cell 7 16,alignx right,aligny bottom");
 
-		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea, "cell 6 16");
+		supplyRestaurantPanel.add(btnGoBack, "cell 7 16,alignx right,aligny bottom");
+		choiceLowOrHigh = new Choice();
+		supplyRestaurantPanel.add(choiceLowOrHigh, "cell 1 4");
+		
+	}
 
-		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
-		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 17");
-
+	private void createSupplyRestaurantTextFields() {
 		textFieldEnterQuantity = new JTextField();
-		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 1 17,growx");
+		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 1 15,grow");
 		textFieldEnterQuantity.setColumns(10);
 
-		JButton btnAddItem = new JButton("Add to order");
-		btnAddItem.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				addLineItems();
-			}
-		});
-		supplyRestaurantPanel.add(btnAddItem, "cell 2 17,growx,aligny bottom");
-		supplyRestaurantPanel.add(btnProceed, "cell 9 17");
-
-		supplyRestaurantPanel.add(btnGoBack, "cell 10 17,growx,aligny bottom");
 
 		textFieldSearch = new JTextField();
-		supplyRestaurantPanel.add(textFieldSearch, "cell 1 5,growx,aligny center");
+		supplyRestaurantPanel.add(textFieldSearch, "cell 1 3,grow");
 		textFieldSearch.setColumns(10);
+	}
+	
+	private void constructSupplyRestaurantPanel() {
+		supplyOrderController = new SupplyOrderController();
+		itemController = new ItemController();
+		supplyRestaurantPanel = new JPanel();
+		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
+		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,grow,center][][][][][grow]", "[grow][][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
+
+		JLabel lblResupplyHeader = new JLabel("Resupply ");
+		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
+		supplyRestaurantPanel.add(lblResupplyHeader, "cell 1 1 5 1,alignx center,aligny top");
+		
+		JLabel lblEnterProduct = new JLabel("Enter product:");
+		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 1 3,alignx left,aligny center");
+
+		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
+		supplyRestaurantPanel.add(rigidArea_1, "cell 0 4");
+
+		itemScrollPane = new GenericScrollPane<Item>(new ArrayList<Item>(), new ItemListCellRenderer());
+		supplyRestaurantPanel.add(itemScrollPane, "cell 1 5 5 9,grow");
+		
+		createSupplyRestaurantTextFields();
+		createSupplyRestaurantButtons();
 
 	}
-	
-	
-	
-	/*
-	 * replace this with a working version
+
 	private void readItems() {
 		Collection<Item> itemsFound;
-		if (itemScrollPane.getDepartmentFromChoice().equals("any")) {
-			itemsFound = itemController.readItemByName(getNameFromSearchTextField());
-		} else {
-			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(),
-					itemScrollPane.getDepartmentFromChoice());
-		}
+		itemsFound = itemController.readItemByNameSortById(getNameFromSearchTextField(), getSortByChoice());
 		itemScrollPane.updateList(itemsFound);
 	}
-	*/
 	private int getQuantityFromTextField() throws Exception {
 		return Integer.parseInt(textFieldEnterQuantity.getText());
 	}
 
-	/*
 	private String getNameFromSearchTextField() {
 		return textFieldSearch.getText();
 	}
-	*/
+	
 	private void addLineItems() {
 		LineItem<Item> lineItem = null;
 		// TODO Maybe move LineItem into a controller so GUI doesn't see the model
@@ -193,4 +218,14 @@ public class SupplyGUI extends JPanel {
 		JOptionPane.showMessageDialog(null, listOfUrgencyEnums, "Urgency of your order", JOptionPane.PLAIN_MESSAGE);
 		return listOfUrgencyEnums.getSelectedValue();
 	}	
+	
+	private void constructChoiceLowOrHigh() {
+		for (SortStockEnum temp : SortStockEnum.values()) {
+			choiceLowOrHigh.add(temp.toString());
+		}
+	}
+	
+	private String getSortByChoice() {
+		return choiceLowOrHigh.getItem(choiceLowOrHigh.getSelectedIndex()).toString();
+	}
 }

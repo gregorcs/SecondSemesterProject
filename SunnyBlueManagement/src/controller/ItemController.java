@@ -93,6 +93,21 @@ public class ItemController {
 		return departmentsList;
 	}
 
+	public Collection<Item> readItemByNameSortById(String nameFromSearchTextField, String sortByChoice) {
+		this.daoItem = DaoFactory.createDaoItem();
+		try {
+			if (sortByChoice.equals("LOWEST")) {
+				return daoItem.readByNameSortByIdASC(nameFromSearchTextField);
+			} else {
+				return daoItem.readByNameSortByIdDESC(nameFromSearchTextField);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
+	}
+
 
 
 
