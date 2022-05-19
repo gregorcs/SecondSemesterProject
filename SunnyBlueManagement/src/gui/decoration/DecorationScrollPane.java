@@ -12,12 +12,21 @@ import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
+import javax.swing.ListCellRenderer;
 
 import controller.DecorationController;
 import controller.ItemController;
 import model.Decoration;
 import model.DecorationStatistics;
-public class DecorationScrollPane extends JScrollPane{
+
+/**
+ * This object displays any type of collection as long as you provide it 
+ * a Collection<any type> with a listCellRenderer<any type> to go with it
+ * @author Gregor
+ *
+ * @param <T> type the class should work with
+ */
+public class DecorationScrollPane<T> extends JScrollPane{
 
 	private static final long serialVersionUID = -4773670531023046534L;
 
@@ -25,62 +34,46 @@ public class DecorationScrollPane extends JScrollPane{
 	private Choice choiceLowOrHigh;
 	private enum SortStockEnum {LOWEST, HIGHEST;};
 	
-	private JList<Decoration> decorationList;
-	//private JList<DecorationStatistics> decorationStatsList;
-	private DefaultListModel<Decoration> listRepresentationDecoration;
-	//private DefaultListModel<DecorationStatistics> listRepresentationDecorationStats;
+	private JList<T> jlist;
+	private DefaultListModel<T> listRepresentation;
+	private ListCellRenderer<? super T> cellRenderer;
 	
 	private DecorationController decorationController;
 	private ItemController itemController;
 	private JMenuBar menuBar;
 	
-	public DecorationScrollPane() {
-		itemController = new ItemController();
-		decorationList = new JList<Decoration>();
-		setViewportView(decorationList);
-		decorationList.setFixedCellHeight(20);
-		constructScrollPaneHeader();
-		decorationController = new DecorationController();
-
-		initializeList(decorationController.readAllDecorations());
-	}
-	
-	public DecorationScrollPane(Collection<Decoration> decorationsToShow) {
+	/**
+	 * constructor
+	 * @param decorationsToShow collection of any type
+	 * @param cellRenderToUse ListCellRenderer that can process the passed in decorationsToShow
+	 */
+	public DecorationScrollPane(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
 		decorationController = new DecorationController();
 		itemController = new ItemController();
-		decorationList = new JList<Decoration>();
-		setViewportView(decorationList);
-		decorationList.setFixedCellHeight(20);
+		jlist = new JList<T>();
+		setViewportView(jlist);
+		jlist.setFixedCellHeight(20);
 		constructScrollPaneHeader();
-		initializeList(decorationsToShow);
+		initializeList(decorationsToShow, cellRenderToUse);
 	}
 	
-	public void initializeList(Collection<Decoration> decorationsToShow) {
-		DecorationListCellRenderer cellRenderer = new DecorationListCellRenderer();
-		decorationList.setCellRenderer(cellRenderer);
+	public void initializeList(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
+		this.cellRenderer = cellRenderToUse;
+		jlist.setCellRenderer(cellRenderer);
 		decorationController = new DecorationController();
 		updateList(decorationsToShow);
 	}
 	
-	public void updateList(Collection<Decoration> listToShow) {
-		listRepresentationDecoration = new DefaultListModel<Decoration>();
+	public void updateList(Collection<T> listToShow) {
+		listRepresentation = new DefaultListModel<T>();
 		
-		for(Decoration item : listToShow) {
-			listRepresentationDecoration.addElement(item);
+		for(T item : listToShow) {
+			listRepresentation.addElement(item);
 		}
-		decorationList.setModel(listRepresentationDecoration);
+		jlist.setModel(listRepresentation);
 	}
-	/*
-	public void updateListStatistics(Collection<DecorationStatistics> listToShow) {
-		listRepresentationDecorationStats = new DefaultListModel<DecorationStatistics>();
-		
-		for(DecorationStatistics decorationStats : listToShow) {
-			listRepresentationDecorationStats.addElement(decorationStats);
-		}
-		decorationStatsList.setModel(listRepresentationDecorationStats);
-	}
-	*/
-	public Decoration getSelectedDecoration() {return decorationList.getSelectedValue();};
+
+	public T getSelectedDecoration() {return jlist.getSelectedValue();};
 	
 	public String getDepartmentFromChoice() {
 		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex()).toString();
@@ -89,18 +82,7 @@ public class DecorationScrollPane extends JScrollPane{
 	public String getStockSortFromChoice() {
 		return choiceLowOrHigh.getItem(choiceLowOrHigh.getSelectedIndex()).toString();
 	}
-	
-	/*
-	private void switchToMonthlyView() {
-		this.remove(decorationList);
-		decorationController = new DecorationController();
-		DecorationStatisticsListCellRenderer cellRendererStats = new DecorationStatisticsListCellRenderer();
-		decorationStatsList = new JList<DecorationStatistics>();
-		decorationStatsList.setCellRenderer(cellRendererStats);
-		updateListStatistics(decorationController.readSumDecorationsPerMonth());
-		this.add(decorationStatsList);
-	}
-	*/
+
 	private void constructChoiceDepartment() {
 		JLabel lblSortByDepartment = new JLabel("By department:  ");
 		menuBar.add(lblSortByDepartment);

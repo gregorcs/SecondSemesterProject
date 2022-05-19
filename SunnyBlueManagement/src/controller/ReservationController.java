@@ -6,6 +6,7 @@ import dao.DaoFactory;
 import dao.interfaces.DaoReservationIF;
 import model.Decoration;
 import model.Item;
+import model.LineItem;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
 
@@ -70,19 +71,20 @@ public class ReservationController {
 		return reservation.getListOfTables();
 	}
 	
-	public void selectDecoration(Decoration decoration) {
-		if(!reservation.getListOfDecorations().contains(decoration)) {
-			reservation.addDecoration(decoration);
+	//TODO RENAME TO ADD? ADD EDGE CASE HANDLING FOR CHECKING DUPLICATE
+	public void selectDecoration(Decoration decoration, int quantity) {
+		if(!reservation.getListOfDecorations().contains(new LineItem<Decoration>(quantity, decoration))) {
+			reservation.addDecoration(new LineItem<Decoration>(quantity, decoration));
 		}
 	}
 	
-	public void removeDecoration(Decoration decoration) {
+	public void removeDecoration(LineItem<Decoration> decoration) {
 		if(reservation.getListOfDecorations().contains(decoration)) {
 			reservation.removeDecoration(decoration);
 		}
 	}
 	
-	public Collection<Decoration> getSelectedDecorations() {
+	public Collection<LineItem<Decoration>> getSelectedDecorations() {
 		return reservation.getListOfDecorations();
 	}
 }

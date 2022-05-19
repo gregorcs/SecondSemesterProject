@@ -19,7 +19,11 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
 
-public class ReadReservation extends JPanel {
+public class ReadReservationGUI extends JPanel {
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7335505866400342972L;
 	private MainFrame mainFrame;
 	private JTextField textSearch;
 	private ReservationScrollPane scrollPane;
@@ -27,7 +31,7 @@ public class ReadReservation extends JPanel {
 	/**
 	 * Create the panel.
 	 */
-	public ReadReservation(final MainFrame mainFrame) {
+	public ReadReservationGUI(final MainFrame mainFrame) {
 		setBounds(100, 100, 1920, 1080);
 		this.mainFrame = mainFrame;
 		this.reservationController = new ReservationController();
