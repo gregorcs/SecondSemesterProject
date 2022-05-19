@@ -5,7 +5,7 @@ import javax.swing.JPanel;
 import controller.DecorationController;
 import gui.MainFrame;
 import gui.decoration.DecorationListCellRenderer;
-import gui.decoration.DecorationScrollPane;
+import gui.decoration.GenericScrollPane;
 import model.Decoration;
 import net.miginfocom.swing.MigLayout;
 
@@ -26,7 +26,7 @@ public class DecorationGUI extends JPanel {
 	 */
 	private static final long serialVersionUID = -4802415561708298203L;
 	private MainFrame mainFrame;
-	private DecorationScrollPane<Decoration> list;
+	private GenericScrollPane<Decoration> list;
 	private DecorationController decorationController;
 	
 	public DecorationGUI(final MainFrame mainFrame) {
@@ -47,7 +47,7 @@ public class DecorationGUI extends JPanel {
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel.add(lblHeader, "cell 1 1 6 1,alignx center,aligny center");
 		
-		list = new DecorationScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
+		list = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
 		panel.add(list, "cell 1 3 7 5,grow");
 		
 		JButton btnSearch = new JButton("Search");

@@ -3,7 +3,6 @@ package gui.decoration;
 import java.awt.Choice;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
@@ -16,8 +15,6 @@ import javax.swing.ListCellRenderer;
 
 import controller.DecorationController;
 import controller.ItemController;
-import model.Decoration;
-import model.DecorationStatistics;
 
 /**
  * This object displays any type of collection as long as you provide it 
@@ -26,7 +23,7 @@ import model.DecorationStatistics;
  *
  * @param <T> type the class should work with
  */
-public class DecorationScrollPane<T> extends JScrollPane{
+public class GenericScrollPane<T> extends JScrollPane{
 
 	private static final long serialVersionUID = -4773670531023046534L;
 
@@ -47,7 +44,7 @@ public class DecorationScrollPane<T> extends JScrollPane{
 	 * @param decorationsToShow collection of any type
 	 * @param cellRenderToUse ListCellRenderer that can process the passed in decorationsToShow
 	 */
-	public DecorationScrollPane(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
+	public GenericScrollPane(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
 		decorationController = new DecorationController();
 		itemController = new ItemController();
 		jlist = new JList<T>();

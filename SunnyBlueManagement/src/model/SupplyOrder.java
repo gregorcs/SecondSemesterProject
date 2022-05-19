@@ -62,8 +62,8 @@ public class SupplyOrder {
 	public void addLineItem(LineItem<Item> lineItem) {
 		boolean found = false;
 		for (LineItem<Item> temp : this.getListOfItems()) {
-			//TODO move this checking into a separate method
-			if (temp.getItem().getName().equals(lineItem.getItem().getName())) {
+			if (isItemInList(temp, lineItem)) {
+				//if the lineItem is already in the list, add the quantity to that lineItem
 				temp.setQuantity(temp.getQuantity() + lineItem.getQuantity());
 				found = true;
 			}
@@ -71,6 +71,13 @@ public class SupplyOrder {
 		if (!found) {
 			this.listOfItems.add(lineItem);
 		}
+	}
+	
+	private boolean isItemInList(LineItem<Item> existing, LineItem<Item> toBeAdded) {
+		if(existing.getItem().getName().equals(toBeAdded.getItem().getName())) {
+			return true;
+		}
+		return false;
 	}
 	
 	public void removeLineItem(LineItem<Item> LineItem) {

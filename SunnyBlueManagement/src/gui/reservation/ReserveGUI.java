@@ -27,7 +27,7 @@ import controller.DecorationController;
 import controller.ReservationController;
 import gui.MainFrame;
 import gui.decoration.DecorationListCellRenderer;
-import gui.decoration.DecorationScrollPane;
+import gui.decoration.GenericScrollPane;
 import gui.decoration.LineItemDecorationListCellRenderer;
 import gui.table.TableScrollPane;
 import model.Decoration;
@@ -57,8 +57,8 @@ public class ReserveGUI extends JPanel {
 	
 	private TableScrollPane paneTablesAvailable;
 	private TableScrollPane paneTablesSelected;
-	private DecorationScrollPane<Decoration> paneDecorationsAvailable;
-	private DecorationScrollPane<LineItem<Decoration>> paneDecorationsSelected;
+	private GenericScrollPane<Decoration> paneDecorationsAvailable;
+	private GenericScrollPane<LineItem<Decoration>> paneDecorationsSelected;
 	
 	private JButton btnRemoveDecoration;
 	private JButton btnSelectDecoration;
@@ -145,8 +145,8 @@ public class ReserveGUI extends JPanel {
 		paneTablesAvailable = new TableScrollPane();
 		paneTablesSelected = new TableScrollPane();
 		decorationController = new DecorationController();
-		paneDecorationsAvailable = new DecorationScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
-		paneDecorationsSelected = new DecorationScrollPane<LineItem<Decoration>>(new ArrayList<LineItem<Decoration>>(), new LineItemDecorationListCellRenderer());
+		paneDecorationsAvailable = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
+		paneDecorationsSelected = new GenericScrollPane<LineItem<Decoration>>(new ArrayList<LineItem<Decoration>>(), new LineItemDecorationListCellRenderer());
 		
 		createEnterDetailsLabels();
 		createEnterDetailsButtons();
@@ -290,7 +290,7 @@ public class ReserveGUI extends JPanel {
 	 * @param pane
 	 * @param decorations
 	 */
-	public <T> void updateScrollPane(DecorationScrollPane<T> pane, Collection<T> decorations) {//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
+	public <T> void updateScrollPane(GenericScrollPane<T> pane, Collection<T> decorations) {//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
 		pane.updateList(decorations);
 	}
 	
@@ -422,7 +422,7 @@ public class ReserveGUI extends JPanel {
 		Decoration decoration = paneDecorationsAvailable.getSelectedDecoration();
 		if(decoration!=null) {
 			int quantity = askForDecorationAmount();
-			reservationController.selectDecoration(decoration, quantity);
+			reservationController.getReservation().addDecoration(new LineItem<Decoration>(quantity, decoration));;
 			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
 		}
 	}

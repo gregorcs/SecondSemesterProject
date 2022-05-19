@@ -13,7 +13,8 @@ import model.Item;
 import model.LineItem;
 import model.UrgencyEnum;
 import gui.MainFrame;
-import gui.item.ItemScrollPane;
+import gui.decoration.GenericScrollPane;
+import gui.item.ItemListCellRenderer;
 import net.miginfocom.swing.MigLayout;
 import java.awt.Component;
 import javax.swing.Box;
@@ -33,7 +34,7 @@ public class SupplyGUI extends JPanel {
 	private JPanel supplyRestaurantPanel;
 	private JTextField textFieldSearch;
 
-	private ItemScrollPane itemScrollPane;
+	private GenericScrollPane<Item> itemScrollPane;
 	private JTextField textFieldEnterQuantity;
 
 	/**
@@ -56,6 +57,7 @@ public class SupplyGUI extends JPanel {
 
 	private void constructSupplyRestaurantPanel() {
 		supplyOrderController = new SupplyOrderController();
+		itemController = new ItemController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
 		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,center][][][][][][][][][grow]",
@@ -72,7 +74,6 @@ public class SupplyGUI extends JPanel {
 				btnSelectItem.addActionListener(new ActionListener() {
 					@Override
 					public void actionPerformed(ActionEvent e) {
-						itemController = new ItemController();
 						readItems();
 					}
 				});
@@ -81,7 +82,7 @@ public class SupplyGUI extends JPanel {
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		supplyRestaurantPanel.add(rigidArea_1, "cell 1 6");
 
-		itemScrollPane = new ItemScrollPane();
+		itemScrollPane = new GenericScrollPane<Item>(itemController.readAllItems(), new ItemListCellRenderer());
 		supplyRestaurantPanel.add(itemScrollPane, "cell 1 7 10 9,grow");
 
 		JButton btnGoBack = new JButton("Back");
@@ -134,7 +135,7 @@ public class SupplyGUI extends JPanel {
 			itemsFound = itemController.readItemByNameAndDepartment(getNameFromSearchTextField(),
 					itemScrollPane.getDepartmentFromChoice());
 		}
-		itemScrollPane.updateListItem(itemsFound);
+		itemScrollPane.updateList(itemsFound);
 	}
 
 	private int getQuantityFromTextField() throws Exception {
@@ -152,7 +153,7 @@ public class SupplyGUI extends JPanel {
 		try {
 			int quantity = getQuantityFromTextField();
 			if (quantity > 0) {
-				lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedItem());
+				lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedDecoration());
 				supplyOrderController.getSupplyOrder().addLineItem(lineItem);
 			} else {
 				throw new Exception();

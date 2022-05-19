@@ -109,6 +109,7 @@ public class Reservation {
 	}
 	
 	public void addDecoration(LineItem<Decoration> decoration) {
+		//TODO error handling
 		listOfDecorations.add(decoration);
 	}
 	

@@ -11,12 +11,8 @@ public class ItemController {
 	
 	private DaoItemIF daoItem;
 
-	public ItemController() {
-		super();
-		this.daoItem = DaoFactory.createDaoItem();
-	}
-
 	public void createItem(String name, String departmentType) {
+		this.daoItem = DaoFactory.createDaoItem();
 		Item itemToCreate = new Item(name, departmentType.toLowerCase());
 		try {
 			daoItem.create(itemToCreate);
@@ -27,6 +23,7 @@ public class ItemController {
 	}
 	
 	public Item readItem(int id) {
+		this.daoItem = DaoFactory.createDaoItem();
 		try {
 			return daoItem.read(id);
 		} catch (Exception e) {
@@ -38,6 +35,7 @@ public class ItemController {
 	}
 	
 	public void deleteItem(Item item) {
+		this.daoItem = DaoFactory.createDaoItem();
 		try {
 			daoItem.delete(item);
 		} catch (Exception e) {
@@ -47,6 +45,7 @@ public class ItemController {
 	}
 	
 	public Collection<Item> readAllItems() {
+		this.daoItem = DaoFactory.createDaoItem();
 		try {
 			Collection<Item> itemList;
 			itemList = daoItem.readAll();
@@ -61,6 +60,7 @@ public class ItemController {
 	}
 	
 	public Collection<Item> readItemByName(String name) {
+		this.daoItem = DaoFactory.createDaoItem();
 		try {
 			return daoItem.readByName(name);
 		} catch (Exception e) {
@@ -71,6 +71,7 @@ public class ItemController {
 	}
 	
 	public Collection<Item> readItemByNameAndDepartment(String name, String department) {
+		this.daoItem = DaoFactory.createDaoItem();
 		try {
 			return daoItem.readByNameAndDepartment(name, department);
 		} catch (Exception e) {
@@ -80,7 +81,9 @@ public class ItemController {
 		return null;
 	}
 	
+	//TODO MOVE LOGIC OUT OF HERE
 	public Collection<String> getAllDepartmentTypes() {
+		this.daoItem = DaoFactory.createDaoItem();
 		Collection<String> departmentsList = new ArrayList<String>();
 		for (Item item : readAllItems()) {
 			if (!departmentsList.contains(item.getDepartmentType())) {
