@@ -18,6 +18,7 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -53,7 +54,7 @@ public class DecorationGUI extends JPanel {
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel.add(lblHeader, "cell 1 1 3 1,alignx center,aligny center");
 		
-		scrollPane = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
+		scrollPane = new GenericScrollPane<Decoration>(new ArrayList<Decoration>(), new DecorationListCellRenderer());
 		panel.add(scrollPane, "cell 1 3 3 5,grow");
 		
 		JButton btnBack = new JButton("Back");
@@ -98,11 +99,10 @@ public class DecorationGUI extends JPanel {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
 				Collection<Decoration> decorationsFound;
-				//decorationsFound = decorationController.readAllSwitch(list.getDepartmentFromChoice(), list.getStockSortFromChoice());
-				//list.updateList(decorationsFound);
-				
+				//TODO FINISH SEARCH
+				decorationsFound = decorationController.readAllDecorations();
+				scrollPane.updateList(decorationsFound);
 			}
 		});
 		
@@ -116,7 +116,6 @@ public class DecorationGUI extends JPanel {
 		this.revalidate();
 		this.repaint();
 	}
-
 	
 	private void createAskForDecorationInfoDialog(String actionType) {
 		JFrame frame;

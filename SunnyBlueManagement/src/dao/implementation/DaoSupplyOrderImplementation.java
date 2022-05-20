@@ -1,6 +1,7 @@
 	package dao.implementation;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DBConnection;
@@ -15,28 +16,42 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
 
 	private PreparedStatement buildCreateSupplyOrderStatement(SupplyOrder supplyOrder) throws SQLException {
-		String createSupplyOrder = "INSERT INTO SupplyOrder values (?, ?)";
+		String query = "INSERT INTO SupplyOrder values (?, ?)";
 
-		PreparedStatement stmt = con.prepareStatement(createSupplyOrder, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, supplyOrder.getDateString());
 		stmt.setString(2, supplyOrder.getUrgencyEnum().toString());
-		System.out.println(createSupplyOrder);
+		System.out.println(query);
 		return stmt;
 	}
 
 	private PreparedStatement buildCreateSupplyOrderItemStatement(SupplyOrder supplyOrder, LineItem<Item> lineItem) throws SQLException {
-		String createSupplyOrderItem = "INSERT INTO SupplyOrder_Item values (?, ?, ?)";
-		PreparedStatement stmt = con.prepareStatement(createSupplyOrderItem, Statement.RETURN_GENERATED_KEYS);
+		String query = "INSERT INTO SupplyOrder_Item values (?, ?, ?)";
+		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, Integer.toString(supplyOrder.getSupplyOrderId()));
 		stmt.setString(2, Integer.toString(lineItem.getItem().getItemId()));
 		stmt.setString(3, Integer.toString(lineItem.getQuantity()));
-		System.out.println(createSupplyOrderItem);
+		System.out.println(query);
+		return stmt;
+	}
+	
+	private PreparedStatement buildReadAllSupplyOrdersStatement() throws SQLException {
+		String query = "SELECT * FROM SupplyOrder";
+		PreparedStatement stmt = con.prepareStatement(query);
+		System.out.println(query);
+		return stmt;
+	}
+	
+	private PreparedStatement buildReadAllItemsBySupplyOrderIdStatement(int id) throws SQLException {
+		//TODO FINISH THIS
+		String query = "SELECT * FROM SupplyOrder";
+		PreparedStatement stmt = con.prepareStatement(query);
+		System.out.println(query);
 		return stmt;
 	}
 
 	@Override
 	public void create(SupplyOrder obj) throws Exception {
-		con = DBConnection.getInstance().getDBcon();
 		PreparedStatement stmt = buildCreateSupplyOrderStatement(obj);
 
 		try {
@@ -57,16 +72,17 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 			if (con != null) {
 		        try {
 		          con.rollback();
-		          System.out.println("Rolling back database");
+		          System.out.println("Rolling back database" + e);
 		        } catch (SQLException excep) {
-		          throw new SQLException("Error when rolling back database");
+		          throw new SQLException("Error when rolling back database" + excep);
 		        }
 			}
 		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems");
+			throw new Exception("Null pointer exception, possible connection problems" + e);
 		} catch (Exception e) {
-			throw new Exception("Technical error");
+			throw new Exception("Technical error" + e);
 		} finally {
+			con.setAutoCommit(true);
 			DBConnection.closeConnection();
 		}
 	}
@@ -91,7 +107,28 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
 	@Override
 	public Collection<SupplyOrder> readAll() {
-		// TODO Auto-generated method stub
+		/*
+		PreparedStatement stmt = buildReadAllSupplyOrdersStatement();
+		ArrayList<SupplyOrder> itemsList = new ArrayList<>();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				//itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return itemsList;
+		*/
 		return null;
 	}
 
