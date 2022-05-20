@@ -11,6 +11,9 @@ public class Table {
 		this.isOutside = isOutside;
 	}
 
+	public Table() {
+	}
+
 	public int getTableNo() {
 		return tableNo;
 	}

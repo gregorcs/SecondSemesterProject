@@ -9,9 +9,12 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoDecorationIF;
+
 import model.Decoration;
 import model.DecorationStatistics;
 import model.Item;
+import model.LineItem;
+
 
 public class DaoDecorationImplementation implements DaoDecorationIF{
 
@@ -63,6 +66,7 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 		return stmt;
 	}
 	
+
 	private PreparedStatement buildDeleteDecorationString(Decoration decoration) throws SQLException {
 		String query = "UPDATE Reservation_Decoration "
 				+ "SET decoration_decorationId_FK = NULL "
@@ -73,7 +77,16 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 		stmt.setInt(2, decoration.getDecorationId());
 		System.out.println(query);
 		return stmt;
+  }
 
+	
+	//NORBERT DID CHANGES HERE
+	private PreparedStatement buildReadById(int id) throws SQLException {
+		String query = "SELECT name, department FROM Item INNER JOIN (SELECT item_itemId_FK FROM Decoration WHERE decorationId = ?) DecorationItem ON Item.itemId = DecorationItem.item_itemId_FK";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, id);
+		System.out.println(query);
+		return stmt;
 	}
 	
 	@Override
@@ -82,10 +95,15 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 		
 	}
 
-
+	//NORBERT DID CHANGES HERE
 	@Override
 	public Decoration read(int id) throws Exception {
-		// TODO Auto-generated method stub
+		PreparedStatement stmt = buildReadById(id);
+		
+		ResultSet rs = stmt.executeQuery();
+		if(rs.next()) {
+			return new Decoration(rs.getString(1), rs.getString(2), 0); //THE 0 IS THERE BECAUSE I DIDNT WANT TO MAKE A NEW CONSTRUCTOR
+		}
 		return null;
 	}
 

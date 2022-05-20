@@ -44,6 +44,7 @@ public class ReserveGUI extends JPanel {
 	private static final long serialVersionUID = 2671428415317456781L;
 	private MainFrame mainFrame;
 	private ReservationController reservationController;
+	private DecorationController decorationController;
 	private JLayeredPane layeredPane;
 	
 	private JPanel EnterDetailsPanel;
@@ -64,8 +65,9 @@ public class ReserveGUI extends JPanel {
 	private JButton btnSelectDecoration;
 	
 	private JRadioButton rdbtnIsEvent;
+	private JLabel lblAvailableDecorations;
+	private JLabel lblSelectedDecorations;
 	
-	private DecorationController decorationController;
 	
 	//Panel creation
 	
@@ -144,6 +146,7 @@ public class ReserveGUI extends JPanel {
 		
 		paneTablesAvailable = new TableScrollPane();
 		paneTablesSelected = new TableScrollPane();
+    
 		decorationController = new DecorationController();
 		paneDecorationsAvailable = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
 		paneDecorationsSelected = new GenericScrollPane<LineItem<Decoration>>(new ArrayList<LineItem<Decoration>>(), new LineItemDecorationListCellRenderer());
@@ -161,11 +164,11 @@ public class ReserveGUI extends JPanel {
 		lblSelectedTables.setFont(new Font("Tahoma", Font.BOLD, 12));
 		ChooseTablePanel.add(lblSelectedTables, "cell 4 3,alignx center");
 		
-		JLabel lblAvailableDecorations = new JLabel("Available decorations");
+		lblAvailableDecorations = new JLabel("Available decorations");
 		lblAvailableDecorations.setFont(new Font("Tahoma", Font.BOLD, 12));
 		ChooseTablePanel.add(lblAvailableDecorations, "cell 1 7,alignx center");
 		
-		JLabel lblSelectedDecorations = new JLabel("Selected decorations");
+		lblSelectedDecorations = new JLabel("Selected decorations");
 		lblSelectedDecorations.setFont(new Font("Tahoma", Font.BOLD, 12));
 		ChooseTablePanel.add(lblSelectedDecorations, "cell 4 7,alignx center");
 		ChooseTablePanel.add(paneDecorationsSelected, "cell 4 8,grow");
@@ -255,6 +258,7 @@ public class ReserveGUI extends JPanel {
 		this.mainFrame = mainFrame;
 		this.setBounds(100, 100, 1920, 1080);
 		this.reservationController = new ReservationController();
+		this.decorationController = new DecorationController();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		
 		constructLayeredPane();
@@ -308,6 +312,8 @@ public class ReserveGUI extends JPanel {
         switchReservePanels(EnterDetailsPanel);
         updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
         updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
+        //decorationController = new DecorationController();
+        //updateScrollPane(paneDecorationsAvailable, decorationController.readAllDecorations());
 	}
 	
 	public boolean isValid(String dateStr) {
@@ -370,7 +376,8 @@ public class ReserveGUI extends JPanel {
 		try {
 			Collection<Table> tables = reservationController.enterDetails(numOfPeople, date, reservationName, specificRequests, phoneNo, isEvent);
 			switchReservePanels(ChooseTablePanel);
-			updateScrollPane(paneTablesAvailable ,tables);						
+			updateScrollPane(paneTablesAvailable ,tables);		
+			updateScrollPane(paneDecorationsAvailable ,decorationController.readAllDecorations());						
 			updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
 			updateScrollPane(paneDecorationsSelected, reservationController.getSelectedDecorations());
 			
@@ -438,10 +445,19 @@ public class ReserveGUI extends JPanel {
 	private void toggleDecorations(boolean b) {
 		paneDecorationsAvailable.setEnabled(b);
 		paneDecorationsAvailable.setVisible(b);
+		
 		paneDecorationsSelected.setEnabled(b);
 		paneDecorationsSelected.setVisible(b);
+		
+		lblAvailableDecorations.setEnabled(b);
+		lblAvailableDecorations.setVisible(b);
+		
+		lblSelectedDecorations.setEnabled(b);
+		lblSelectedDecorations.setVisible(b);
+		
 		btnRemoveDecoration.setEnabled(b);
 		btnRemoveDecoration.setVisible(b);
+		
 		btnSelectDecoration.setEnabled(b);
 		btnSelectDecoration.setVisible(b);
 	}

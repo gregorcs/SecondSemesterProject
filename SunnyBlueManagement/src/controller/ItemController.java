@@ -92,7 +92,7 @@ public class ItemController {
 		}
 		return departmentsList;
 	}
-
+  
 	public Collection<Item> readItemByNameSortById(String nameFromSearchTextField, String sortByChoice) {
 		this.daoItem = DaoFactory.createDaoItem();
 		try {
@@ -107,28 +107,5 @@ public class ItemController {
 		}
 		return null;
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 }
