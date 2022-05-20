@@ -12,6 +12,7 @@ import controller.ItemController;
 import controller.SupplyOrderController;
 import model.Item;
 import model.LineItem;
+import model.ParametersSortEnum;
 import model.UrgencyEnum;
 import gui.GenericScrollPane;
 import gui.MainFrame;
@@ -36,7 +37,6 @@ public class SupplyGUI extends JPanel {
 	private JPanel supplyRestaurantPanel;
 	private JTextField textFieldSearch;
 	
-	private enum SortStockEnum {LOWEST, HIGHEST;};
 	private Choice choiceLowOrHigh;
 
 	private GenericScrollPane<Item> itemScrollPane;
@@ -70,13 +70,6 @@ public class SupplyGUI extends JPanel {
 			}
 		});
 		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 3,alignx left,aligny bottom");
-		
-		JButton btnChangeToDecoration = new JButton("Change to decoration");
-		btnChangeToDecoration.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		supplyRestaurantPanel.add(btnChangeToDecoration, "cell 6 5,alignx center");
 		
 		JButton btnDeleteRow = new JButton("Delete row");
 		btnDeleteRow.addActionListener(new ActionListener() {
@@ -179,7 +172,6 @@ public class SupplyGUI extends JPanel {
 	private void addLineItems() {
 		LineItem<Item> lineItem = null;
 		// TODO Maybe move LineItem into a controller so GUI doesn't see the model
-		// TODO Put into separate method
 		try {
 			int quantity = getQuantityFromTextField();
 			if (quantity > 0) {
@@ -220,7 +212,7 @@ public class SupplyGUI extends JPanel {
 	}	
 	
 	private void constructChoiceLowOrHigh() {
-		for (SortStockEnum temp : SortStockEnum.values()) {
+		for (ParametersSortEnum temp : ParametersSortEnum.values()) {
 			choiceLowOrHigh.add(temp.toString());
 		}
 	}

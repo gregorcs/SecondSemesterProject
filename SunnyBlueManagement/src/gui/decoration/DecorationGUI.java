@@ -22,6 +22,7 @@ import java.util.Collection;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
 import java.awt.FlowLayout;
+import java.awt.Choice;
 
 public class DecorationGUI extends JPanel {
 
@@ -96,14 +97,16 @@ public class DecorationGUI extends JPanel {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				/*
-				decorationController = new DecorationController();
+				
 				Collection<Decoration> decorationsFound;
 				decorationsFound = decorationController.readAllSwitch(list.getDepartmentFromChoice(), list.getStockSortFromChoice());
 				list.updateList(decorationsFound);
-				*/
+				
 			}
 		});
+		
+		Choice choiceStock = new Choice();
+		panel.add(choiceStock, "cell 1 8");
 		panel.add(btnSearch, "cell 1 8,alignx left");
 		
 	}
@@ -120,7 +123,7 @@ public class DecorationGUI extends JPanel {
 		JPanel panel = new JPanel();
 		panel.setBounds(100, 100, 400, 400);
 		JButton button = new JButton("create");
-		frame.add(panel);
+		frame.getContentPane().add(panel);
 		
 		button.addActionListener(new ActionListener() {
 			@Override
@@ -130,7 +133,7 @@ public class DecorationGUI extends JPanel {
 		});
 		
 		JDialog dialog = new JDialog(frame , "Enter decoration details");
-		dialog.setLayout(new FlowLayout());
+		dialog.getContentPane().setLayout(new FlowLayout());
 		JLabel lblName = new JLabel("Name: ");
 		JLabel lblDepartment = new JLabel("Department: ");
 		JLabel lblStock = new JLabel("Stock: ");
@@ -139,13 +142,13 @@ public class DecorationGUI extends JPanel {
 		JTextField textFieldDepartment = new JTextField(8);
 		JTextField textFieldStock = new JTextField(8);
 		
-		dialog.add(lblName);
-		dialog.add(textFieldName);
-		dialog.add(lblDepartment);
-		dialog.add(textFieldDepartment);
-		dialog.add(lblStock);
-		dialog.add(textFieldStock);
-		dialog.add(button);
+		dialog.getContentPane().add(lblName);
+		dialog.getContentPane().add(textFieldName);
+		dialog.getContentPane().add(lblDepartment);
+		dialog.getContentPane().add(textFieldDepartment);
+		dialog.getContentPane().add(lblStock);
+		dialog.getContentPane().add(textFieldStock);
+		dialog.getContentPane().add(button);
 		dialog.pack();
 		dialog.setVisible(true);
 	}
