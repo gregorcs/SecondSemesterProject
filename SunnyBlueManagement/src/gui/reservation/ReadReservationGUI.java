@@ -2,6 +2,8 @@ package gui.reservation;
 
 import javax.swing.JPanel;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 import java.awt.Font;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextField;
@@ -9,6 +11,7 @@ import javax.swing.JTextField;
 import controller.ReservationController;
 import gui.MainFrame;
 import model.ReservationFolder.Reservation;
+import model.ReservationFolder.Table;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
@@ -45,20 +48,32 @@ public class ReadReservationGUI extends JPanel {
 		JButton btnSearch = new JButton("Search");
 		btnSearch.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				try {
-					updateScrollPane(scrollPane, reservationController.readReservationsByDate(textSearch.getText()));
-				} catch (Exception e1) {
-					e1.printStackTrace();
-				}
+				search();
 			}
 		});
 		
 		Component rigidArea = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea, "cell 1 2");
-		add(btnSearch, "cell 2 3");
+		add(btnSearch, "flowx,cell 2 3");
+		
+		JButton btnDelete = new JButton("Cancel reservation");
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				delete();
+			}
+		});
+		add(btnDelete, "cell 3 3");
 		
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		add(rigidArea_1, "cell 1 4");
+		
+		JButton btnDetails = new JButton("Show details");
+		btnDetails.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				details();
+			}
+		});
+		add(btnDetails, "cell 3 4");
 		
 		scrollPane = new ReservationScrollPane();
 		add(scrollPane, "cell 1 5 2 3,grow");
@@ -79,7 +94,36 @@ public class ReadReservationGUI extends JPanel {
 
 	}
 	
-	private void updateScrollPane(ReservationScrollPane pane, Collection<Reservation> reservations) {				//THESE 2 ARE DIFFERENT - INITIALIZE / UPDATELIST
+	private void search() {
+		try {
+			updateScrollPane(scrollPane, reservationController.readReservationsByDate(textSearch.getText()));
+		} catch (Exception e1) {
+			e1.printStackTrace();
+		}
+	}
+	
+	private void delete() {
+		int dialogResult = JOptionPane.showConfirmDialog(null, "Are you sure you want to cancel this reservation?", "Confirm deletion", JOptionPane.YES_NO_OPTION);
+		if(dialogResult != JOptionPane.YES_OPTION){
+			return;
+		}
+		Reservation reservation = scrollPane.getSelectedReservation();
+		if(reservationController.delete(reservation)) {
+	        JOptionPane.showMessageDialog(null, "Reservation cancelled!");
+	        search();
+		}
+		else {
+	        JOptionPane.showMessageDialog(null, "There was an error while cancelling reservation!", "Deletion failed", JOptionPane.ERROR_MESSAGE);
+		}
+	}
+	
+	private void details() {
+		Reservation reservation = scrollPane.getSelectedReservation();
+		String messageToShow = reservationController.constructDetails(reservation);
+		JOptionPane.showMessageDialog(mainFrame, messageToShow);
+	}
+	
+	private void updateScrollPane(ReservationScrollPane pane, Collection<Reservation> reservations) {
 		pane.initializeList(reservations);
 	}
 }

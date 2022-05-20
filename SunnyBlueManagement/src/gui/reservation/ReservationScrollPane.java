@@ -37,7 +37,7 @@ private static final long serialVersionUID = -6447934041446584216L;
 		reservationList.setModel(listRepresentation);
 	}
 		
-	public Reservation getSelectedTable() {
+	public Reservation getSelectedReservation() {
 		return reservationList.getSelectedValue();
 	}
 }

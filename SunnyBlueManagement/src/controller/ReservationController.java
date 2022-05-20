@@ -16,7 +16,7 @@ public class ReservationController {
 	
 	//creates reservation??? - should be in DAO
 	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo, boolean isEvent) throws Exception {	
-		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo, isEvent);
+		reservation = new Reservation(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
 		
 		DaoReservationIF daoReservation = DaoFactory.createDaoReservation();
 		Collection<Table> availableTables = daoReservation.readTablesByDate(date);
@@ -26,6 +26,16 @@ public class ReservationController {
 
 	public Collection<Reservation> readReservationsByDate(String date) throws Exception{
 		return DaoFactory.createDaoReservation().readReservationsByDate(date);
+	}
+	
+	public boolean delete(Reservation reservation) {
+		try {
+			DaoFactory.createDaoReservation().delete(reservation);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+		return true;
 	}
 	
 	//select table(s) for the reservation
@@ -47,7 +57,6 @@ public class ReservationController {
 	public boolean confirmReservation() {
 		try {
 			DaoFactory.createDaoReservation().create(reservation);
-			reservation = new Reservation();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -86,5 +95,27 @@ public class ReservationController {
 	
 	public Collection<LineItem<Decoration>> getSelectedDecorations() {
 		return reservation.getListOfDecorations();
+	}
+	
+	public String constructDetails(Reservation reservation) {
+		String messageToShow = "Name: " + reservation.getReservationName()
+						+ "\nDate: " + reservation.getDate()
+						+ "\nNo. of people: " + reservation.getNumOfPeople()
+						+ "\nPhone No.: " + reservation.getPhoneNo()
+						+ "\n"
+						+ "\nTables: ";
+		for(Table table : reservation.getListOfTables()) {
+			messageToShow += "\n"+table.getTableNo();
+		}
+		
+		if(reservation.isEvent()) {
+			messageToShow += "\n"
+							+"\nDecorations:";
+			for(LineItem<Decoration> decoration : reservation.getListOfDecorations()) {
+				messageToShow += "\n" + decoration.getItem().getName() + "   Quantity: "+decoration.getQuantity();
+			}
+		
+		}
+		return messageToShow;
 	}
 }
