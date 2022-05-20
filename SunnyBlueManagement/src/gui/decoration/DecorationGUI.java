@@ -99,8 +99,8 @@ public class DecorationGUI extends JPanel {
 			public void actionPerformed(ActionEvent e) {
 				
 				Collection<Decoration> decorationsFound;
-				decorationsFound = decorationController.readAllSwitch(list.getDepartmentFromChoice(), list.getStockSortFromChoice());
-				list.updateList(decorationsFound);
+				//decorationsFound = decorationController.readAllSwitch(list.getDepartmentFromChoice(), list.getStockSortFromChoice());
+				//list.updateList(decorationsFound);
 				
 			}
 		});
@@ -118,29 +118,37 @@ public class DecorationGUI extends JPanel {
 
 	
 	private void createAskForDecorationInfoDialog() {
-		JFrame frame = new JFrame();
+		JFrame frame;
+		JPanel panel;
+		JButton btnOk;
+		JDialog dialog;
+		JLabel lblName, lblDepartment, lblStock;
+		JTextField textFieldName, textFieldDepartment, textFieldStock;
+		
+		frame = new JFrame();
 		frame.setBounds(100, 100, 400, 400);
-		JPanel panel = new JPanel();
+		panel = new JPanel();
 		panel.setBounds(100, 100, 400, 400);
-		JButton button = new JButton("create");
 		frame.getContentPane().add(panel);
 		
-		button.addActionListener(new ActionListener() {
+		dialog = new JDialog(frame , "Enter decoration details");
+		dialog.getContentPane().setLayout(new FlowLayout());
+		lblName = new JLabel("Name: ");
+		lblDepartment = new JLabel("Department: ");
+		lblStock = new JLabel("Stock: ");
+		
+		textFieldName = new JTextField(8);
+		textFieldDepartment = new JTextField(8);
+		textFieldStock = new JTextField(8);
+		
+		btnOk = new JButton("create");
+		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				
+				decorationController.createDecoration(textFieldName.getText(), 
+						textFieldDepartment.getText(), Integer.parseInt(textFieldStock.getText()));
 			}
 		});
-		
-		JDialog dialog = new JDialog(frame , "Enter decoration details");
-		dialog.getContentPane().setLayout(new FlowLayout());
-		JLabel lblName = new JLabel("Name: ");
-		JLabel lblDepartment = new JLabel("Department: ");
-		JLabel lblStock = new JLabel("Stock: ");
-		
-		JTextField textFieldName = new JTextField(8);
-		JTextField textFieldDepartment = new JTextField(8);
-		JTextField textFieldStock = new JTextField(8);
 		
 		dialog.getContentPane().add(lblName);
 		dialog.getContentPane().add(textFieldName);
@@ -148,7 +156,7 @@ public class DecorationGUI extends JPanel {
 		dialog.getContentPane().add(textFieldDepartment);
 		dialog.getContentPane().add(lblStock);
 		dialog.getContentPane().add(textFieldStock);
-		dialog.getContentPane().add(button);
+		dialog.getContentPane().add(btnOk);
 		dialog.pack();
 		dialog.setVisible(true);
 	}

@@ -16,7 +16,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	private PreparedStatement buildCreateString(Item item) throws SQLException {
 		String createItemString = "INSERT INTO Item values (?, ?)";
 
-		PreparedStatement stmt = con.prepareStatement(createItemString, Statement.RETURN_GENERATED_KEYS);
+		PreparedStatement stmt = con.prepareStatement(createItemString);
 		stmt.setString(1, item.getName());
 		stmt.setString(2, item.getDepartmentType());
 		System.out.println(createItemString);
@@ -77,6 +77,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
   
+	//would have been nice to return the generated key or bool value here
 	@Override
 	public void create(Item obj) throws Exception {
 		PreparedStatement stmt = buildCreateString(obj);

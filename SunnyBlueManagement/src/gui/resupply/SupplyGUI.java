@@ -153,7 +153,6 @@ public class SupplyGUI extends JPanel {
 		
 		createSupplyRestaurantTextFields();
 		createSupplyRestaurantButtons();
-
 	}
 
 	private void readItems() {
@@ -161,7 +160,7 @@ public class SupplyGUI extends JPanel {
 		itemsFound = itemController.readItemByNameSortById(getNameFromSearchTextField(), getSortByChoice());
 		itemScrollPane.updateList(itemsFound);
 	}
-	private int getQuantityFromTextField() throws Exception {
+	private int tryGetQuantityFromTextField() throws Exception {
 		return Integer.parseInt(textFieldEnterQuantity.getText());
 	}
 
@@ -171,16 +170,27 @@ public class SupplyGUI extends JPanel {
 	
 	private void addLineItems() {
 		LineItem<Item> lineItem = null;
-		// TODO Maybe move LineItem into a controller so GUI doesn't see the model
+		boolean wasAdded;
+		boolean numIsCorrect;
+		int quantity = 0;
+		
 		try {
-			int quantity = getQuantityFromTextField();
-			if (quantity > 0) {
-				lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedObj());
-				supplyOrderController.getSupplyOrder().addLineItem(lineItem);
-			} else {
-				throw new Exception();
-			}
-		} catch (Exception e1) {
+			quantity = tryGetQuantityFromTextField();
+			numIsCorrect = true;
+		} catch (Exception e) {
+			numIsCorrect = false;
+			e.printStackTrace();
+		}
+		
+		if (quantity > 0 && numIsCorrect) {
+			lineItem = new LineItem<Item>(quantity, itemScrollPane.getSelectedObj());
+			supplyOrderController.getSupplyOrder().addLineItem(lineItem);
+			wasAdded = true;
+		} else {
+			wasAdded = false;
+		}
+
+		if (!wasAdded) {
 			JOptionPane.showMessageDialog(mainFrame, "Item wasn't added, check your quantity");
 		}
 
