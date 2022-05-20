@@ -96,6 +96,7 @@ public class ReservationController {
 
 	public void setReservation(Reservation reservation) {
 		this.reservation = reservation;
+	}
 
 	public String constructDetails(Reservation reservation) {
 		String messageToShow = "Name: " + reservation.getReservationName()

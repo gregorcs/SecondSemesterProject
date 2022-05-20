@@ -21,7 +21,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	Connection con = DBConnection.getInstance().getDBcon();
 	
 	private PreparedStatement buildCreateReservationStatement(Reservation reservation) throws SQLException {
-		String query = "INSERT INTO Reservation (date, amountOfPeople, reservationName, specificRequirements, phoneNo) values(?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Reservation (date, amountOfPeople, reservationName, specificRequirements, phoneNo, isEvent) values(?, ?, ?, ?, ?, ?)";
 		
 		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, reservation.getDate());
@@ -102,8 +102,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
-	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException {
-		//TODO CHECKING EDGE CASE IS HARDCODED
+	private PreparedStatement buildCreateReservation_DecorationStatement(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException {
 		String query = 
 				"INSERT INTO Reservation_Decoration "
 				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
