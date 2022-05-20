@@ -54,6 +54,16 @@ public class SupplyOrder {
 	public ArrayList<LineItem> getListOfItems() {
 		return this.listOfItems;
 	}
+	
+	public LineItem getLineItemById(int itemId) {
+		LineItem lineItem = null;
+		for (int i = 0; i < getListOfItems().size(); i++) {
+			if (getListOfItems().get(i).getItem().getItemId() == itemId) {
+				lineItem = getListOfItems().get(i);
+			}
+		}
+		return lineItem;
+	}
 
 	public void setListOfItems(ArrayList<LineItem> listOfItems) {
 		this.setListOfItems(listOfItems);
@@ -73,8 +83,12 @@ public class SupplyOrder {
 		}
 	}
 	
-	public void removeLineItem(LineItem LineItem) {
-		this.getListOfItems().remove(LineItem);
+	public void removeLineItem(LineItem LineItem, int quantity) {
+		LineItem.setQuantity(LineItem.getQuantity() - quantity);
+		
+		if (LineItem.getQuantity() == 0) {
+			this.getListOfItems().remove(LineItem);
+		}
 	}
 	
 	public String getDateString() {

@@ -58,8 +58,7 @@ public class SupplyGUI extends JPanel {
 		supplyOrderController = new SupplyOrderController();
 		supplyRestaurantPanel = new JPanel();
 		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
-		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,center][][][][][][][][][grow]",
-				"[grow][][][14px][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
+		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,center][][][][][][][][][grow]", "[grow][][][14px][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
 
 		JLabel lblResupplyHeader = new JLabel("Resupply ");
 		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
@@ -77,6 +76,14 @@ public class SupplyGUI extends JPanel {
 					}
 				});
 				supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 5,growx,aligny bottom");
+		
+		JButton btnCheckOrder = new JButton("Check order");
+		supplyRestaurantPanel.add(btnCheckOrder, "cell 4 5,alignx center,aligny center");
+		btnCheckOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(mainFrame, createOrderSummary());
+			}
+		});
 
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		supplyRestaurantPanel.add(rigidArea_1, "cell 1 6");
@@ -116,6 +123,15 @@ public class SupplyGUI extends JPanel {
 			}
 		});
 		supplyRestaurantPanel.add(btnAddItem, "cell 2 17,growx,aligny bottom");
+		
+		JButton btnRemoveFromOrder = new JButton("Remove from order");
+		supplyRestaurantPanel.add(btnRemoveFromOrder, "cell 4 17");
+		btnRemoveFromOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				removeLineItems();
+			}
+		});
+		
 		supplyRestaurantPanel.add(btnProceed, "cell 9 17");
 
 		supplyRestaurantPanel.add(btnGoBack, "cell 10 17,growx,aligny bottom");
@@ -158,12 +174,36 @@ public class SupplyGUI extends JPanel {
 				throw new Exception();
 			}
 		} catch (Exception e1) {
-			JOptionPane.showMessageDialog(mainFrame, "Item wasn't added, check your quantity");
+			JOptionPane.showMessageDialog(mainFrame, "Unable to add item, please check quantity");
 		}
 
 		if (lineItem != null) {
-			JOptionPane.showMessageDialog(mainFrame, "Added item successfully" + System.lineSeparator() + "Name: "
+			JOptionPane.showMessageDialog(mainFrame, "Item added successfully" + System.lineSeparator() + "Name: "
 					+ lineItem.getItem().getName() + System.lineSeparator() + "Quantity: " + lineItem.getQuantity());
+		}
+	}
+	
+	private void removeLineItems() {
+		LineItem lineItem = null;
+		try {
+			int quantity = getQuantityFromTextField();
+			if (quantity > 0) {
+				int itemId = itemScrollPane.getSelectedItem().getItemId();
+				lineItem = supplyOrderController.getSupplyOrder().getLineItemById(itemId);
+				supplyOrderController.getSupplyOrder().removeLineItem(lineItem, quantity);
+				
+				if (lineItem.getQuantity() < quantity) {
+					JOptionPane.showMessageDialog(mainFrame, "Unable to remove item, please check quantity");
+				}
+				
+				if (lineItem != null) {
+					JOptionPane.showMessageDialog(mainFrame, quantity + " item(s) removed successfully");
+				}
+			} else {
+			throw new Exception();
+			} 
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(mainFrame, "Unable to remove item, please check quantity");
 		}
 	}
 
@@ -194,7 +234,7 @@ public class SupplyGUI extends JPanel {
 			messageToShow += "Your order:";
 			for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
 				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
-						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
+						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity() + System.lineSeparator() + "ID: " + lineItem.getItem().getItemId() + System.lineSeparator();
 			}
 		} else {
 			messageToShow += "Your order is empty";
