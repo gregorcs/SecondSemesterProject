@@ -23,7 +23,6 @@ import java.awt.Component;
 import javax.swing.Box;
 import java.awt.Dimension;
 import java.awt.Choice;
-import java.awt.ScrollPane;
 
 public class SupplyGUI extends JPanel {
 
@@ -52,6 +51,7 @@ public class SupplyGUI extends JPanel {
 		setBounds(100, 100, 1920, 1080);
 		this.mainFrame = mainFrame;
 		this.supplyOrderController = new SupplyOrderController();
+		this.itemController = new ItemController();
 		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
 		constructLayeredPane();
 		constructSupplyRestaurantPanel();
@@ -64,7 +64,7 @@ public class SupplyGUI extends JPanel {
 		layeredPane.setLayout(new CardLayout(0, 0));
 	}
 	
-	private void createSupplyRestaurantButtons() {
+	private void createSupplyGUIButtons() {
 		JButton btnSelectItem = new JButton("Search");
 		btnSelectItem.addActionListener(new ActionListener() {
 			@Override
@@ -74,9 +74,6 @@ public class SupplyGUI extends JPanel {
 		});
 		supplyRestaurantPanel.add(btnSelectItem, "flowx,cell 2 3,alignx left,aligny bottom");
 
-		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
-		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 15");
-		
 		JButton btnAddItem = new JButton("Add to order");
 		btnAddItem.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -103,7 +100,6 @@ public class SupplyGUI extends JPanel {
 		supplyRestaurantPanel.add(btnProceed, "flowx,cell 6 16,alignx right,aligny bottom");
 
 		supplyRestaurantPanel.add(btnGoBack, "cell 6 16,alignx right,aligny bottom");
-		choiceLowOrHigh = new Choice();
 		supplyRestaurantPanel.add(choiceLowOrHigh, "cell 1 4");
 		
 		JButton btnDeleteRow = new JButton("Delete row");
@@ -113,10 +109,6 @@ public class SupplyGUI extends JPanel {
 			}
 		});
 		supplyRestaurantPanel.add(btnDeleteRow, "cell 1 14,alignx left");
-		
-	}
-
-	private void createSupplyRestaurantTextFields() {
 		
 		JButton btnAddRow = new JButton("Add row");
 		btnAddRow.addActionListener(new ActionListener() {
@@ -133,23 +125,19 @@ public class SupplyGUI extends JPanel {
 			}
 		});
 		supplyRestaurantPanel.add(btnNewButton, "cell 5 14,alignx center");
+	}
+
+	private void createSupplyGUITextFields() {
 		textFieldEnterQuantity = new JTextField();
 		supplyRestaurantPanel.add(textFieldEnterQuantity, "cell 1 15,grow");
 		textFieldEnterQuantity.setColumns(10);
-
 
 		textFieldSearch = new JTextField();
 		supplyRestaurantPanel.add(textFieldSearch, "cell 1 3,grow");
 		textFieldSearch.setColumns(10);
 	}
-	
-	private void constructSupplyRestaurantPanel() {
-		supplyOrderController = new SupplyOrderController();
-		itemController = new ItemController();
-		supplyRestaurantPanel = new JPanel();
-		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
-		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,grow,center][][][grow][grow]", "[grow][][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
 
+	private void createSupplyGUILabels() {
 		JLabel lblResupplyHeader = new JLabel("Resupply ");
 		lblResupplyHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		supplyRestaurantPanel.add(lblResupplyHeader, "cell 1 1 2 1,alignx center,aligny top");
@@ -160,16 +148,31 @@ public class SupplyGUI extends JPanel {
 		
 		JLabel lblEnterProduct = new JLabel("Enter product:");
 		supplyRestaurantPanel.add(lblEnterProduct, "flowx,cell 1 3,alignx left,aligny center");
-
-		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
-		supplyRestaurantPanel.add(rigidArea_1, "cell 0 4");
-
+		
+		JLabel lblEnterQuantity = new JLabel("Enter quantity:");
+		supplyRestaurantPanel.add(lblEnterQuantity, "flowx,cell 1 15");
+		
+	}
+	
+	private void createSupplyGUIScrollPanes() {
 		itemScrollPane = new GenericScrollPane<Item>(new ArrayList<Item>(), new ItemListCellRenderer());
 		supplyRestaurantPanel.add(itemScrollPane, "cell 1 5 2 9,grow");
 		supplyOrderScrollPane = new GenericScrollPane<SupplyOrder>(new ArrayList<SupplyOrder>(), new SupplyOrderListCellRenderer());
 		supplyRestaurantPanel.add(supplyOrderScrollPane, "cell 5 5 1 9,grow");
-		createSupplyRestaurantTextFields();
-		createSupplyRestaurantButtons();
+	}
+	
+	private void constructSupplyRestaurantPanel() {
+		supplyRestaurantPanel = new JPanel();
+		layeredPane.add(supplyRestaurantPanel, "name_3150264217800");
+		supplyRestaurantPanel.setLayout(new MigLayout("", "[grow][173.00px][113.00px,grow,center][][][grow][grow]", "[grow][][][][][41.00][40.00][39.00][36.00][68.00][][][][][][][grow]"));
+		choiceLowOrHigh = new Choice();
+		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
+		supplyRestaurantPanel.add(rigidArea_1, "cell 0 4");
+		
+		createSupplyGUILabels();
+		createSupplyGUIScrollPanes();
+		createSupplyGUITextFields();
+		createSupplyGUIButtons();
 	}
 
 	private void readItems() {
@@ -177,6 +180,7 @@ public class SupplyGUI extends JPanel {
 		itemsFound = itemController.readItemByNameSortById(getNameFromSearchTextField(), getSortByChoice());
 		itemScrollPane.updateList(itemsFound);
 	}
+	
 	private int tryGetQuantityFromTextField() throws Exception {
 		return Integer.parseInt(textFieldEnterQuantity.getText());
 	}

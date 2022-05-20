@@ -1,7 +1,6 @@
 	package dao.implementation;
 
 import java.sql.*;
-import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DBConnection;
@@ -112,11 +111,8 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		ArrayList<SupplyOrder> itemsList = new ArrayList<>();
 
 		try {
+			con.setAutoCommit(false);
 			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				//itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
-			}
 
 		} catch (SQLException e) {
 			throw new Exception("SQL exception " + e);

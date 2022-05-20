@@ -1,6 +1,5 @@
 package tests;
 
-import java.util.ArrayList;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,8 +7,6 @@ import controller.SupplyOrderController;
 import dao.DBConnection;
 import model.Item;
 import model.LineItem;
-import model.UrgencyEnum;
-
 
 import java.time.LocalDateTime;
 

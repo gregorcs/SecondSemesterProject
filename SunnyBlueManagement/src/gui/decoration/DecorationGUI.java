@@ -35,28 +35,18 @@ public class DecorationGUI extends JPanel {
 	private GenericScrollPane<Decoration> scrollPane;
 	private DecorationController decorationController;
 	private JTextField textField;
+	private JPanel panel;
+	private JLayeredPane layeredPane;
 	
-	public DecorationGUI(final MainFrame mainFrame) {
-		this.mainFrame = mainFrame;
-		setBounds(100, 100, 1920, 1080);
-		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
-		decorationController = new DecorationController();
-		
-		JLayeredPane layeredPane = new JLayeredPane();
+	private void constructLayeredPane() {
+		layeredPane = new JLayeredPane();
 		add(layeredPane);
 		layeredPane.setLayout(new CardLayout(0, 0));
 		
-		JPanel panel = new JPanel();
-		panel.setLayout(new MigLayout("", "[grow][grow][87.00][][grow]", "[grow][][][grow][][][][][][grow]"));
-		layeredPane.add(panel, "name_97268705302100");
-		
-		JLabel lblHeader = new JLabel("Decoration management");
-		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
-		panel.add(lblHeader, "cell 1 1 3 1,alignx center,aligny center");
-		
-		scrollPane = new GenericScrollPane<Decoration>(new ArrayList<Decoration>(), new DecorationListCellRenderer());
-		panel.add(scrollPane, "cell 1 3 3 5,grow");
-		
+	}
+	
+	private void createDecorationGUIButtons() {
+
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -87,13 +77,6 @@ public class DecorationGUI extends JPanel {
 			}
 		});
 		panel.add(btnDelete, "cell 4 6");
-		
-		JLabel lblSearch = new JLabel("Search:");
-		panel.add(lblSearch, "flowx,cell 1 8");
-		
-		textField = new JTextField();
-		panel.add(textField, "cell 1 8,alignx left");
-		textField.setColumns(10);
 		panel.add(btnBack, "cell 4 9,alignx right,aligny bottom");
 		
 		JButton btnSearch = new JButton("Search");
@@ -104,11 +87,41 @@ public class DecorationGUI extends JPanel {
 				decorationsFound = decorationController.readAllDecorations();
 				scrollPane.updateList(decorationsFound);
 			}
-		});
+		});	
+	}
+	
+	private void createDecorationGUILabels() {
+		JLabel lblHeader = new JLabel("Decoration management");
+		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
+		panel.add(lblHeader, "cell 1 1 3 1,alignx center,aligny center");
 		
+		JLabel lblSearch = new JLabel("Search:");
+		panel.add(lblSearch, "flowx,cell 1 8");
+	}
+	
+	public DecorationGUI(final MainFrame mainFrame) {
+		this.mainFrame = mainFrame;
+		setBounds(100, 100, 1920, 1080);
+		setLayout(new BoxLayout(this, BoxLayout.X_AXIS));
+		decorationController = new DecorationController();
+		constructLayeredPane();
+
+		panel = new JPanel();
+		panel.setLayout(new MigLayout("", "[grow][grow][87.00][][grow]", "[grow][][][grow][][][][][][grow]"));
+		layeredPane.add(panel, "name_97268705302100");
+
+		scrollPane = new GenericScrollPane<Decoration>(new ArrayList<Decoration>(), new DecorationListCellRenderer());
+		panel.add(scrollPane, "cell 1 3 3 5,grow");
+		
+		createDecorationGUIButtons();
+		createDecorationGUILabels();
+		
+		textField = new JTextField();
+		panel.add(textField, "cell 1 8,alignx left");
+		textField.setColumns(10);
+
 		Choice choiceStock = new Choice();
 		panel.add(choiceStock, "cell 1 8");
-		panel.add(btnSearch, "cell 1 8,alignx left");
 		
 	}
 	
@@ -124,23 +137,23 @@ public class DecorationGUI extends JPanel {
 		JDialog dialog;
 		JLabel lblName, lblDepartment, lblStock;
 		JTextField textFieldName, textFieldDepartment, textFieldStock;
-		
+
 		frame = new JFrame();
 		frame.setBounds(100, 100, 400, 400);
 		panel = new JPanel();
 		panel.setBounds(100, 100, 400, 400);
 		frame.getContentPane().add(panel);
-		
-		dialog = new JDialog(frame , "Enter decoration details");
+
+		dialog = new JDialog(frame, "Enter decoration details");
 		dialog.getContentPane().setLayout(new FlowLayout());
 		lblName = new JLabel("Name: ");
 		lblDepartment = new JLabel("Department: ");
 		lblStock = new JLabel("Stock: ");
-		
+
 		textFieldName = new JTextField(8);
 		textFieldDepartment = new JTextField(8);
 		textFieldStock = new JTextField(8);
-		
+
 		btnOk = new JButton("create");
 		btnOk.addActionListener(new ActionListener() {
 			@Override
@@ -152,13 +165,13 @@ public class DecorationGUI extends JPanel {
 							Integer.parseInt(textFieldStock.getText()));
 					break;
 				case "update":
-					decorationController.updateDecoration(scrollPane.getSelectedObj(), textFieldName.getText(), 
+					decorationController.updateDecoration(scrollPane.getSelectedObj(), textFieldName.getText(),
 							textFieldDepartment.getText(), Integer.parseInt(textFieldStock.getText()));
 				}
 
 			}
 		});
-		
+
 		dialog.getContentPane().add(lblName);
 		dialog.getContentPane().add(textFieldName);
 		dialog.getContentPane().add(lblDepartment);
@@ -169,8 +182,6 @@ public class DecorationGUI extends JPanel {
 		dialog.pack();
 		dialog.setVisible(true);
 	}
-	
-	
 	
 	
 	
