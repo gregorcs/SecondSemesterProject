@@ -20,7 +20,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	Connection con = DBConnection.getInstance().getDBcon();
 	
 	private PreparedStatement buildCreateReservationStatement(Reservation reservation) throws SQLException {
-		String query = "INSERT INTO Reservation values(?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Reservation (date, amountOfPeople, reservationName, specificRequirements, phoneNo) values(?, ?, ?, ?, ?)";
 		
 		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, reservation.getDate());
