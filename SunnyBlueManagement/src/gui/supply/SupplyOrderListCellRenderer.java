@@ -1,4 +1,4 @@
-package gui.resupply;
+package gui.supply;
 
 import java.awt.Component;
 

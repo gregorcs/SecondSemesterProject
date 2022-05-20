@@ -1,4 +1,4 @@
-package gui.resupply;
+package gui.supply;
 
 import java.awt.CardLayout;
 import java.awt.Font;
@@ -32,17 +32,20 @@ public class SupplyGUI extends JPanel {
 	private static final long serialVersionUID = -7068038639929039542L;
 	
 	private MainFrame mainFrame;
+	
 	private SupplyOrderController supplyOrderController;
 	private ItemController itemController;
+	
 	private JLayeredPane layeredPane;
 	private JPanel supplyRestaurantPanel;
-	private JTextField textFieldSearch;
 	
+	private JTextField textFieldSearch;
+	private JTextField textFieldEnterQuantity;
+
 	private Choice choiceLowOrHigh;
 
 	private GenericScrollPane<Item> itemScrollPane;
 	private GenericScrollPane<SupplyOrder> supplyOrderScrollPane;
-	private JTextField textFieldEnterQuantity;
 
 	/**
 	 * Create the panel.

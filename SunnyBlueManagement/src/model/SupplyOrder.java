@@ -1,6 +1,6 @@
 package model;
 
-import java.time.LocalDateTime;  
+import java.time.LocalDate;  
 import java.time.format.DateTimeFormatter;  
 
 import java.util.ArrayList;
@@ -8,11 +8,11 @@ import java.util.ArrayList;
 public class SupplyOrder {
 
 	private int supplyOrderId;
-	private LocalDateTime date;
+	private LocalDate date;
 	private UrgencyEnum urgencyEnum;
 	private ArrayList<LineItem<Item>> listOfItems;
 	
-	public SupplyOrder(int supplyOrderId, LocalDateTime date, UrgencyEnum urgency, ArrayList<LineItem<Item>> listOfItems) {
+	public SupplyOrder(int supplyOrderId, LocalDate date, UrgencyEnum urgency, ArrayList<LineItem<Item>> listOfItems) {
 		super();
 		this.supplyOrderId = supplyOrderId;
 		this.date = date;
@@ -26,7 +26,7 @@ public class SupplyOrder {
 	 * @param urgencyEnum
 	 * @param listOfItems
 	 */
-	public SupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem<Item>> listOfItems) {
+	public SupplyOrder(LocalDate date, UrgencyEnum urgencyEnum, ArrayList<LineItem<Item>> listOfItems) {
 		super();
 		this.date = date;
 		this.urgencyEnum = urgencyEnum;
@@ -35,13 +35,13 @@ public class SupplyOrder {
 	
 	public SupplyOrder() {
 		this.listOfItems = new ArrayList<LineItem<Item>>();
-		this.date = LocalDateTime.now();
+		this.date = LocalDate.now();
 	}
 
-	public LocalDateTime getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
-	public void setDate(LocalDateTime date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	public UrgencyEnum getUrgencyEnum() {

@@ -1,6 +1,5 @@
 package controller;
 
-
 import dao.DaoFactory;
 import dao.interfaces.DaoSupplyOrderIF;
 
@@ -30,6 +29,17 @@ public class SupplyOrderController {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public SupplyOrder readSupplyOrder(int id) {
+		this.daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
+		try {
+			return daoSupplyOrder.read(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public SupplyOrder getSupplyOrder() {

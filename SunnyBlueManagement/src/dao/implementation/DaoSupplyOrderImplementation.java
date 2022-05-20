@@ -1,6 +1,7 @@
 	package dao.implementation;
 
 import java.sql.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DBConnection;
@@ -8,6 +9,7 @@ import dao.interfaces.DaoSupplyOrderIF;
 import model.Item;
 import model.LineItem;
 import model.SupplyOrder;
+import model.UrgencyEnum;
 
 public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 
@@ -49,6 +51,14 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		return stmt;
 	}
 
+	private PreparedStatement buildReadSupplyOrderStatement(int id) throws SQLException {
+		String query = "SELECT * FROM SupplyOrder WHERE supplyOrderId = ?";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, id);
+		System.out.println(query);
+		return stmt;
+	}
+	
 	@Override
 	public void create(SupplyOrder obj) throws Exception {
 		PreparedStatement stmt = buildCreateSupplyOrderStatement(obj);
@@ -87,9 +97,28 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 	}
 
 	@Override
-	public SupplyOrder read(int id) {
-		// TODO Auto-generated method stub
-		return null;
+	public SupplyOrder read(int id) throws Exception {
+		PreparedStatement stmt = buildReadSupplyOrderStatement(id);
+		SupplyOrder supplyOrder = null;
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			if (rs.next()) {
+				//TODO ADD SOME ERROR HANDLING IN HERE/IN MODEL FOR PARSING THE STRING INTO THE DEPARTMENT ENUM
+				supplyOrder = new SupplyOrder(rs.getInt(1), rs.getDate(2).toLocalDate(), UrgencyEnum.fromString(rs.getString(3)), new ArrayList<LineItem<Item>>());
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return supplyOrder;
 	}
 
 	@Override
@@ -129,11 +158,11 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 	}
 
 	private void createSupplyOrderItem(SupplyOrder supplyOrder, LineItem<Item> lineItem) throws SQLException, NullPointerException, Exception{
-
 		PreparedStatement stmt = buildCreateSupplyOrderItemStatement(supplyOrder, lineItem);
 
 		try {
-			stmt.executeQuery();
+			//should have checked updated rows here but no time :))
+			stmt.executeUpdate();
 
 		} catch (SQLException e) {
 			throw new Exception("SQL exception");
@@ -141,11 +170,6 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 			throw new Exception("Null pointer exception, possible connection problems");
 		} catch (Exception e) {
 			throw new Exception("Technical error");
-		} finally {
-			//TODO REMOVED CLOSE.CONNECTION FROM HERE 
-		}
-
+		} 
 	}
-
-
 }

@@ -13,7 +13,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	Connection con = DBConnection.getInstance().getDBcon();
 
 	// ******* CREATE *******
-	private PreparedStatement buildCreateString(Item item) throws SQLException {
+	private PreparedStatement buildCreateStatement(Item item) throws SQLException {
 		String query = "INSERT INTO Item values (?, ?)";
 
 		PreparedStatement stmt = con.prepareStatement(query);
@@ -23,7 +23,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 
-	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
+	private PreparedStatement buildReadItemStatement(int itemId) throws SQLException {
 		String query = "SELECT * FROM Item WHERE itemId = ?";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setInt(1, itemId);
@@ -31,7 +31,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
-	private PreparedStatement buildDeleteItemString(Item item) throws SQLException {
+	private PreparedStatement buildDeleteItemStatement(Item item) throws SQLException {
 		String query = "UPDATE SupplyOrder_Item "
 				+ "SET item_itemId_FK = NULL "
 				+ "WHERE item_itemId_FK = ?; "
@@ -44,7 +44,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	}
 	
-	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
+	private PreparedStatement buildReadByNameItemStatement(String name) throws SQLException {
 		String query = "SELECT * FROM Item WHERE name LIKE  ?";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
@@ -52,7 +52,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
-	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
+	private PreparedStatement buildReadByNameAndDepartmentStatement(String name, String department) throws SQLException {
 		String query = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
@@ -61,7 +61,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
-	private PreparedStatement buildReadByNameSortByIdASC(String name) throws SQLException {
+	private PreparedStatement buildReadByNameSortByIdASCStatement(String name) throws SQLException {
 		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId ASC";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
@@ -69,7 +69,7 @@ public class DaoItemImplementation implements DaoItemIF {
 		return stmt;
 	}
 	
-	private PreparedStatement buildReadByNameSortByIdDESC(String name) throws SQLException {
+	private PreparedStatement buildReadByNameSortByIdDESCStatement(String name) throws SQLException {
 		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId DESC";
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
@@ -80,7 +80,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	//would have been nice to return the generated key or bool value here
 	@Override
 	public void create(Item obj) throws Exception {
-		PreparedStatement stmt = buildCreateString(obj);
+		PreparedStatement stmt = buildCreateStatement(obj);
 
 		try {
 			int insertedRows = stmt.executeUpdate();
@@ -102,7 +102,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	
 	@Override
 	public Item read(int id) throws Exception {
-		PreparedStatement stmt = buildReadItemString(id);
+		PreparedStatement stmt = buildReadItemStatement(id);
 		Item item = new Item();
 
 		try {
@@ -134,7 +134,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	@Override
 	public void delete(Item obj) throws Exception {
-		PreparedStatement stmt = buildDeleteItemString(obj);
+		PreparedStatement stmt = buildDeleteItemStatement(obj);
 		try {
 			stmt.executeUpdate();
 
@@ -184,7 +184,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	@Override
 	public Collection<Item> readByName(String name) throws Exception {
-		PreparedStatement stmt = buildReadByNameItemString(name);
+		PreparedStatement stmt = buildReadByNameItemStatement(name);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {
@@ -208,7 +208,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	@Override
 	public Collection<Item> readByNameAndDepartment(String name, String departmentEnum) throws Exception {
-		PreparedStatement stmt = buildReadByNameAndDepartment(name, departmentEnum);
+		PreparedStatement stmt = buildReadByNameAndDepartmentStatement(name, departmentEnum);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {
@@ -232,7 +232,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	@Override
 	public Collection<Item> readByNameSortByIdASC(String name) throws Exception {
-		PreparedStatement stmt = buildReadByNameSortByIdASC(name);
+		PreparedStatement stmt = buildReadByNameSortByIdASCStatement(name);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {
@@ -256,7 +256,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	
 	@Override
 	public Collection<Item> readByNameSortByIdDESC(String name) throws Exception {
-		PreparedStatement stmt = buildReadByNameSortByIdDESC(name);
+		PreparedStatement stmt = buildReadByNameSortByIdDESCStatement(name);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {
