@@ -1,10 +1,10 @@
 package model;
 
-public class LineItem {
+public class LineItem<T> {
 	private int quantity;
-	private Item item;
+	private T item;
 	
-	public LineItem(int quantity, Item item) {
+	public LineItem(int quantity, T item) {
 		super();
 		this.quantity = quantity;
 		this.item = item;
@@ -18,11 +18,11 @@ public class LineItem {
 		this.quantity = quantity;
 	}
 
-	public Item getItem() {
+	public T getItem() {
 		return item;
 	}
 
-	public void setItem(Item item) {
+	public void setItem(T item) {
 		this.item = item;
 	}
 }

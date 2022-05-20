@@ -1,6 +1,9 @@
 package gui.decoration;
 
 import java.awt.Choice;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 
 import javax.swing.DefaultListModel;
@@ -9,11 +12,21 @@ import javax.swing.JList;
 import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JToggleButton;
+import javax.swing.ListCellRenderer;
 
 import controller.DecorationController;
 import controller.ItemController;
 import model.Decoration;
-public class DecorationScrollPane extends JScrollPane{
+import model.DecorationStatistics;
+
+/**
+ * This object displays any type of collection as long as you provide it 
+ * a Collection<any type> with a listCellRenderer<any type> to go with it
+ * @author Gregor
+ *
+ * @param <T> type the class should work with
+ */
+public class DecorationScrollPane<T> extends JScrollPane{
 
 	private static final long serialVersionUID = -4773670531023046534L;
 
@@ -21,40 +34,46 @@ public class DecorationScrollPane extends JScrollPane{
 	private Choice choiceLowOrHigh;
 	private enum SortStockEnum {LOWEST, HIGHEST;};
 	
-	private JList<Decoration> decorationList;
-	private DefaultListModel<Decoration> listRepresentationDecoration;
+	private JList<T> jlist;
+	private DefaultListModel<T> listRepresentation;
+	private ListCellRenderer<? super T> cellRenderer;
 	
 	private DecorationController decorationController;
 	private ItemController itemController;
 	private JMenuBar menuBar;
 	
-	public DecorationScrollPane() {
+	/**
+	 * constructor
+	 * @param decorationsToShow collection of any type
+	 * @param cellRenderToUse ListCellRenderer that can process the passed in decorationsToShow
+	 */
+	public DecorationScrollPane(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
 		decorationController = new DecorationController();
 		itemController = new ItemController();
-		decorationList = new JList<Decoration>();
-		setViewportView(decorationList);
-		decorationList.setFixedCellHeight(20);
+		jlist = new JList<T>();
+		setViewportView(jlist);
+		jlist.setFixedCellHeight(20);
 		constructScrollPaneHeader();
-		initializeList();
+		initializeList(decorationsToShow, cellRenderToUse);
 	}
 	
-	public void initializeList() {
-		DecorationListCellRenderer cellRenderer = new DecorationListCellRenderer();
-		decorationList.setCellRenderer(cellRenderer);
+	public void initializeList(Collection<T> decorationsToShow, ListCellRenderer<? super T> cellRenderToUse) {
+		this.cellRenderer = cellRenderToUse;
+		jlist.setCellRenderer(cellRenderer);
 		decorationController = new DecorationController();
-		updateList(decorationController.readAllDecorations());
+		updateList(decorationsToShow);
 	}
 	
-	public void updateList(Collection<Decoration> listToShow) {
-		listRepresentationDecoration = new DefaultListModel<Decoration>();
+	public void updateList(Collection<T> listToShow) {
+		listRepresentation = new DefaultListModel<T>();
 		
-		for(Decoration item : listToShow) {
-			listRepresentationDecoration.addElement(item);
+		for(T item : listToShow) {
+			listRepresentation.addElement(item);
 		}
-		decorationList.setModel(listRepresentationDecoration);
+		jlist.setModel(listRepresentation);
 	}
-	
-	public Decoration getSelectedDecoration() {return decorationList.getSelectedValue();};
+
+	public T getSelectedDecoration() {return jlist.getSelectedValue();};
 	
 	public String getDepartmentFromChoice() {
 		return choiceDepartments.getItem(choiceDepartments.getSelectedIndex()).toString();
@@ -63,7 +82,7 @@ public class DecorationScrollPane extends JScrollPane{
 	public String getStockSortFromChoice() {
 		return choiceLowOrHigh.getItem(choiceLowOrHigh.getSelectedIndex()).toString();
 	}
-	
+
 	private void constructChoiceDepartment() {
 		JLabel lblSortByDepartment = new JLabel("By department:  ");
 		menuBar.add(lblSortByDepartment);
@@ -91,6 +110,11 @@ public class DecorationScrollPane extends JScrollPane{
 		constructChoiceDepartment();
 		constructChoiceLowOrHigh();
 		JToggleButton monthlyView = new JToggleButton("Monthly view");
+		monthlyView.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//switchToMonthlyView();
+			}
+		});
 		menuBar.add(monthlyView);
 	}
 }

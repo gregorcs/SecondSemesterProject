@@ -1,6 +1,10 @@
 package model.ReservationFolder;
 
 import java.util.ArrayList;
+import java.util.Collection;
+
+import model.Decoration;
+import model.LineItem;
 
 public class Reservation {
 	
@@ -9,37 +13,47 @@ public class Reservation {
 	private String date;
 	private String reservationName;
 	private String specificRequests;
-	// ^^^^ these should be either a boolean isEvent or we can have event tags for different events
 	private long phoneNo;
-	private ArrayList<Table> listOfTables = new ArrayList<>();
-
+	private Collection<Table> listOfTables = new ArrayList<>();
+	private boolean isEvent;
+	private Collection<LineItem<Decoration>> listOfDecorations = new ArrayList<>();
 	
-	//constructor
-	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
-		this.setNumOfPeople(numOfPeople);
-		this.setDate(date);
-		this.setReservationName(reservationName);
-		this.setSpecificRequests(specificRequests);
-		this.setPhoneNo(phoneNo);
-	}
-	
-	/**
+	 /**
 	 * if you need to create a reservation before it is inserted into the database
-	 * @param numOfPeople
 	 * @param date
+	 * @param numOfPeople
 	 * @param reservationName
 	 * @param specificRequests
 	 * @param phoneNo
+	 * @param isEvent
 	 */
-	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
-		this.setNumOfPeople(numOfPeople);
-		this.setDate(date);
-		this.setReservationName(reservationName);
-		this.setSpecificRequests(specificRequests);
-		this.setPhoneNo(phoneNo);
+	public Reservation(String date, int numOfPeople, String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
+		constructCommon(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
+	}
+	
+	public Reservation(int reservationID, String date, int numOfPeople, String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
+		this.setReservationID(reservationID);
+		constructCommon(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
+	}
+	
+	private void constructCommon(String date, int numOfPeople, String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
+		setDate(date);
+		setNumOfPeople(numOfPeople);
+		setReservationName(reservationName);
+		setSpecificRequests(specificRequests);
+		setPhoneNo(phoneNo);
+		setEvent(isEvent);
+	}
+	
+	public boolean isEvent() {
+		return isEvent;
 	}
 
-	public int getnumOfPeople() {
+	public void setEvent(boolean isEvent) {
+		this.isEvent = isEvent;
+	}
+
+	public int getNumOfPeople() {
 		return numOfPeople;
 	}
 
@@ -71,7 +85,7 @@ public class Reservation {
 		this.specificRequests = specificRequests;
 	}
 
-	public long getphoneNo() {
+	public long getPhoneNo() {
 		return phoneNo;
 	}
 
@@ -83,8 +97,24 @@ public class Reservation {
 		listOfTables.add(table);
 	}
 	
-	public ArrayList<Table> getListOfTables(){
+	public void removeTable(Table table) {
+		listOfTables.remove(table);
+	}
+	
+	public Collection<Table> getListOfTables(){
 		return listOfTables;
+	}
+	
+	public void addDecoration(LineItem<Decoration> decoration) {
+		listOfDecorations.add(decoration);
+	}
+	
+	public void removeDecoration(LineItem<Decoration> decoration) {
+		listOfDecorations.remove(decoration);
+	}
+	
+	public Collection<LineItem<Decoration>> getListOfDecorations(){
+		return listOfDecorations;
 	}
 
 	public int getReservationId() {

@@ -10,9 +10,9 @@ public class SupplyOrder {
 	private int supplyOrderId;
 	private LocalDateTime date;
 	private UrgencyEnum urgencyEnum;
-	private ArrayList<LineItem> listOfItems;
+	private ArrayList<LineItem<Item>> listOfItems;
 	
-	public SupplyOrder(int supplyOrderId, LocalDateTime date, UrgencyEnum urgency, ArrayList<LineItem> listOfItems) {
+	public SupplyOrder(int supplyOrderId, LocalDateTime date, UrgencyEnum urgency, ArrayList<LineItem<Item>> listOfItems) {
 		super();
 		this.supplyOrderId = supplyOrderId;
 		this.date = date;
@@ -26,7 +26,7 @@ public class SupplyOrder {
 	 * @param urgencyEnum
 	 * @param listOfItems
 	 */
-	public SupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
+	public SupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem<Item>> listOfItems) {
 		super();
 		this.date = date;
 		this.urgencyEnum = urgencyEnum;
@@ -34,7 +34,7 @@ public class SupplyOrder {
 	}
 	
 	public SupplyOrder() {
-		this.listOfItems = new ArrayList<LineItem>();
+		this.listOfItems = new ArrayList<LineItem<Item>>();
 		this.date = LocalDateTime.now();
 	}
 
@@ -51,17 +51,17 @@ public class SupplyOrder {
 		this.urgencyEnum = urgency;
 	}
 
-	public ArrayList<LineItem> getListOfItems() {
+	public ArrayList<LineItem<Item>> getListOfItems() {
 		return this.listOfItems;
 	}
 
-	public void setListOfItems(ArrayList<LineItem> listOfItems) {
+	public void setListOfItems(ArrayList<LineItem<Item>> listOfItems) {
 		this.setListOfItems(listOfItems);
 	}
 	
-	public void addLineItem(LineItem lineItem) {
+	public void addLineItem(LineItem<Item> lineItem) {
 		boolean found = false;
-		for (LineItem temp : this.getListOfItems()) {
+		for (LineItem<Item> temp : this.getListOfItems()) {
 			//TODO move this checking into a separate method
 			if (temp.getItem().getName().equals(lineItem.getItem().getName())) {
 				temp.setQuantity(temp.getQuantity() + lineItem.getQuantity());
@@ -73,7 +73,7 @@ public class SupplyOrder {
 		}
 	}
 	
-	public void removeLineItem(LineItem LineItem) {
+	public void removeLineItem(LineItem<Item> LineItem) {
 		this.getListOfItems().remove(LineItem);
 	}
 	
