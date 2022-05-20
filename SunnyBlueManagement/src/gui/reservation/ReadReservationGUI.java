@@ -9,12 +9,13 @@ import net.miginfocom.swing.MigLayout;
 import javax.swing.JTextField;
 
 import controller.ReservationController;
+import gui.GenericScrollPane;
 import gui.MainFrame;
 import model.ReservationFolder.Reservation;
-import model.ReservationFolder.Table;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.awt.event.ActionEvent;
 import javax.swing.SwingConstants;
@@ -29,7 +30,7 @@ public class ReadReservationGUI extends JPanel {
 	private static final long serialVersionUID = 7335505866400342972L;
 	private MainFrame mainFrame;
 	private JTextField textSearch;
-	private ReservationScrollPane scrollPane;
+	private GenericScrollPane<Reservation> scrollPane;
 	private ReservationController reservationController;
 	/**
 	 * Create the panel.
@@ -75,7 +76,7 @@ public class ReadReservationGUI extends JPanel {
 		});
 		add(btnDetails, "cell 3 4");
 		
-		scrollPane = new ReservationScrollPane();
+		scrollPane = new GenericScrollPane<Reservation>(new ArrayList<Reservation>(), new ReservationListCellRenderer());
 		add(scrollPane, "cell 1 5 2 3,grow");
 		
 		textSearch = new JTextField();
@@ -107,7 +108,7 @@ public class ReadReservationGUI extends JPanel {
 		if(dialogResult != JOptionPane.YES_OPTION){
 			return;
 		}
-		Reservation reservation = scrollPane.getSelectedReservation();
+		Reservation reservation = scrollPane.getSelectedObj();
 		if(reservationController.delete(reservation)) {
 	        JOptionPane.showMessageDialog(null, "Reservation cancelled!");
 	        search();
@@ -118,12 +119,12 @@ public class ReadReservationGUI extends JPanel {
 	}
 	
 	private void details() {
-		Reservation reservation = scrollPane.getSelectedReservation();
+		Reservation reservation = scrollPane.getSelectedObj();
 		String messageToShow = reservationController.constructDetails(reservation);
 		JOptionPane.showMessageDialog(mainFrame, messageToShow);
 	}
 	
-	private void updateScrollPane(ReservationScrollPane pane, Collection<Reservation> reservations) {
-		pane.initializeList(reservations);
+	private void updateScrollPane(GenericScrollPane<Reservation> pane, Collection<Reservation> reservations) {
+		pane.initializeList(reservations, new ReservationListCellRenderer());
 	}
 }
