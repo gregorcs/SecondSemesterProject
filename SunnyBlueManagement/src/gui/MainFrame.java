@@ -7,7 +7,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.resupply.DecorationGUI;
+import gui.decoration.DecorationGUI;
 import gui.reservation.ReadReservationGUI;
 import gui.reservation.ReserveGUI;
 import gui.resupply.SupplyGUI;
@@ -45,6 +45,10 @@ public class MainFrame extends JFrame {
 		});
 	}
 
+	public void start() {
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */

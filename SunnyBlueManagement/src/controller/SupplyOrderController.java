@@ -40,7 +40,7 @@ public class SupplyOrderController {
 	public boolean createSupplyOrder() {
 		try {
 			if (supplyOrder.getListOfItems().isEmpty()) {
-				throw new Exception("List is empty");
+				return false;
 			} else {
 				daoSupplyOrder.create(supplyOrder);
 				return true;
@@ -61,5 +61,9 @@ public class SupplyOrderController {
 	
 	public void emptySupplyOrder() {
 		supplyOrder = new SupplyOrder();
+	}
+	
+	public String createOrderSummary() {
+		return supplyOrder.createOrderSummary();
 	}
 }

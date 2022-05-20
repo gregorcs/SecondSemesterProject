@@ -8,6 +8,12 @@ import model.Decoration;
 import model.DecorationStatistics;
 
 public class DecorationController {
+
+	private DaoDecorationIF daoDecoration;
+	
+	public DecorationController() {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
+	}
 	
 	public Collection<Decoration> readAllSwitch(String department, String stockSortType) {
 		
@@ -22,7 +28,20 @@ public class DecorationController {
 		}
 	}
 	
+	
+	public void deleteDecoration(Decoration decoration) {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
+
+		try {
+			daoDecoration.delete(decoration);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public Collection<Decoration> readAllDecorations() {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
 		try {
 			return DaoFactory.createDaoDecoration().readAll();
 		} catch (Exception e) {
@@ -33,6 +52,7 @@ public class DecorationController {
 	}
 	
 	public Collection<Decoration> readAllByDepartmentSortByLowestStock() {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
 		try {
 			return DaoFactory.createDaoDecoration().readAllByDepartmentSortByLowestStock();
 		} catch (Exception e) {
@@ -43,6 +63,7 @@ public class DecorationController {
 	}
 	
 	public Collection<Decoration> readAllByDepartmentSortByHighestStock() {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
 		try {
 			return DaoFactory.createDaoDecoration().readAllByDepartmentSortByHighestStock();
 		} catch (Exception e) {
@@ -53,6 +74,7 @@ public class DecorationController {
 	}
 
 	public Collection<DecorationStatistics> readSumDecorationsPerMonth() {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
 		try {
 			return DaoFactory.createDaoDecoration().readSumDecorationsPerMonth();
 		} catch (Exception e) {

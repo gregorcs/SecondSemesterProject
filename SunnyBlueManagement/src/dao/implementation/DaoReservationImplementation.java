@@ -21,7 +21,7 @@ public class DaoReservationImplementation implements DaoReservationIF{
 	Connection con = DBConnection.getInstance().getDBcon();
 	
 	private PreparedStatement buildCreateReservationStatement(Reservation reservation) throws SQLException {
-		String query = "INSERT INTO Reservation values(?, ?, ?, ?, ?, ?)";
+		String query = "INSERT INTO Reservation (date, amountOfPeople, reservationName, specificRequirements, phoneNo) values(?, ?, ?, ?, ?)";
 		
 		PreparedStatement stmt = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 		stmt.setString(1, reservation.getDate());
@@ -102,18 +102,19 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		return stmt;
 	}
 	
-	private PreparedStatement buildCreateReservation_DecorationStatement(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException {
+	private PreparedStatement buildCreateReservation_Decoration(Reservation reservation, LineItem<Decoration> lineItem) throws SQLException {
+		//TODO CHECKING EDGE CASE IS HARDCODED
 		String query = 
 				"INSERT INTO Reservation_Decoration "
 				+ "(reservation_reservationId_FK, decoration_decorationId_FK, quantity) "
 				+ "SELECT ?,?,? "
 					+ "WHERE EXISTS (SELECT * FROM Decoration d "
-					+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0); "
+					+ "WHERE d.decorationId = ? AND (d.quantityInStock - ?) > 0); "
 
 				+ "UPDATE Decoration "
 					+ "SET quantityInStock = quantityInStock - ? "
 					+ "WHERE EXISTS (SELECT * FROM Decoration d "
-						+ "WHERE d.decorationId = ? AND (d.quantityInStock - 5) > 0) "
+						+ "WHERE d.decorationId = ? AND (d.quantityInStock - ?) > 0) "
 						+ "AND decorationId = ?; ";
 
 		PreparedStatement stmt = con.prepareStatement(query);
@@ -123,8 +124,10 @@ public class DaoReservationImplementation implements DaoReservationIF{
 		stmt.setInt(3, lineItem.getQuantity());
 		stmt.setInt(4, lineItem.getItem().getDecorationId());
 		stmt.setInt(5, lineItem.getQuantity());
-		stmt.setInt(6, lineItem.getItem().getDecorationId());
+		stmt.setInt(6, lineItem.getQuantity());
 		stmt.setInt(7, lineItem.getItem().getDecorationId());
+		stmt.setInt(8, lineItem.getQuantity());
+		stmt.setInt(9, lineItem.getItem().getDecorationId());
 		System.out.println(query);
 		return stmt;
 	}

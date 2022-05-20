@@ -9,9 +9,12 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoDecorationIF;
+
 import model.Decoration;
 import model.DecorationStatistics;
+import model.Item;
 import model.LineItem;
+
 
 public class DaoDecorationImplementation implements DaoDecorationIF{
 
@@ -63,6 +66,19 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 		return stmt;
 	}
 	
+
+	private PreparedStatement buildDeleteDecorationString(Decoration decoration) throws SQLException {
+		String query = "UPDATE Reservation_Decoration "
+				+ "SET decoration_decorationId_FK = NULL "
+				+ "WHERE decoration_decorationId_FK = ?; "
+				+ "DELETE FROM Decoration WHERE decorationId = ?;";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, decoration.getDecorationId());
+		stmt.setInt(2, decoration.getDecorationId());
+		System.out.println(query);
+		return stmt;
+  }
+
 	
 	//NORBERT DID CHANGES HERE
 	private PreparedStatement buildReadById(int id) throws SQLException {
@@ -101,8 +117,19 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 
 	@Override
 	public void delete(Decoration obj) throws Exception {
-		// TODO Auto-generated method stub
+		PreparedStatement stmt = buildDeleteDecorationString(obj);
 		
+		try {
+			stmt.executeUpdate();
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
 	}
 
 	@Override

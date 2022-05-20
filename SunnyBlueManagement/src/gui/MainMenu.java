@@ -9,7 +9,7 @@ import javax.swing.JLabel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import gui.resupply.DecorationGUI;
+import gui.decoration.DecorationGUI;
 import gui.reservation.ReadReservationGUI;
 import gui.reservation.ReserveGUI;
 

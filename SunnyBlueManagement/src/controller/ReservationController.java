@@ -12,8 +12,8 @@ import model.ReservationFolder.Table;
 
 public class ReservationController {
 	
-	Reservation reservation;
-	
+	private Reservation reservation;
+
 	//creates reservation??? - should be in DAO
 	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo, boolean isEvent) throws Exception {	
 		reservation = new Reservation(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
@@ -80,13 +80,6 @@ public class ReservationController {
 		return reservation.getListOfTables();
 	}
 	
-	//TODO RENAME TO ADD? ADD EDGE CASE HANDLING FOR CHECKING DUPLICATE
-	public void selectDecoration(Decoration decoration, int quantity) {
-		if(!reservation.getListOfDecorations().contains(new LineItem<Decoration>(quantity, decoration))) {
-			reservation.addDecoration(new LineItem<Decoration>(quantity, decoration));
-		}
-	}
-	
 	public void removeDecoration(LineItem<Decoration> decoration) {
 		if(reservation.getListOfDecorations().contains(decoration)) {
 			reservation.removeDecoration(decoration);
@@ -97,6 +90,13 @@ public class ReservationController {
 		return reservation.getListOfDecorations();
 	}
 	
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
+
 	public String constructDetails(Reservation reservation) {
 		String messageToShow = "Name: " + reservation.getReservationName()
 						+ "\nDate: " + reservation.getDate()
