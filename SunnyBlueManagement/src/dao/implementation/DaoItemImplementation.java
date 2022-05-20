@@ -14,66 +14,66 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	// ******* CREATE *******
 	private PreparedStatement buildCreateString(Item item) throws SQLException {
-		String createItemString = "INSERT INTO Item values (?, ?)";
+		String query = "INSERT INTO Item values (?, ?)";
 
-		PreparedStatement stmt = con.prepareStatement(createItemString);
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, item.getName());
 		stmt.setString(2, item.getDepartmentType());
-		System.out.println(createItemString);
+		System.out.println(query);
 		return stmt;
 	}
 
 	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
-		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
-		PreparedStatement stmt = con.prepareStatement(readItemString);
+		String query = "SELECT * FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setInt(1, itemId);
-		System.out.println(readItemString);
+		System.out.println(query);
 		return stmt;
 	}
 	
 	private PreparedStatement buildDeleteItemString(Item item) throws SQLException {
-		String deleteItemString = "UPDATE SupplyOrder_Item "
+		String query = "UPDATE SupplyOrder_Item "
 				+ "SET item_itemId_FK = NULL "
 				+ "WHERE item_itemId_FK = ?; "
 				+ "DELETE FROM Item WHERE itemId = ?;";
-		PreparedStatement stmt = con.prepareStatement(deleteItemString);
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setInt(1, item.getItemId());
 		stmt.setInt(2, item.getItemId());
-		System.out.println(deleteItemString);
+		System.out.println(query);
 		return stmt;
 
 	}
 	
 	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
-		String readByNameItemString = "SELECT * FROM Item WHERE name LIKE  ?";
-		PreparedStatement stmt = con.prepareStatement(readByNameItemString);
+		String query = "SELECT * FROM Item WHERE name LIKE  ?";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
-		System.out.println(readByNameItemString);
+		System.out.println(query);
 		return stmt;
 	}
 	
 	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
-		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
-		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		String query = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
 		stmt.setString(2, department);
-		System.out.println(readByDepartmentItemString);
+		System.out.println(query);
 		return stmt;
 	}
 	
 	private PreparedStatement buildReadByNameSortByIdASC(String name) throws SQLException {
-		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId ASC";
-		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId ASC";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
-		System.out.println(readByDepartmentItemString);
+		System.out.println(query);
 		return stmt;
 	}
 	
 	private PreparedStatement buildReadByNameSortByIdDESC(String name) throws SQLException {
-		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId DESC";
-		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId DESC";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
-		System.out.println(readByDepartmentItemString);
+		System.out.println(query);
 		return stmt;
 	}
   
@@ -109,7 +109,7 @@ public class DaoItemImplementation implements DaoItemIF {
 			ResultSet rs = stmt.executeQuery();
 
 			if (rs.next()) {
-				//TODO ADD SOME ERROR HANDLING IN HERE FOR PARSING THE STRING INTO THE DEPARTMENT ENUM
+				//TODO ADD SOME ERROR HANDLING IN HERE/IN MODEL FOR PARSING THE STRING INTO THE DEPARTMENT ENUM
 				item = new Item(rs.getInt(1), rs.getString(2), rs.getString(3));
 			}
 

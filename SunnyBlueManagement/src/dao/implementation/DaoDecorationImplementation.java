@@ -4,20 +4,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Collection;
 
 import dao.DBConnection;
-import dao.DaoFactory;
 import dao.interfaces.DaoDecorationIF;
-import dao.interfaces.DaoItemIF;
 import model.Decoration;
 import model.DecorationStatistics;
 import model.Item;
-import model.LineItem;
-import model.ReservationFolder.Table;
-
 
 public class DaoDecorationImplementation implements DaoDecorationIF{
 
@@ -44,7 +38,28 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 		return stmt;
 	}
 	
-	private PreparedStatement buildReadAllItemsStringStatement() throws SQLException {
+	private PreparedStatement buildUpdateItemStatement(Decoration decoration) throws SQLException {
+		String query = "UPDATE Item "
+				+ "SET name = ?, department = ? "
+				+ "WHERE itemId = ?;";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setString(1, decoration.getName());
+		stmt.setString(2, decoration.getDepartmentType());
+		stmt.setInt(3, decoration.getItemId());
+		return stmt;
+	}
+	
+	private PreparedStatement buildUpdateDecorationStatement(Decoration decoration) throws SQLException {
+		String query = "UPDATE Decoration "
+				+ "SET quantityInStock = ? "
+				+ "WHERE decorationId = ?;";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, decoration.getQuantityInStock());
+		stmt.setInt(2, decoration.getDecorationId());
+		return stmt;
+	}
+	
+	private PreparedStatement buildReadAllDecorationsStringStatement() throws SQLException {
 		String query = "SELECT t1.itemId, t2.decorationId, t1.name, t1.department, t2.quantityInStock "
 				+ "FROM Item t1 "
 				+ "LEFT JOIN Decoration t2 "
@@ -125,6 +140,7 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 	        if (generatedKeys.next() && rowsUpdated == 1) {
 	        	generatedItemId = generatedKeys.getInt(1);
 				stmtDecoration = buildCreateDecorationStatement(obj, generatedItemId);
+				//TODO check for updated rows here too
 				stmtDecoration.executeUpdate();
 	        } else {
 	        	throw new SQLException("Item was not created properly before decoration");
@@ -163,8 +179,37 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 
 	@Override
 	public void update(Decoration obj) throws Exception {
-		// TODO Auto-generated method stub
+		PreparedStatement stmtItem = buildUpdateItemStatement(obj);
+		PreparedStatement stmtDecoration = buildUpdateDecorationStatement(obj);
 		
+		try {
+			con.setAutoCommit(false);
+			int rowsUpdated = stmtItem.executeUpdate();
+	        //gotta check if the parent class actually went through before updating decoration :)
+	        if (rowsUpdated == 1) {
+				//TODO check for updated decorations rows 
+	        	stmtDecoration.executeUpdate();
+	        } else {
+	        	throw new SQLException("Item was not created properly before decoration");
+	        }
+			
+			con.commit();
+		} catch (SQLException e) {
+			if (con != null) {
+				try {
+					con.rollback();
+					System.out.println("Rolling back database");
+				} catch (SQLException excep) {
+					throw new SQLException("Error when rolling back database" + excep);
+				}
+			}
+			throw new Exception("sql expcetion" + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Technical error" + e);
+		} finally {
+			con.setAutoCommit(true);
+			DBConnection.closeConnection();
+		}
 	}
 
 
@@ -187,7 +232,7 @@ public class DaoDecorationImplementation implements DaoDecorationIF{
 
 	@Override
 	public Collection<Decoration> readAll() throws Exception {
-			PreparedStatement stmt = buildReadAllItemsStringStatement();
+			PreparedStatement stmt = buildReadAllDecorationsStringStatement();
 			ArrayList<Decoration> decorationsList = new ArrayList<>();
 
 			try {

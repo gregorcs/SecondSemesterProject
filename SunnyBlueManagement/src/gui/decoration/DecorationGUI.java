@@ -31,7 +31,7 @@ public class DecorationGUI extends JPanel {
 	 */
 	private static final long serialVersionUID = -4802415561708298203L;
 	private MainFrame mainFrame;
-	private GenericScrollPane<Decoration> list;
+	private GenericScrollPane<Decoration> scrollPane;
 	private DecorationController decorationController;
 	private JTextField textField;
 	
@@ -53,8 +53,8 @@ public class DecorationGUI extends JPanel {
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));
 		panel.add(lblHeader, "cell 1 1 3 1,alignx center,aligny center");
 		
-		list = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
-		panel.add(list, "cell 1 3 3 5,grow");
+		scrollPane = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
+		panel.add(scrollPane, "cell 1 3 3 5,grow");
 		
 		JButton btnBack = new JButton("Back");
 		btnBack.addActionListener(new ActionListener() {
@@ -66,7 +66,7 @@ public class DecorationGUI extends JPanel {
 		JButton btnAdd = new JButton("Add decoration");
 		btnAdd.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				createAskForDecorationInfoDialog();
+				createAskForDecorationInfoDialog("add");
 			}
 		});
 		panel.add(btnAdd, "cell 4 4");
@@ -74,6 +74,7 @@ public class DecorationGUI extends JPanel {
 		JButton btnAddStock = new JButton("Update decoration");
 		btnAddStock.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				createAskForDecorationInfoDialog("update");
 			}
 		});
 		panel.add(btnAddStock, "cell 4 5");
@@ -81,7 +82,7 @@ public class DecorationGUI extends JPanel {
 		JButton btnDelete = new JButton("Delete decoration");
 		btnDelete.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				decorationController.deleteDecoration(list.getSelectedObj());
+				decorationController.deleteDecoration(scrollPane.getSelectedObj());
 			}
 		});
 		panel.add(btnDelete, "cell 4 6");
@@ -117,7 +118,7 @@ public class DecorationGUI extends JPanel {
 	}
 
 	
-	private void createAskForDecorationInfoDialog() {
+	private void createAskForDecorationInfoDialog(String actionType) {
 		JFrame frame;
 		JPanel panel;
 		JButton btnOk;
@@ -145,8 +146,17 @@ public class DecorationGUI extends JPanel {
 		btnOk.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				decorationController.createDecoration(textFieldName.getText(), 
-						textFieldDepartment.getText(), Integer.parseInt(textFieldStock.getText()));
+
+				switch (actionType) {
+				case "add":
+					decorationController.createDecoration(textFieldName.getText(), textFieldDepartment.getText(),
+							Integer.parseInt(textFieldStock.getText()));
+					break;
+				case "update":
+					decorationController.updateDecoration(scrollPane.getSelectedObj(), textFieldName.getText(), 
+							textFieldDepartment.getText(), Integer.parseInt(textFieldStock.getText()));
+				}
+
 			}
 		});
 		
