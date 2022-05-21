@@ -38,21 +38,6 @@ public class ReservationController {
 		return true;
 	}
 	
-	//select table(s) for the reservation
-	public void addTable(int tableNo) {
-		//reservation.addTable(tableController.getTable(tableNo));
-	}
-	
-	//choose decoration if the reservation is an event
-	public void addDecoration(Item decoration) {
-		
-	}
-	
-	//to be implemented
-	public String toString(){
-		return null;
-		}
-	
 	//confirms the reservation
 	public boolean confirmReservation() {
 		try {

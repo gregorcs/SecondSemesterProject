@@ -7,10 +7,13 @@ import java.util.Collection;
 import org.junit.jupiter.api.Test;
 
 import controller.DecorationController;
+import dao.DBConnection;
 import model.Decoration;
 
 class DecorationTests {
 
+	DBConnection con = DBConnection.getInstance();
+	
 	@Test
 	void decoraitonIsCreated() {
 		//Arrange

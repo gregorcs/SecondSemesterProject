@@ -45,6 +45,28 @@ public class Reservation {
 		setEvent(isEvent);
 	}
 	
+	public String constructDetails() {
+		String messageToShow = "Name: " + getReservationName()
+						+ "\nDate: " + getDate()
+						+ "\nNo. of people: " + getNumOfPeople()
+						+ "\nPhone No.: " + getPhoneNo()
+						+ "\n"
+						+ "\nTables: ";
+		for(Table table : getListOfTables()) {
+			messageToShow += "\n"+table.getTableNo();
+		}
+		
+		if(isEvent()) {
+			messageToShow += "\n"
+							+"\nDecorations:";
+			for(LineItem<Decoration> decoration : getListOfDecorations()) {
+				messageToShow += "\n" + decoration.getItem().getName() + "   Quantity: "+decoration.getQuantity();
+			}
+		
+		}
+		return messageToShow;
+	}
+	
 	public boolean isEvent() {
 		return isEvent;
 	}
