@@ -2,14 +2,12 @@ package tests;
 
 import static org.junit.Assert.assertEquals;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 import org.junit.jupiter.api.Test;
 
 import controller.ItemController;
 import dao.DBConnection;
-import model.Decoration;
 import model.Item;
 
 class ItemTests {
@@ -18,6 +16,7 @@ class ItemTests {
 
 	@Test
 	public void itemIsRead() {
+		//faulty logic
 		//Arrange
 		ItemController itemController = new ItemController();
 		String itemName = "ham";
@@ -31,33 +30,19 @@ class ItemTests {
 	public void itemIsCreated() {
 		//Arrange
 		ItemController itemController = new ItemController();
-		Collection<Item> itemsFound = new ArrayList<Item>();
-		String nameOfItem = "flower";
+		Collection<Item> itemsFound;
+		String name = "carrot";
+		String department = "restaurant";
 		Item itemMatch = new Item();
 		//Act
-		itemController.createItem(nameOfItem, "kitchen");
-		itemController = new ItemController(); 		//gotta refresh the connection here
-		itemsFound = itemController.readItemByNameAndDepartment(nameOfItem, "ANY");
-		
-		for (Item temp : itemsFound) {
-			if (temp.getName().equals(nameOfItem)) {
-				itemMatch = temp;
+		itemController.createItem(name, department);
+		itemsFound = itemController.readAllItems();
+		for (Item item : itemsFound) {
+			if (item.getName().equals(name)) {
+				itemMatch = item;
 			}
 		}
 		//Assert
-		assertEquals(nameOfItem, itemMatch.getName());
-	}
-	
-	public void itemIsDeleted() {
-		//Arrange
-		ItemController itemController = new ItemController();
-		//Act
-		itemController.deleteItem(null);
-		//Assert
-		//TODO FINISH IT
-	}
-	
-	public void decorationWorks() {
-		Item item = new Decoration("confetti", "restaurant", 5);
+		assertEquals(name, itemMatch.getName());
 	}
 }

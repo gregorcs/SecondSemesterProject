@@ -12,7 +12,6 @@ import model.UrgencyEnum;
 import static org.junit.Assert.assertEquals;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 
 class SupplyOrderTests {
 
@@ -22,6 +21,8 @@ class SupplyOrderTests {
 	public void SupplyOrderWasCreated() {
 		
 		//Arrange
+		int createdId = 0;
+		int foundId = 0;
 		SupplyOrderController supplyOrderController = new SupplyOrderController();
 		Item item = new Item("potato", "restaurant");
 		Item item2 = new Item("decoration", "kitchen");
@@ -34,6 +35,7 @@ class SupplyOrderTests {
 		supplyOrderController.getSupplyOrder().setUrgencyEnum(UrgencyEnum.LOW);
 		try {
 			supplyOrderController.createSupplyOrder();
+			supplyOrderController.readSupplyOrder(0);
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
