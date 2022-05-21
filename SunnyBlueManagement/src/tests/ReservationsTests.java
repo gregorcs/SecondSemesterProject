@@ -46,6 +46,7 @@ class ReservationsTests {
 		decorationsFound = decorationController.readAllByDepartmentSortByHighestStock();
 		//if the lineitem request qty is bigger than in stock then this is gonna fail
 		reservationController.getReservation().addDecoration(new LineItem<Decoration>(5, ((ArrayList<Decoration>) decorationsFound).get(0)));
+		//all of these should be deleted afterwards
 		reservationController.confirmReservation();
 
 		try {
