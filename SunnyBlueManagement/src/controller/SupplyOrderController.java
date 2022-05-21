@@ -1,16 +1,9 @@
 package controller;
 
-import java.util.ArrayList;
-
 import dao.DaoFactory;
 import dao.interfaces.DaoSupplyOrderIF;
 
-import java.time.LocalDateTime;
-
-import model.Item;
-import model.LineItem;
 import model.SupplyOrder;
-import model.UrgencyEnum;
 
 public class SupplyOrderController {
 	
@@ -23,21 +16,8 @@ public class SupplyOrderController {
 		this.supplyOrder = new SupplyOrder();
 	}
 
-	public void createSupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem<Item>> listOfItems) {
-		SupplyOrder supplyOrderToCreate = new SupplyOrder(date, urgencyEnum, listOfItems);
-
-		try {
-			if (listOfItems.isEmpty()) {
-				throw new Exception("List is empty");
-			} else {
-				daoSupplyOrder.create(supplyOrderToCreate);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
 	public boolean createSupplyOrder() {
+		this.daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
 		try {
 			if (supplyOrder.getListOfItems().isEmpty()) {
 				return false;
@@ -49,6 +29,17 @@ public class SupplyOrderController {
 			e.printStackTrace();
 			return false;
 		}
+	}
+	
+	public SupplyOrder readSupplyOrder(int id) {
+		this.daoSupplyOrder = DaoFactory.createDaoSupplyOrder();
+		try {
+			return daoSupplyOrder.read(id);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return null;
 	}
 
 	public SupplyOrder getSupplyOrder() {

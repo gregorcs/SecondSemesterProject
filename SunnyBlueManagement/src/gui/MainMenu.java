@@ -12,8 +12,7 @@ import com.jgoodies.forms.factories.DefaultComponentFactory;
 import gui.decoration.DecorationGUI;
 import gui.reservation.ReadReservationGUI;
 import gui.reservation.ReserveGUI;
-
-import gui.resupply.SupplyGUI;
+import gui.supply.SupplyGUI;
 
 import java.awt.Component;
 import javax.swing.Box;

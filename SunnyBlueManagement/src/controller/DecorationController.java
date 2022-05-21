@@ -15,16 +15,27 @@ public class DecorationController {
 		this.daoDecoration = DaoFactory.createDaoDecoration();
 	}
 	
-	public Collection<Decoration> readAllSwitch(String department, String stockSortType) {
-		
-		switch(stockSortType) {
-		//here i could reuse the enum
-			case "LOWEST":
-				return readAllByDepartmentSortByLowestStock();
-			case "HIGHEST":
-				return readAllByDepartmentSortByHighestStock();
-			default:
-				return null;
+	public void createDecoration(String name, String department, int quantityInStock) {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
+		Decoration decorationToCreate = new Decoration(name, department, quantityInStock);
+		try {
+			daoDecoration.create(decorationToCreate);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public void updateDecoration(Decoration decorationToUpdate, String updatedName, String updatedDepartment, int updatedQuantityInStock) {
+		this.daoDecoration = DaoFactory.createDaoDecoration();
+		decorationToUpdate.setName(updatedName);
+		decorationToUpdate.setDepartmentType(updatedDepartment);
+		decorationToUpdate.setQuantityInStock(updatedQuantityInStock);
+		try {
+			daoDecoration.update(decorationToUpdate);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
 	}
 	
