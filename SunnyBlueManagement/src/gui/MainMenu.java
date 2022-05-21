@@ -26,7 +26,6 @@ public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
 
-	private MainFrame mainFrame;
 	private ReserveGUI reservePanel;
 	private SupplyGUI supplyPanel;
 	private DecorationGUI decorationPanel;

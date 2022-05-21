@@ -35,14 +35,18 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		System.out.println(query);
 		return stmt;
 	}
-	
+	/*
+	 * No time to implement before hand in
 	private PreparedStatement buildReadAllSupplyOrdersStatement() throws SQLException {
 		String query = "SELECT * FROM SupplyOrder";
 		PreparedStatement stmt = con.prepareStatement(query);
 		System.out.println(query);
 		return stmt;
 	}
+	*/
 	
+	/*
+	 * No time to implement before hand in
 	private PreparedStatement buildReadAllItemsBySupplyOrderIdStatement(int id) throws SQLException {
 		//TODO FINISH THIS
 		String query = "SELECT * FROM SupplyOrder";
@@ -50,7 +54,7 @@ public class DaoSupplyOrderImplementation implements DaoSupplyOrderIF {
 		System.out.println(query);
 		return stmt;
 	}
-
+	*/
 	private PreparedStatement buildReadSupplyOrderStatement(int id) throws SQLException {
 		String query = "SELECT * FROM SupplyOrder WHERE supplyOrderId = ?";
 		PreparedStatement stmt = con.prepareStatement(query);

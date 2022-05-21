@@ -18,7 +18,6 @@ import javax.swing.JDialog;
 import javax.swing.JFrame;
 
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.awt.event.ActionEvent;
 import javax.swing.JTextField;
@@ -110,7 +109,7 @@ public class DecorationGUI extends JPanel {
 		panel.setLayout(new MigLayout("", "[grow][grow][87.00][][grow]", "[grow][][][grow][][][][][][grow]"));
 		layeredPane.add(panel, "name_97268705302100");
 
-		scrollPane = new GenericScrollPane<Decoration>(new ArrayList<Decoration>(), new DecorationListCellRenderer());
+		scrollPane = new GenericScrollPane<Decoration>(decorationController.readAllByDepartmentSortByHighestStock(), new DecorationListCellRenderer());
 		panel.add(scrollPane, "cell 1 3 3 5,grow");
 		
 		createDecorationGUIButtons();

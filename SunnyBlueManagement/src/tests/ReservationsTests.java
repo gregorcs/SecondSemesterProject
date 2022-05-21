@@ -33,7 +33,6 @@ class ReservationsTests {
 		Collection<Decoration> decorationsFound = null;
 		String date = "10/10/" + generateRandomYear();
 		String name = "Test";
-		Reservation reservationFound = null;
 		boolean found = false;
 		//Act
 		try {

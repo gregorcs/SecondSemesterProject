@@ -5,7 +5,6 @@ import java.util.Collection;
 import dao.DaoFactory;
 import dao.interfaces.DaoReservationIF;
 import model.Decoration;
-import model.Item;
 import model.LineItem;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
