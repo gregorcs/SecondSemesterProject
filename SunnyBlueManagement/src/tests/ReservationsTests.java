@@ -8,8 +8,11 @@ import java.util.Random;
 
 import org.junit.jupiter.api.Test;
 
+import controller.DecorationController;
 import controller.ReservationController;
 import dao.DBConnection;
+import model.Decoration;
+import model.LineItem;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
 
@@ -17,13 +20,18 @@ class ReservationsTests {
 
 	DBConnection con = DBConnection.getInstance();
 	
+	/**
+	 * First the reservation is filled out, table is added, 
+	 */
 	@Test
 	void reservationIsCreated() {
 		//Arrange
 		ReservationController reservationController = new ReservationController();
+		DecorationController decorationController = new DecorationController();
 		Collection<Table> tables = null;
 		Collection<Reservation> reservationsFound = null;
-		String date = "26/10/" + generateRandomYear();
+		Collection<Decoration> decorationsFound = null;
+		String date = "10/10/" + generateRandomYear();
 		String name = "Test";
 		Reservation reservationFound = null;
 		boolean found = false;
@@ -35,6 +43,9 @@ class ReservationsTests {
 			e.printStackTrace();
 		}
 		reservationController.getReservation().addTable(((ArrayList<Table>) tables).get(0));
+		decorationsFound = decorationController.readAllByDepartmentSortByHighestStock();
+		//if the lineitem request qty is bigger than in stock then this is gonna fail
+		reservationController.getReservation().addDecoration(new LineItem<Decoration>(5, ((ArrayList<Decoration>) decorationsFound).get(0)));
 		reservationController.confirmReservation();
 
 		try {
@@ -56,8 +67,8 @@ class ReservationsTests {
 
 	private int generateRandomYear() {
 		Random r = new Random();
-		int low = 2023;
-		int high = 3000;
+		int low = 3023;
+		int high = 6000;
 		return r.nextInt(high-low) + low;
 	}
 }
