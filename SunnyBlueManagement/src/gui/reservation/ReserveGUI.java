@@ -219,7 +219,15 @@ public class ReserveGUI extends JPanel {
 			}
 		});
 		ChooseTablePanel.add(btnRemoveDecoration, "cell 4 9");
-		ChooseTablePanel.add(btnConfirmReservation, "flowx,cell 5 10,alignx right,aligny bottom");
+		
+		JButton btnSpecificReq = new JButton("Add specific request");
+		btnSpecificReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addSpecificRequest();
+			}
+		});
+		ChooseTablePanel.add(btnSpecificReq, "cell 4 10");
+		ChooseTablePanel.add(btnConfirmReservation, "flowx,cell 5 11,alignx right,aligny bottom");
 		
 		
 		JButton btnBackFromChooseTable = new JButton("Back");
@@ -229,7 +237,7 @@ public class ReserveGUI extends JPanel {
 			}
 		});
 		
-		ChooseTablePanel.add(btnBackFromChooseTable, "cell 5 10,alignx right,aligny bottom");
+		ChooseTablePanel.add(btnBackFromChooseTable, "cell 5 11,alignx right,aligny bottom");
 	}
 	
 	private void constructReservationCreation() {
@@ -237,7 +245,7 @@ public class ReserveGUI extends JPanel {
 		ChooseTablePanel = new JPanel();
 		ChooseTablePanel.setBounds(100, 100, 1920, 1080);
 		layeredPane.add(ChooseTablePanel, "name_54378967892300");
-		ChooseTablePanel.setLayout(new MigLayout("", "[grow][grow][center][][grow][grow]", "[grow][14px][32.00][][184.00,grow,top][][][][grow][][grow]"));
+		ChooseTablePanel.setLayout(new MigLayout("", "[grow][grow][center][][grow][grow]", "[grow][14px][32.00][][184.00,grow,top][][][][grow][][][grow]"));
 
 		createReservationCreationLabels();
 				
@@ -390,6 +398,11 @@ public class ReserveGUI extends JPanel {
 				e1.printStackTrace();
 		}
 			//Update the panel
+	}
+	
+	private void addSpecificRequest() {
+		String specReq = JOptionPane.showInputDialog("Add specific requests");
+		reservationController.addSpecificRequest(specReq);
 	}
 	
 	private void confirmReservation() {

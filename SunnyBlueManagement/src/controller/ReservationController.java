@@ -48,6 +48,10 @@ public class ReservationController {
 		
 	}
 	
+	public void addSpecificRequest(String specReq) {
+		reservation.setSpecificRequests(specReq);
+	}
+	
 	//to be implemented
 	public String toString(){
 		return null;
@@ -102,6 +106,7 @@ public class ReservationController {
 						+ "\nDate: " + reservation.getDate()
 						+ "\nNo. of people: " + reservation.getNumOfPeople()
 						+ "\nPhone No.: " + reservation.getPhoneNo()
+						+ "\nSpecific request: " + reservation.getSpecificRequests()
 						+ "\n"
 						+ "\nTables: ";
 		for(Table table : reservation.getListOfTables()) {

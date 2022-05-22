@@ -67,7 +67,7 @@ public class DecorationGUI extends JPanel {
 				mainFrame.backToMainMenu();
 			}
 		});
-		panel.add(btnBack, "cell 8 9,alignx right,aligny bottom");
+		panel.add(btnBack, "cell 7 8,alignx right,aligny bottom");
 		
 	}
 	
