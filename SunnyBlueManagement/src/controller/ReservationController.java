@@ -87,6 +87,7 @@ public class ReservationController {
 						+ "\nDate: " + reservation.getDate()
 						+ "\nNo. of people: " + reservation.getNumOfPeople()
 						+ "\nPhone No.: " + reservation.getPhoneNo()
+						+ "\nSpecific request: " + reservation.getSpecificRequests()
 						+ "\n"
 						+ "\nTables: ";
 		for(Table table : reservation.getListOfTables()) {
@@ -103,4 +104,9 @@ public class ReservationController {
 		}
 		return messageToShow;
 	}
+	
+	public void addSpecificRequest(String specReq) {
+		reservation.setSpecificRequests(specReq);
+	}
+	
 }

@@ -223,6 +223,14 @@ public class ReserveGUI extends JPanel {
 		ChooseTablePanel.add(btnRemoveDecoration, "cell 4 9");
 		ChooseTablePanel.add(btnConfirmReservation, "flowx,cell 5 10,alignx right,aligny bottom");
 		
+		JButton btnSpecificReq = new JButton("Add specific request");
+		btnSpecificReq.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				addSpecificRequest();
+			}
+		});
+		ChooseTablePanel.add(btnSpecificReq, "cell 4 10");
+		ChooseTablePanel.add(btnConfirmReservation, "flowx,cell 5 11,alignx right,aligny bottom");
 		
 		JButton btnBackFromChooseTable = new JButton("Back");
 		btnBackFromChooseTable.addActionListener(new ActionListener(){
@@ -460,6 +468,11 @@ public class ReserveGUI extends JPanel {
 		
 		btnSelectDecoration.setEnabled(b);
 		btnSelectDecoration.setVisible(b);
+	}
+	
+	private void addSpecificRequest() {
+		String specReq = JOptionPane.showInputDialog("Add specific requests");
+		reservationController.addSpecificRequest(specReq);
 	}
 	
 }
