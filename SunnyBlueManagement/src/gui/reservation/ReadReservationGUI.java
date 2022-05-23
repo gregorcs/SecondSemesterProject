@@ -87,12 +87,18 @@ public class ReadReservationGUI extends JPanel {
 		btnBack.setHorizontalAlignment(SwingConstants.LEFT);
 		btnBack.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				mainFrame.backToMainMenu();
+				back();
 			}
 		});
 		add(btnBack, "cell 2 8,alignx right,aligny baseline");
 		
 
+	}
+	
+	private void back() {
+		textSearch.setText("");
+		updateScrollPane(scrollPane, new ArrayList<>()); //CLEANS THE PANEL
+		mainFrame.backToMainMenu();
 	}
 	
 	private void search() {
@@ -120,6 +126,7 @@ public class ReadReservationGUI extends JPanel {
 	
 	private void details() {
 		Reservation reservation = scrollPane.getSelectedObj();
+		if(reservation == null) return;
 		String messageToShow = reservationController.constructDetails(reservation);
 		JOptionPane.showMessageDialog(mainFrame, messageToShow);
 	}
