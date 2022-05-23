@@ -9,11 +9,10 @@ import javax.swing.JLabel;
 
 import com.jgoodies.forms.factories.DefaultComponentFactory;
 
-import gui.resupply.DecorationGUI;
-import gui.reservation.ReadReservation;
-import gui.reservation.Reserve;
-
-import gui.resupply.SupplyGUI;
+import gui.decoration.DecorationGUI;
+import gui.reservation.ReadReservationGUI;
+import gui.reservation.ReserveGUI;
+import gui.supply.SupplyGUI;
 
 import java.awt.Component;
 import javax.swing.Box;
@@ -27,11 +26,10 @@ public class MainMenu extends JPanel {
 
 	private static final long serialVersionUID = -2547880461104225298L;
 
-	private MainFrame mainFrame;
-	private Reserve reservePanel;
+	private ReserveGUI reservePanel;
 	private SupplyGUI supplyPanel;
 	private DecorationGUI decorationPanel;
-	private ReadReservation readReservationPanel;
+	private ReadReservationGUI readReservationPanel;
 	private JLabel lblConOutput;
 
 
@@ -43,13 +41,13 @@ public class MainMenu extends JPanel {
 		setLayout(new MigLayout("", "[grow][][][center][][grow]", "[grow][][][][][][][][][][][][grow]"));
 		// setLayout(new MigLayout("align 50% 50%"));
 
-		reservePanel = new Reserve(mainFrame);
+		reservePanel = new ReserveGUI(mainFrame);
 
 		supplyPanel = new SupplyGUI(mainFrame);
 
 		decorationPanel = new DecorationGUI(mainFrame);
 		
-		readReservationPanel = new ReadReservation(mainFrame);
+		readReservationPanel = new ReadReservationGUI(mainFrame);
 
 		JLabel lblHeader = DefaultComponentFactory.getInstance().createLabel("Main menu");
 		lblHeader.setFont(new Font("Tahoma", Font.BOLD, 16));

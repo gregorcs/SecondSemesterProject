@@ -7,11 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.resupply.DecorationGUI;
-import gui.reservation.ReadReservation;
-import gui.reservation.Reserve;
-import gui.resupply.SupplyGUI;
-
+import gui.decoration.DecorationGUI;
+import gui.reservation.ReadReservationGUI;
+import gui.reservation.ReserveGUI;
+import gui.supply.SupplyGUI;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLayeredPane;
@@ -45,6 +44,10 @@ public class MainFrame extends JFrame {
 		});
 	}
 
+	public void start() {
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -82,10 +85,10 @@ public class MainFrame extends JFrame {
 		decorationPanel = new DecorationGUI(this);
 		layeredPane.add(decorationPanel, "name_98119803398600");
     
-		reservePanel = new Reserve(this);
+		reservePanel = new ReserveGUI(this);
 		layeredPane.add(reservePanel, "name_79832769847600");
 		
-		readReservationPanel = new ReadReservation(this);
+		readReservationPanel = new ReadReservationGUI(this);
 		layeredPane.add(readReservationPanel, "name_81428270717000");
 	}
 

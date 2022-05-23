@@ -18,14 +18,53 @@ public class Reservation {
 	private boolean isEvent;
 	private Collection<LineItem<Decoration>> listOfDecorations = new ArrayList<>();
 	
-	//constructor
-	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+	 /**
+	 * if you need to create a reservation before it is inserted into the database
+	 * @param date
+	 * @param numOfPeople
+	 * @param reservationName
+	 * @param specificRequests
+	 * @param phoneNo
+	 * @param isEvent
+	 */
+	public Reservation(String date, int numOfPeople, String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
+		constructCommon(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
+	}
+	
+	public Reservation(int reservationID, String date, int numOfPeople, String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
 		this.setReservationID(reservationID);
-		this.setNumOfPeople(numOfPeople);
-		this.setDate(date);
-		this.setReservationName(reservationName);
-		this.setSpecificRequests(specificRequests);
-		this.setPhoneNo(phoneNo);
+		constructCommon(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
+	}
+	
+	private void constructCommon(String date, int numOfPeople, String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
+		setDate(date);
+		setNumOfPeople(numOfPeople);
+		setReservationName(reservationName);
+		setSpecificRequests(specificRequests);
+		setPhoneNo(phoneNo);
+		setEvent(isEvent);
+	}
+	
+	public String constructDetails() {
+		String messageToShow = "Name: " + getReservationName()
+						+ "\nDate: " + getDate()
+						+ "\nNo. of people: " + getNumOfPeople()
+						+ "\nPhone No.: " + getPhoneNo()
+						+ "\n"
+						+ "\nTables: ";
+		for(Table table : getListOfTables()) {
+			messageToShow += "\n"+table.getTableNo();
+		}
+		
+		if(isEvent()) {
+			messageToShow += "\n"
+							+"\nDecorations:";
+			for(LineItem<Decoration> decoration : getListOfDecorations()) {
+				messageToShow += "\n" + decoration.getItem().getName() + "   Quantity: "+decoration.getQuantity();
+			}
+		
+		}
+		return messageToShow;
 	}
 	
 	public boolean isEvent() {
@@ -36,27 +75,7 @@ public class Reservation {
 		this.isEvent = isEvent;
 	}
 
-	public Reservation() {
-		
-	}
-	/**
-	 * if you need to create a reservation before it is inserted into the database
-	 * @param numOfPeople
-	 * @param date
-	 * @param reservationName
-	 * @param specificRequests
-	 * @param phoneNo
-	 */
-	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo, boolean isEvent) {
-		this.setNumOfPeople(numOfPeople);
-		this.setDate(date);
-		this.setReservationName(reservationName);
-		this.setSpecificRequests(specificRequests);
-		this.setPhoneNo(phoneNo);
-		this.setEvent(isEvent);
-	}
-
-	public int getnumOfPeople() {
+	public int getNumOfPeople() {
 		return numOfPeople;
 	}
 
@@ -88,7 +107,7 @@ public class Reservation {
 		this.specificRequests = specificRequests;
 	}
 
-	public long getphoneNo() {
+	public long getPhoneNo() {
 		return phoneNo;
 	}
 
@@ -109,6 +128,7 @@ public class Reservation {
 	}
 	
 	public void addDecoration(LineItem<Decoration> decoration) {
+		//TODO error handling
 		listOfDecorations.add(decoration);
 	}
 	

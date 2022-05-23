@@ -5,18 +5,17 @@ import java.util.Collection;
 import dao.DaoFactory;
 import dao.interfaces.DaoReservationIF;
 import model.Decoration;
-import model.Item;
 import model.LineItem;
 import model.ReservationFolder.Reservation;
 import model.ReservationFolder.Table;
 
 public class ReservationController {
 	
-	Reservation reservation;
-	
+	private Reservation reservation;
+
 	//creates reservation??? - should be in DAO
 	public Collection<Table> enterDetails(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo, boolean isEvent) throws Exception {	
-		reservation = new Reservation(numOfPeople, date, reservationName, specificRequests, phoneNo, isEvent);
+		reservation = new Reservation(date, numOfPeople, reservationName, specificRequests, phoneNo, isEvent);
 		
 		DaoReservationIF daoReservation = DaoFactory.createDaoReservation();
 		Collection<Table> availableTables = daoReservation.readTablesByDate(date);
@@ -28,26 +27,20 @@ public class ReservationController {
 		return DaoFactory.createDaoReservation().readReservationsByDate(date);
 	}
 	
-	//select table(s) for the reservation
-	public void addTable(int tableNo) {
-		//reservation.addTable(tableController.getTable(tableNo));
-	}
-	
-	//choose decoration if the reservation is an event
-	public void addDecoration(Item decoration) {
-		
-	}
-	
-	//to be implemented
-	public String toString(){
-		return null;
+	public boolean delete(Reservation reservation) {
+		try {
+			DaoFactory.createDaoReservation().delete(reservation);
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
 		}
+		return true;
+	}
 	
 	//confirms the reservation
 	public boolean confirmReservation() {
 		try {
 			DaoFactory.createDaoReservation().create(reservation);
-			reservation = new Reservation();
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
@@ -71,13 +64,6 @@ public class ReservationController {
 		return reservation.getListOfTables();
 	}
 	
-	//TODO RENAME TO ADD? ADD EDGE CASE HANDLING FOR CHECKING DUPLICATE
-	public void selectDecoration(Decoration decoration, int quantity) {
-		if(!reservation.getListOfDecorations().contains(new LineItem<Decoration>(quantity, decoration))) {
-			reservation.addDecoration(new LineItem<Decoration>(quantity, decoration));
-		}
-	}
-	
 	public void removeDecoration(LineItem<Decoration> decoration) {
 		if(reservation.getListOfDecorations().contains(decoration)) {
 			reservation.removeDecoration(decoration);
@@ -87,4 +73,40 @@ public class ReservationController {
 	public Collection<LineItem<Decoration>> getSelectedDecorations() {
 		return reservation.getListOfDecorations();
 	}
+	
+	public Reservation getReservation() {
+		return reservation;
+	}
+
+	public void setReservation(Reservation reservation) {
+		this.reservation = reservation;
+	}
+
+	public String constructDetails(Reservation reservation) {
+		String messageToShow = "Name: " + reservation.getReservationName()
+						+ "\nDate: " + reservation.getDate()
+						+ "\nNo. of people: " + reservation.getNumOfPeople()
+						+ "\nPhone No.: " + reservation.getPhoneNo()
+						+ "\nSpecific request: " + reservation.getSpecificRequests()
+						+ "\n"
+						+ "\nTables: ";
+		for(Table table : reservation.getListOfTables()) {
+			messageToShow += "\n"+table.getTableNo();
+		}
+		
+		if(reservation.isEvent()) {
+			messageToShow += "\n"
+							+"\nDecorations:";
+			for(LineItem<Decoration> decoration : reservation.getListOfDecorations()) {
+				messageToShow += "\n" + decoration.getItem().getName() + "   Quantity: "+decoration.getQuantity();
+			}
+		
+		}
+		return messageToShow;
+	}
+	
+	public void addSpecificRequest(String specReq) {
+		reservation.setSpecificRequests(specReq);
+	}
+	
 }
