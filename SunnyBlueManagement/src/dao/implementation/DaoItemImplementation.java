@@ -78,6 +78,7 @@ public class DaoItemImplementation implements DaoItemIF {
 	}
   
 	//would have been nice to return the generated key or bool value here
+
 	@Override
 	public void create(Item obj) throws Exception {
 		PreparedStatement stmt = buildCreateStatement(obj);
@@ -98,6 +99,15 @@ public class DaoItemImplementation implements DaoItemIF {
 		} finally {
 			DBConnection.closeConnection();
 		}
+	}
+	
+	// ******* READ *******
+	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
+		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(readItemString);
+		stmt.setString(1, Integer.toString(itemId));
+		System.out.println(readItemString);
+		return stmt;
 	}
 	
 	@Override
@@ -124,7 +134,6 @@ public class DaoItemImplementation implements DaoItemIF {
 		}
 		return item;
 	}
-
 
 	@Override
 	public void update(Item obj) throws Exception {
@@ -181,7 +190,16 @@ public class DaoItemImplementation implements DaoItemIF {
 		}
 		return itemsList;
 	}
-
+	
+	// ******* READ BY NAME *******
+	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
+		String readByNameItemString = "SELECT * FROM Item WHERE name LIKE  ?";
+		PreparedStatement stmt = con.prepareStatement(readByNameItemString);
+		stmt.setString(1, "%" + name + "%");
+		System.out.println(readByNameItemString);
+		return stmt;
+	}
+	
 	@Override
 	public Collection<Item> readByName(String name) throws Exception {
 		PreparedStatement stmt = buildReadByNameItemStatement(name);
@@ -204,6 +222,16 @@ public class DaoItemImplementation implements DaoItemIF {
 			DBConnection.closeConnection();
 		}
 		return itemsList;
+	}
+	
+	// ******* READ BY NAME & DEPARTMENT *******
+	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
+		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
+		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+		stmt.setString(1, "%" + name + "%");
+		stmt.setString(2, department);
+		System.out.println(readByDepartmentItemString);
+		return stmt;
 	}
 
 	@Override
@@ -265,6 +293,7 @@ public class DaoItemImplementation implements DaoItemIF {
 			while (rs.next()) {
 				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
 			}
+
 		} catch (SQLException e) {
 			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {
