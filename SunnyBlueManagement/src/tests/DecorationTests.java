@@ -15,7 +15,7 @@ class DecorationTests {
 	DBConnection con = DBConnection.getInstance();
 	
 	@Test
-	void decoraitonIsCreated() {
+	void decorationIsCreated() {
 		//Arrange
 		DecorationController deocrationController = new DecorationController();
 		Collection<Decoration> decorationsFound;

@@ -11,7 +11,10 @@ class SupplyOrderTests {
 	@Test
 	public void SupplyOrderWasCreated() {
 		/*
-		 * no time to implement
+		 * no time to implement :(
+		 * 
+		 * 
+		 * 
 		//Arrange
 		int createdId = 0;
 		int foundId = 0;
