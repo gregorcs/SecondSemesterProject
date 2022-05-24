@@ -1,4 +1,4 @@
-package model.ReservationFolder;
+package model.reservation;
 
 import java.util.ArrayList;
 import java.util.Collection;

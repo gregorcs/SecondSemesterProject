@@ -2,8 +2,8 @@ package dao.interfaces;
 
 import java.util.Collection;
 
-import model.ReservationFolder.Reservation;
-import model.ReservationFolder.Table;
+import model.reservation.Reservation;
+import model.reservation.Table;
 
 public interface DaoReservationIF extends DaoIF<Reservation>{
 

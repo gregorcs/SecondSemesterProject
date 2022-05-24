@@ -1,4 +1,4 @@
-package model.ReservationFolder;
+package model.reservation;
 
 public class Table {
 	private int tableNo;

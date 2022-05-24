@@ -55,8 +55,8 @@ public class SupplyOrder {
 		return this.listOfItems;
 	}
 
-	public LineItem getLineItemById(int itemId) {
-		LineItem lineItem = null;
+	public LineItem<Item> getLineItemById(int itemId) {
+		LineItem<Item> lineItem = null;
 		for (int i = 0; i < getListOfItems().size(); i++) {
 			if (getListOfItems().get(i).getItem().getItemId() == itemId) {
 				lineItem = getListOfItems().get(i);
@@ -82,13 +82,7 @@ public class SupplyOrder {
 			this.listOfItems.add(lineItem);
 		}
 	}
-
-	public void removeLineItem(LineItem LineItem, int quantity) {
-		LineItem.setQuantity(LineItem.getQuantity() - quantity);
-
-		if (LineItem.getQuantity() == 0) {
-			this.getListOfItems().remove(LineItem);
-		}
+	
 	private boolean isItemInList(LineItem<Item> existing, LineItem<Item> toBeAdded) {
 		if(existing.getItem().getName().equals(toBeAdded.getItem().getName())) {
 			return true;
@@ -111,20 +105,5 @@ public class SupplyOrder {
 
 	public void setSupplyOrderId(int supplyOrderId) {
 		this.supplyOrderId = supplyOrderId;
-	}
-
-	public String createOrderSummary() {
-		//put into controller
-		String messageToShow = "";
-		if (!getListOfItems().isEmpty()) {
-			messageToShow += "Your order:";
-			for (LineItem<Item> lineItem : getListOfItems()) {
-				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
-						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
-			}
-		} else {
-			messageToShow += "Your order is empty";
-		}
-		return messageToShow;
 	}
 }

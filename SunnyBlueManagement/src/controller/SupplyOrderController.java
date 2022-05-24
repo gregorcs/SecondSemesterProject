@@ -2,7 +2,8 @@ package controller;
 
 import dao.DaoFactory;
 import dao.interfaces.DaoSupplyOrderIF;
-
+import model.Item;
+import model.LineItem;
 import model.SupplyOrder;
 
 public class SupplyOrderController {
@@ -55,6 +56,16 @@ public class SupplyOrderController {
 	}
 	
 	public String createOrderSummary() {
-		return supplyOrder.createOrderSummary();
+		String messageToShow = "";
+		if (!supplyOrder.getListOfItems().isEmpty()) {
+			messageToShow += "Your order:";
+			for (LineItem<Item> lineItem : supplyOrder.getListOfItems()) {
+				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
+						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
+			}
+		} else {
+			messageToShow += "Your order is empty";
+		}
+		return messageToShow;
 	}
 }

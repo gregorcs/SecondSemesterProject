@@ -14,7 +14,7 @@ public class DaoItemImplementation implements DaoItemIF {
 
 	// ******* CREATE *******
 	private PreparedStatement buildCreateStatement(Item item) throws SQLException {
-		String query = "INSERT INTO Item values (?, ?)";
+		String query = "INSERT INTO Item VALUES (?, ?)";
 
 		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, item.getName());
@@ -22,62 +22,6 @@ public class DaoItemImplementation implements DaoItemIF {
 		System.out.println(query);
 		return stmt;
 	}
-
-	private PreparedStatement buildReadItemStatement(int itemId) throws SQLException {
-		String query = "SELECT * FROM Item WHERE itemId = ?";
-		PreparedStatement stmt = con.prepareStatement(query);
-		stmt.setInt(1, itemId);
-		System.out.println(query);
-		return stmt;
-	}
-	
-	private PreparedStatement buildDeleteItemStatement(Item item) throws SQLException {
-		String query = "UPDATE SupplyOrder_Item "
-				+ "SET item_itemId_FK = NULL "
-				+ "WHERE item_itemId_FK = ?; "
-				+ "DELETE FROM Item WHERE itemId = ?;";
-		PreparedStatement stmt = con.prepareStatement(query);
-		stmt.setInt(1, item.getItemId());
-		stmt.setInt(2, item.getItemId());
-		System.out.println(query);
-		return stmt;
-
-	}
-	
-	private PreparedStatement buildReadByNameItemStatement(String name) throws SQLException {
-		String query = "SELECT * FROM Item WHERE name LIKE  ?";
-		PreparedStatement stmt = con.prepareStatement(query);
-		stmt.setString(1, "%" + name + "%");
-		System.out.println(query);
-		return stmt;
-	}
-	
-	private PreparedStatement buildReadByNameAndDepartmentStatement(String name, String department) throws SQLException {
-		String query = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
-		PreparedStatement stmt = con.prepareStatement(query);
-		stmt.setString(1, "%" + name + "%");
-		stmt.setString(2, department);
-		System.out.println(query);
-		return stmt;
-	}
-	
-	private PreparedStatement buildReadByNameSortByIdASCStatement(String name) throws SQLException {
-		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId ASC";
-		PreparedStatement stmt = con.prepareStatement(query);
-		stmt.setString(1, "%" + name + "%");
-		System.out.println(query);
-		return stmt;
-	}
-	
-	private PreparedStatement buildReadByNameSortByIdDESCStatement(String name) throws SQLException {
-		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId DESC";
-		PreparedStatement stmt = con.prepareStatement(query);
-		stmt.setString(1, "%" + name + "%");
-		System.out.println(query);
-		return stmt;
-	}
-  
-	//would have been nice to return the generated key or bool value here
 
 	@Override
 	public void create(Item obj) throws Exception {
@@ -102,11 +46,11 @@ public class DaoItemImplementation implements DaoItemIF {
 	}
 	
 	// ******* READ *******
-	private PreparedStatement buildReadItemString(int itemId) throws SQLException {
-		String readItemString = "SELECT * FROM Item WHERE itemId = ?";
-		PreparedStatement stmt = con.prepareStatement(readItemString);
-		stmt.setString(1, Integer.toString(itemId));
-		System.out.println(readItemString);
+	private PreparedStatement buildReadItemStatement(int itemId) throws SQLException {
+		String query = "SELECT * FROM Item WHERE itemId = ?";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, itemId);
+		System.out.println(query);
 		return stmt;
 	}
 	
@@ -135,10 +79,24 @@ public class DaoItemImplementation implements DaoItemIF {
 		return item;
 	}
 
+	// ******* UPDATE *******
 	@Override
 	public void update(Item obj) throws Exception {
 		// TODO Auto-generated method stub
 
+	}
+	
+	// ******* DELETE *******
+	private PreparedStatement buildDeleteItemStatement(Item item) throws SQLException {
+		String query = "UPDATE SupplyOrder_Item "
+					 + "SET item_itemId_FK = NULL "
+					 + "WHERE item_itemId_FK = ?; "
+					 + "DELETE FROM Item WHERE itemId = ?;";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setInt(1, item.getItemId());
+		stmt.setInt(2, item.getItemId());
+		System.out.println(query);
+		return stmt;
 	}
 
 	@Override
@@ -146,7 +104,6 @@ public class DaoItemImplementation implements DaoItemIF {
 		PreparedStatement stmt = buildDeleteItemStatement(obj);
 		try {
 			stmt.executeUpdate();
-
 		} catch (SQLException e) {
 			throw new Exception("SQL exception " + e);
 		} catch (NullPointerException e) {
@@ -159,7 +116,6 @@ public class DaoItemImplementation implements DaoItemIF {
   }
 
 	// ******* READ ALL*******
-	//this will be duplicate code with daoDecoration, no time to make a shared class for queries rn
 	private PreparedStatement buildReadAllItemsString() throws SQLException {
 		String readAllString = "SELECT * FROM Item";
 		PreparedStatement stmt = con.prepareStatement(readAllString);
@@ -192,11 +148,11 @@ public class DaoItemImplementation implements DaoItemIF {
 	}
 	
 	// ******* READ BY NAME *******
-	private PreparedStatement buildReadByNameItemString(String name) throws SQLException {
-		String readByNameItemString = "SELECT * FROM Item WHERE name LIKE  ?";
-		PreparedStatement stmt = con.prepareStatement(readByNameItemString);
+	private PreparedStatement buildReadByNameItemStatement(String name) throws SQLException {
+		String query = "SELECT * FROM Item WHERE name LIKE  ?";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
-		System.out.println(readByNameItemString);
+		System.out.println(query);
 		return stmt;
 	}
 	
@@ -224,40 +180,14 @@ public class DaoItemImplementation implements DaoItemIF {
 		return itemsList;
 	}
 	
-	// ******* READ BY NAME & DEPARTMENT *******
-	private PreparedStatement buildReadByNameAndDepartment(String name, String department) throws SQLException {
-		String readByDepartmentItemString = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
-		PreparedStatement stmt = con.prepareStatement(readByDepartmentItemString);
+	private PreparedStatement buildReadByNameSortByIdASCStatement(String name) throws SQLException {
+		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId ASC";
+		PreparedStatement stmt = con.prepareStatement(query);
 		stmt.setString(1, "%" + name + "%");
-		stmt.setString(2, department);
-		System.out.println(readByDepartmentItemString);
+		System.out.println(query);
 		return stmt;
 	}
-
-	@Override
-	public Collection<Item> readByNameAndDepartment(String name, String departmentEnum) throws Exception {
-		PreparedStatement stmt = buildReadByNameAndDepartmentStatement(name, departmentEnum);
-		ArrayList<Item> itemsList = new ArrayList<>();
-
-		try {
-			ResultSet rs = stmt.executeQuery();
-
-			while (rs.next()) {
-				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
-			}
-
-		} catch (SQLException e) {
-			throw new Exception("SQL exception " + e);
-		} catch (NullPointerException e) {
-			throw new Exception("Null pointer exception, possible connection problems " + e);
-		} catch (Exception e) {
-			throw new Exception("Technical error " + e);
-		} finally {
-			DBConnection.closeConnection();
-		}
-		return itemsList;
-	}
-
+	
 	@Override
 	public Collection<Item> readByNameSortByIdASC(String name) throws Exception {
 		PreparedStatement stmt = buildReadByNameSortByIdASCStatement(name);
@@ -282,9 +212,51 @@ public class DaoItemImplementation implements DaoItemIF {
 		return itemsList;
 	}
 	
+	private PreparedStatement buildReadByNameSortByIdDESCStatement(String name) throws SQLException {
+		String query = "SELECT * FROM Item WHERE name LIKE ? ORDER BY itemId DESC";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setString(1, "%" + name + "%");
+		System.out.println(query);
+		return stmt;
+	}
+	
 	@Override
 	public Collection<Item> readByNameSortByIdDESC(String name) throws Exception {
 		PreparedStatement stmt = buildReadByNameSortByIdDESCStatement(name);
+		ArrayList<Item> itemsList = new ArrayList<>();
+
+		try {
+			ResultSet rs = stmt.executeQuery();
+
+			while (rs.next()) {
+				itemsList.add(new Item(rs.getInt(1), rs.getString(2), rs.getString(3)));
+			}
+
+		} catch (SQLException e) {
+			throw new Exception("SQL exception " + e);
+		} catch (NullPointerException e) {
+			throw new Exception("Null pointer exception, possible connection problems " + e);
+		} catch (Exception e) {
+			throw new Exception("Technical error " + e);
+		} finally {
+			DBConnection.closeConnection();
+		}
+		return itemsList;
+	}
+	
+	// ******* READ BY NAME & DEPARTMENT *******
+	private PreparedStatement buildReadByNameAndDepartmentStatement(String name, String department) throws SQLException {
+		String query = "SELECT * FROM Item WHERE name LIKE ? AND department = ?";
+		PreparedStatement stmt = con.prepareStatement(query);
+		stmt.setString(1, "%" + name + "%");
+		stmt.setString(2, department);
+		System.out.println(query);
+		return stmt;
+	}	
+
+	@Override
+	public Collection<Item> readByNameAndDepartment(String name, String departmentEnum) throws Exception {
+		PreparedStatement stmt = buildReadByNameAndDepartmentStatement(name, departmentEnum);
 		ArrayList<Item> itemsList = new ArrayList<>();
 
 		try {

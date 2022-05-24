@@ -11,7 +11,7 @@ import javax.swing.JTextField;
 import controller.ReservationController;
 import gui.GenericScrollPane;
 import gui.MainFrame;
-import model.ReservationFolder.Reservation;
+import model.reservation.Reservation;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;

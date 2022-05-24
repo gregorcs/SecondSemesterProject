@@ -20,5 +20,4 @@ public class TestDBAccess {
 		con = DBConnection.getInstance();
 		assertNotNull("Connected - connection cannot be null", con);		
 	}
-
 }

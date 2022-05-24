@@ -6,8 +6,8 @@ import dao.DaoFactory;
 import dao.interfaces.DaoReservationIF;
 import model.Decoration;
 import model.LineItem;
-import model.ReservationFolder.Reservation;
-import model.ReservationFolder.Table;
+import model.reservation.Reservation;
+import model.reservation.Table;
 
 public class ReservationController {
 	

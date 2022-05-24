@@ -13,8 +13,8 @@ import controller.ReservationController;
 import dao.DBConnection;
 import model.Decoration;
 import model.LineItem;
-import model.ReservationFolder.Reservation;
-import model.ReservationFolder.Table;
+import model.reservation.Reservation;
+import model.reservation.Table;
 
 class ReservationsTests {
 

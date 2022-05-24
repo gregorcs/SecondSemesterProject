@@ -10,23 +10,15 @@ package controller;
 import java.util.Collection;
 
 import dao.DaoFactory;
-import dao.implementation.DaoTableImplementation;
 import dao.interfaces.DaoTableIF;
-import model.ReservationFolder.Table;
+import model.reservation.Table;
 
 public class TableController {
+	
 	private DaoTableIF daoTable;
 	
-	/**
-	 * Constructor
-	 */
-	
-	public TableController() {
-		super();
-		this.daoTable = DaoFactory.createDaoTable();
-	}
-	
 	public void createTable(int tableNo, int noOfSeats, boolean isOutside) {
+		this.daoTable = DaoFactory.createDaoTable();
 		Table tableToCreate = new Table(tableNo, noOfSeats, isOutside);
 		try {
 			daoTable.create(tableToCreate);
@@ -37,6 +29,7 @@ public class TableController {
 	}
 	
 	public Table readTable(int tableNo) {
+		this.daoTable = DaoFactory.createDaoTable();
 		try {
 			return daoTable.read(tableNo);
 		} catch (Exception e) {
@@ -47,6 +40,7 @@ public class TableController {
 	}
 	
 	public Collection<Table> readAllTables() {
+		this.daoTable = DaoFactory.createDaoTable();
 		try {
 			Collection<Table> tableList;
 			tableList = daoTable.readAll();
@@ -59,6 +53,7 @@ public class TableController {
 	}
 	
 	public Collection<Table> readTableByNoOfSeats(int noOfSeats) {
+		this.daoTable = DaoFactory.createDaoTable();
 		try {
 			return daoTable.readByNoOfSeats(noOfSeats);
 		} catch (Exception e) {
@@ -68,6 +63,7 @@ public class TableController {
 	}
 	
 	public Collection<Table> readTableByIsOutside(boolean isOutside) {
+		this.daoTable = DaoFactory.createDaoTable();
 		try {
 			return daoTable.readByIsOutside(isOutside);
 		} catch (Exception e) {
@@ -77,6 +73,7 @@ public class TableController {
 	}
 	
 	public void deleteTable(Table table) {
+		this.daoTable = DaoFactory.createDaoTable();
 		try {
 			daoTable.delete(table);
 		} catch (Exception e) {

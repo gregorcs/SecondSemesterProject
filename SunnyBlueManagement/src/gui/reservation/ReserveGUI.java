@@ -29,10 +29,10 @@ import gui.GenericScrollPane;
 import gui.MainFrame;
 import gui.decoration.DecorationListCellRenderer;
 import gui.decoration.LineItemDecorationListCellRenderer;
-import gui.table.TableScrollPane;
+import gui.table.TableListCellRenderer;
 import model.Decoration;
 import model.LineItem;
-import model.ReservationFolder.Table;
+import model.reservation.Table;
 import net.miginfocom.swing.MigLayout;
 import javax.swing.JRadioButton;
 
@@ -56,8 +56,8 @@ public class ReserveGUI extends JPanel {
 	private JTextField textDate;
 	private JTextField textPhoneNum;
 	
-	private TableScrollPane paneTablesAvailable;
-	private TableScrollPane paneTablesSelected;
+	private GenericScrollPane<Table> paneTablesAvailable;
+	private GenericScrollPane<Table> paneTablesSelected;
 	private GenericScrollPane<Decoration> paneDecorationsAvailable;
 	private GenericScrollPane<LineItem<Decoration>> paneDecorationsSelected;
 	
@@ -144,9 +144,9 @@ public class ReserveGUI extends JPanel {
 		Component rigidArea_1 = Box.createRigidArea(new Dimension(20, 20));
 		EnterDetailsPanel.add(rigidArea_1, "cell 2 7");
 		
-		paneTablesAvailable = new TableScrollPane();
-		paneTablesSelected = new TableScrollPane();
-    
+		paneTablesAvailable = new GenericScrollPane<Table>(new ArrayList<Table>(), new TableListCellRenderer());
+		paneTablesSelected = new GenericScrollPane<Table>(new ArrayList<Table>(), new TableListCellRenderer());
+		
 		decorationController = new DecorationController();
 		paneDecorationsAvailable = new GenericScrollPane<Decoration>(decorationController.readAllDecorations(), new DecorationListCellRenderer());
 		paneDecorationsSelected = new GenericScrollPane<LineItem<Decoration>>(new ArrayList<LineItem<Decoration>>(), new LineItemDecorationListCellRenderer());
@@ -291,8 +291,8 @@ public class ReserveGUI extends JPanel {
 	 * @param pane
 	 * @param tables
 	 */
-	public void updateScrollPane(TableScrollPane pane, Collection<Table> tables) {
-		pane.initializeList(tables);
+	public void updateScrollPaneTable(GenericScrollPane<Table> pane, Collection<Table> tables) {
+		pane.initializeList(tables, new TableListCellRenderer());
 	}
 	
 	/**
@@ -418,7 +418,7 @@ public class ReserveGUI extends JPanel {
 	}
 	
 	private void selectTable() {
-		Table table = paneTablesAvailable.getSelectedTable();
+		Table table = paneTablesAvailable.getSelectedObj();
 		if(table!=null) {
 			reservationController.selectTable(table);
 			updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());
@@ -426,7 +426,7 @@ public class ReserveGUI extends JPanel {
 	}
 	
 	private void removeTable() {
-		Table table = paneTablesSelected.getSelectedTable();
+		Table table = paneTablesSelected.getSelectedObj();
 		if(table!=null) {
 			reservationController.removeTable(table);
 			updateScrollPane(paneTablesSelected, reservationController.getSelectedTables());

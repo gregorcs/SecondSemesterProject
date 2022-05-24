@@ -2,7 +2,7 @@ package dao.interfaces;
 
 import java.util.Collection;
 
-import model.ReservationFolder.Table;
+import model.reservation.Table;
 
 public interface DaoTableIF extends DaoIF<Table> {
 	public Collection<Table> readByNoOfSeats(int noOfSeats) throws Exception;

@@ -10,25 +10,25 @@ import javax.swing.*;
 
 import controller.ItemController;
 import controller.SupplyOrderController;
+
 import model.Item;
 import model.LineItem;
 import model.ParametersSortEnum;
 import model.SupplyOrder;
 import model.UrgencyEnum;
+
 import gui.GenericScrollPane;
 import gui.MainFrame;
 import gui.item.ItemListCellRenderer;
+
 import net.miginfocom.swing.MigLayout;
+
 import java.awt.Component;
-import javax.swing.Box;
 import java.awt.Dimension;
 import java.awt.Choice;
 
 public class SupplyGUI extends JPanel {
 
-	/**
-	 *
-	 */
 	private static final long serialVersionUID = -7068038639929039542L;
 	
 	private MainFrame mainFrame;
@@ -85,6 +85,21 @@ public class SupplyGUI extends JPanel {
 		});
 		supplyRestaurantPanel.add(btnAddItem, "cell 2 15,alignx left,aligny bottom");
 
+		JButton btnCheckOrder = new JButton("Check order");
+		supplyRestaurantPanel.add(btnCheckOrder, "cell 4 5,alignx center,aligny center");
+		btnCheckOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				JOptionPane.showMessageDialog(mainFrame, supplyOrderController.createOrderSummary());
+			}
+		});
+		
+		JButton btnRemoveFromOrder = new JButton("Remove from order");
+		supplyRestaurantPanel.add(btnRemoveFromOrder, "cell 4 17");
+		btnRemoveFromOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				removeLineItems();
+			}
+		});		
 		
 		JButton btnGoBack = new JButton("Back");
 		btnGoBack.addActionListener(new ActionListener() {
@@ -121,13 +136,13 @@ public class SupplyGUI extends JPanel {
 		
 		supplyRestaurantPanel.add(btnAddRow, "flowx,cell 1 14,alignx left");
 		
-		JButton btnNewButton = new JButton("View orders");
-		btnNewButton.addActionListener(new ActionListener() {
+		JButton btnViewOrders = new JButton("View orders");
+		btnViewOrders.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				supplyOrderScrollPane.updateList(new ArrayList<SupplyOrder>());
 			}
 		});
-		supplyRestaurantPanel.add(btnNewButton, "cell 5 14,alignx center");
+		supplyRestaurantPanel.add(btnViewOrders, "cell 5 14,alignx center");
 	}
 
 	private void createSupplyGUITextFields() {
@@ -219,8 +234,34 @@ public class SupplyGUI extends JPanel {
 		}
 
 		if (lineItem != null) {
-			JOptionPane.showMessageDialog(mainFrame, "Added item successfully" + System.lineSeparator() + "Name: "
-					+ lineItem.getItem().getName() + System.lineSeparator() + "Quantity: " + lineItem.getQuantity());
+			JOptionPane.showMessageDialog(mainFrame, "Added item successfully"
+										 + System.lineSeparator() + "Name: "
+										 + lineItem.getItem().getName() + System.lineSeparator()
+										 + "Quantity: " + lineItem.getQuantity());
+		}
+	}
+	
+	private void removeLineItems() {
+		LineItem<Item> lineItem = null;
+		try {
+			int quantity = tryGetQuantityFromTextField();
+			if (quantity > 0) {
+				int itemId = itemScrollPane.getSelectedObj().getItemId();
+				lineItem = supplyOrderController.getSupplyOrder().getLineItemById(itemId);
+				supplyOrderController.getSupplyOrder().removeLineItem(lineItem);
+				
+				if (lineItem.getQuantity() < quantity) {
+					JOptionPane.showMessageDialog(mainFrame, "Unable to remove item, please check quantity");
+				}
+				
+				if (lineItem != null) {
+					JOptionPane.showMessageDialog(mainFrame, quantity + " item(s) removed successfully");
+				}
+			} else {
+			throw new Exception();
+			} 
+		} catch (Exception e1) {
+			JOptionPane.showMessageDialog(mainFrame, "Unable to remove item, please check quantity");
 		}
 	}
 

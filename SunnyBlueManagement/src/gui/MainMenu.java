@@ -13,6 +13,7 @@ import gui.decoration.DecorationGUI;
 import gui.reservation.ReadReservationGUI;
 import gui.reservation.ReserveGUI;
 import gui.supply.SupplyGUI;
+import gui.table.TableGUI;
 
 import java.awt.Component;
 import javax.swing.Box;

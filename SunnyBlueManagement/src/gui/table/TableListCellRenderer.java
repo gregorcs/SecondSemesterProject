@@ -6,7 +6,7 @@ import javax.swing.DefaultListCellRenderer;
 import javax.swing.JList;
 import javax.swing.ListCellRenderer;
 
-import model.ReservationFolder.Table;
+import model.reservation.Table;
 
 public class TableListCellRenderer implements ListCellRenderer<Table>{
 
