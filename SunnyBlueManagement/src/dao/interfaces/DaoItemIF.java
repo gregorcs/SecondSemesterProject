@@ -8,4 +8,6 @@ public interface DaoItemIF extends DaoIF<Item> {
 	
 	public Collection<Item> readByName(String name) throws Exception;
 	public Collection<Item> readByNameAndDepartment(String name, String departmentEnum) throws Exception;
+	public Collection<Item> readByNameSortByIdASC(String name) throws Exception;
+	public Collection<Item> readByNameSortByIdDESC(String name) throws Exception;
 }

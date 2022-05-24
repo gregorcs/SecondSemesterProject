@@ -1,13 +1,12 @@
 package model;
 
-public enum UrgencyEnum {
-	LOW("LOW"),
-    MEDIUM("MEDIUM"),
-    HIGH("HIGH");
+public enum ParametersSortEnum {
+	LOWEST("LOWEST"),
+    HIGHEST("HIGHEST");
 	
     private String name;
 
-    UrgencyEnum(String text) {
+    ParametersSortEnum(String text) {
         this.name = text;
     }
 
@@ -20,8 +19,8 @@ public enum UrgencyEnum {
 	 * @param text
 	 * @return
 	 */
-	public static UrgencyEnum fromString(String text) {
-	    for (UrgencyEnum tempEnum : UrgencyEnum.values()) {
+	public static ParametersSortEnum fromString(String text) {
+	    for (ParametersSortEnum tempEnum : ParametersSortEnum.values()) {
 	        if (tempEnum.name.equalsIgnoreCase(text)) {
 	            return tempEnum;
 	        }

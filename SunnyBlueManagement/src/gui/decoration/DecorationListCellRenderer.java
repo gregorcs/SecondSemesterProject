@@ -17,7 +17,7 @@ public class DecorationListCellRenderer implements ListCellRenderer<Decoration> 
 	public Component getListCellRendererComponent(JList<? extends Decoration> list, Decoration value, int index, boolean isSelected,
 			boolean cellHasFocus) {
 		dlcr = new DefaultListCellRenderer();
-		String textToShow = ("Name: " + value.getName() + ",  ID: " + value.getItemId() + ",  Department: " + value.getDepartmentType() + ",  In stock: " + value.getQuantityInStock());
+		String textToShow = ("Name: " + value.getName() + ",  ID: " + value.getDecorationId() + ",  Department: " + value.getDepartmentType() + ",  In stock: " + value.getQuantityInStock());
 		return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 	}
 }

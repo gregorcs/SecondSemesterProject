@@ -7,10 +7,10 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import gui.resupply.DecorationGUI;
-import gui.reservation.Reserve;
-import gui.resupply.SupplyGUI;
-
+import gui.decoration.DecorationGUI;
+import gui.reservation.ReadReservationGUI;
+import gui.reservation.ReserveGUI;
+import gui.supply.SupplyGUI;
 
 import java.awt.GridBagLayout;
 import javax.swing.JLayeredPane;
@@ -25,6 +25,7 @@ public class MainFrame extends JFrame {
 	private JPanel reservePanel;
 	private JLayeredPane layeredPane;
 	private DecorationGUI decorationPanel;
+	private JPanel readReservationPanel;
 
 	/**
 	 * Launch the application.
@@ -43,6 +44,10 @@ public class MainFrame extends JFrame {
 		});
 	}
 
+	public void start() {
+		
+	}
+	
 	/**
 	 * Create the frame.
 	 */
@@ -77,11 +82,14 @@ public class MainFrame extends JFrame {
 		resupplyPanel = new SupplyGUI(this);
 		layeredPane.add(resupplyPanel, "name_1894438046500");
 		
-		decorationPanel = new DecorationGUI();
+		decorationPanel = new DecorationGUI(this);
 		layeredPane.add(decorationPanel, "name_98119803398600");
     
-		reservePanel = new Reserve(this);
+		reservePanel = new ReserveGUI(this);
 		layeredPane.add(reservePanel, "name_79832769847600");
+		
+		readReservationPanel = new ReadReservationGUI(this);
+		layeredPane.add(readReservationPanel, "name_81428270717000");
 	}
 
 	public JLayeredPane getLayeredPane() {

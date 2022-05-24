@@ -1,18 +1,18 @@
 package model;
 
-import java.time.LocalDateTime;  
-import java.time.format.DateTimeFormatter;  
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 import java.util.ArrayList;
 
 public class SupplyOrder {
 
 	private int supplyOrderId;
-	private LocalDateTime date;
+	private LocalDate date;
 	private UrgencyEnum urgencyEnum;
-	private ArrayList<LineItem> listOfItems;
-	
-	public SupplyOrder(int supplyOrderId, LocalDateTime date, UrgencyEnum urgency, ArrayList<LineItem> listOfItems) {
+	private ArrayList<LineItem<Item>> listOfItems;
+
+	public SupplyOrder(int supplyOrderId, LocalDate date, UrgencyEnum urgency, ArrayList<LineItem<Item>> listOfItems) {
 		super();
 		this.supplyOrderId = supplyOrderId;
 		this.date = date;
@@ -26,22 +26,22 @@ public class SupplyOrder {
 	 * @param urgencyEnum
 	 * @param listOfItems
 	 */
-	public SupplyOrder(LocalDateTime date, UrgencyEnum urgencyEnum, ArrayList<LineItem> listOfItems) {
+	public SupplyOrder(LocalDate date, UrgencyEnum urgencyEnum, ArrayList<LineItem<Item>> listOfItems) {
 		super();
 		this.date = date;
 		this.urgencyEnum = urgencyEnum;
 		this.listOfItems = listOfItems;
 	}
-	
+
 	public SupplyOrder() {
-		this.listOfItems = new ArrayList<LineItem>();
-		this.date = LocalDateTime.now();
+		this.listOfItems = new ArrayList<LineItem<Item>>();
+		this.date = LocalDate.now();
 	}
 
-	public LocalDateTime getDate() {
+	public LocalDate getDate() {
 		return date;
 	}
-	public void setDate(LocalDateTime date) {
+	public void setDate(LocalDate date) {
 		this.date = date;
 	}
 	public UrgencyEnum getUrgencyEnum() {
@@ -51,10 +51,10 @@ public class SupplyOrder {
 		this.urgencyEnum = urgency;
 	}
 
-	public ArrayList<LineItem> getListOfItems() {
+	public ArrayList<LineItem<Item>> getListOfItems() {
 		return this.listOfItems;
 	}
-	
+
 	public LineItem getLineItemById(int itemId) {
 		LineItem lineItem = null;
 		for (int i = 0; i < getListOfItems().size(); i++) {
@@ -65,15 +65,15 @@ public class SupplyOrder {
 		return lineItem;
 	}
 
-	public void setListOfItems(ArrayList<LineItem> listOfItems) {
+	public void setListOfItems(ArrayList<LineItem<Item>> listOfItems) {
 		this.setListOfItems(listOfItems);
 	}
-	
-	public void addLineItem(LineItem lineItem) {
+
+	public void addLineItem(LineItem<Item> lineItem) {
 		boolean found = false;
-		for (LineItem temp : this.getListOfItems()) {
-			//TODO move this checking into a separate method
-			if (temp.getItem().getName().equals(lineItem.getItem().getName())) {
+		for (LineItem<Item> temp : this.getListOfItems()) {
+			if (isItemInList(temp, lineItem)) {
+				//if the lineItem is already in the list, add the quantity to that lineItem
 				temp.setQuantity(temp.getQuantity() + lineItem.getQuantity());
 				found = true;
 			}
@@ -82,17 +82,26 @@ public class SupplyOrder {
 			this.listOfItems.add(lineItem);
 		}
 	}
-	
+
 	public void removeLineItem(LineItem LineItem, int quantity) {
 		LineItem.setQuantity(LineItem.getQuantity() - quantity);
-		
+
 		if (LineItem.getQuantity() == 0) {
 			this.getListOfItems().remove(LineItem);
 		}
+	private boolean isItemInList(LineItem<Item> existing, LineItem<Item> toBeAdded) {
+		if(existing.getItem().getName().equals(toBeAdded.getItem().getName())) {
+			return true;
+		}
+		return false;
 	}
-	
+
+	public void removeLineItem(LineItem<Item> LineItem) {
+		this.getListOfItems().remove(LineItem);
+	}
+
 	public String getDateString() {
-	   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");    
+	   DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd");
 	   return dtf.format(this.getDate());
 	}
 
@@ -102,5 +111,20 @@ public class SupplyOrder {
 
 	public void setSupplyOrderId(int supplyOrderId) {
 		this.supplyOrderId = supplyOrderId;
+	}
+
+	public String createOrderSummary() {
+		//put into controller
+		String messageToShow = "";
+		if (!getListOfItems().isEmpty()) {
+			messageToShow += "Your order:";
+			for (LineItem<Item> lineItem : getListOfItems()) {
+				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
+						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity();
+			}
+		} else {
+			messageToShow += "Your order is empty";
+		}
+		return messageToShow;
 	}
 }

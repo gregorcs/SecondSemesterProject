@@ -6,7 +6,6 @@ import dao.implementation.DaoSupplyOrderImplementation;
 import dao.interfaces.DaoReservationIF;
 
 import dao.implementation.DaoItemImplementation;
-import dao.implementation.DaoSupplyOrderImplementation;
 import dao.implementation.DaoTableImplementation;
 import dao.interfaces.DaoDecorationIF;
 import dao.interfaces.DaoItemIF;
