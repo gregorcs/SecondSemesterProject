@@ -1,13 +1,25 @@
+/**
+ *  The TableController class contains the CRUD functionality for the Table Object.
+ *  
+ *  With the utilization of the persistence layer (DAO), it is fed information regarding data operations,
+ *  while maintaining a level of security for details within the database.
+ */
+
 package controller;
 
 import java.util.Collection;
 
 import dao.DaoFactory;
+import dao.implementation.DaoTableImplementation;
 import dao.interfaces.DaoTableIF;
-import model.Table;
+import model.ReservationFolder.Table;
 
 public class TableController {
 	private DaoTableIF daoTable;
+	
+	/**
+	 * Constructor
+	 */
 	
 	public TableController() {
 		super();
@@ -55,7 +67,7 @@ public class TableController {
 		return null;
 	}
 	
-	public Collection<Table> readTableByIsOutisde(boolean isOutside) {
+	public Collection<Table> readTableByIsOutside(boolean isOutside) {
 		try {
 			return daoTable.readByIsOutside(isOutside);
 		} catch (Exception e) {

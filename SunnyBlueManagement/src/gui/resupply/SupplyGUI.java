@@ -178,8 +178,9 @@ public class SupplyGUI extends JPanel {
 		}
 
 		if (lineItem != null) {
-			JOptionPane.showMessageDialog(mainFrame, "Item added successfully" + System.lineSeparator() + "Name: "
-					+ lineItem.getItem().getName() + System.lineSeparator() + "Quantity: " + lineItem.getQuantity());
+			JOptionPane.showMessageDialog(mainFrame, "Item added successfully"
+										 + System.lineSeparator() + "Name: " + lineItem.getItem().getName()
+										 + System.lineSeparator() + "Quantity: " + lineItem.getQuantity());
 		}
 	}
 	
@@ -234,7 +235,9 @@ public class SupplyGUI extends JPanel {
 			messageToShow += "Your order:";
 			for (LineItem lineItem : supplyOrderController.getSupplyOrder().getListOfItems()) {
 				messageToShow += System.lineSeparator() + "Name: " + lineItem.getItem().getName()
-						+ System.lineSeparator() + "Quantity: " + lineItem.getQuantity() + System.lineSeparator() + "ID: " + lineItem.getItem().getItemId() + System.lineSeparator();
+							  + System.lineSeparator() + "Quantity: " + lineItem.getQuantity()
+							  + System.lineSeparator() + "ID: " + lineItem.getItem().getItemId()
+							  + System.lineSeparator();
 			}
 		} else {
 			messageToShow += "Your order is empty";

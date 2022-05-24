@@ -6,42 +6,42 @@ import javax.swing.DefaultListModel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 
+import controller.TableController;
 import model.ReservationFolder.Table;
 
-public class TableScrollPane extends JScrollPane{
+public class TableScrollPane extends JScrollPane {
 	
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = -6447934041446584216L;
 	
 	private JList<Table> tableList;
-	private DefaultListModel<Table> listRepresentation;
+	private DefaultListModel<Table> listRepresentationTable;
+	
+	private TableController tableController;
 	
 	public TableScrollPane() {
 		tableList = new JList<Table>();
 		setViewportView(tableList);
-		//setting style
 		tableList.setFixedCellHeight(20);
-		//TODO initialize list here
+		
+		tableController = new TableController();
+		initializeList(tableController.readAllTables());
 	}
 	
-	public void initializeList(Collection<Table> arrayToShow) {
+	public void initializeList(Collection<Table> listToShow) {
 		TableListCellRenderer cellRenderer = new TableListCellRenderer();
 		tableList.setCellRenderer(cellRenderer);
-		updateList(arrayToShow);
+		tableController = new TableController();
+		updateListTable(tableController.readAllTables());
 	}
 	
-	public void updateList(Collection<Table> arrayToShow) {
-		listRepresentation = new DefaultListModel<Table>();
+	public void updateListTable(Collection<Table> listToShow) {
+		listRepresentationTable = new DefaultListModel<Table>();
 		
-		for(Table table : arrayToShow) {
-			listRepresentation.addElement(table);
+		for (Table table : listToShow) {
+			listRepresentationTable.addElement(table);
 		}
-		tableList.setModel(listRepresentation);
+		tableList.setModel(listRepresentationTable);
 	}
 		
-	public Table getSelectedTable() {
-		return tableList.getSelectedValue();
-	}
+	public Table getSelectedTable() {return tableList.getSelectedValue();};
 }

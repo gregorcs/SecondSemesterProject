@@ -11,12 +11,15 @@ public class Table {
 		this.isOutside = isOutside;
 	}
 
-	public boolean isOutside() {
-		return isOutside;
+	public Table() {
 	}
 
-	public void setOutside(boolean isOutside) {
-		this.isOutside = isOutside;
+	public int getTableNo() {
+		return tableNo;
+	}
+
+	public void setTableNo(int tableNo) {
+		this.tableNo = tableNo;
 	}
 
 	public int getNoOfSeats() {
@@ -27,11 +30,11 @@ public class Table {
 		this.noOfSeats = noOfSeats;
 	}
 
-	public void setTableNo(int tableNo) {
-		this.tableNo = tableNo;
+	public boolean getIsOutside() {
+		return isOutside;
 	}
-	
-	public int getTableNo() {
-		return tableNo;
+
+	public void setIsOutside(boolean isOutside) {
+		this.isOutside = isOutside;
 	}
 }

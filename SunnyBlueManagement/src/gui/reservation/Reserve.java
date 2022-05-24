@@ -234,5 +234,4 @@ public class Reserve extends JPanel {
 	public void updateScrollPane(TableScrollPane pane, Collection<Table> tables) {
 		pane.initializeList(tables);
 	}
-	
 }

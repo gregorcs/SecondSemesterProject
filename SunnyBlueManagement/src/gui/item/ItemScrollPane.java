@@ -13,7 +13,7 @@ import controller.ItemController;
 import gui.ScrollPaneIF;
 import model.Item;
 
-public class ItemScrollPane extends JScrollPane implements ScrollPaneIF<Item>{
+public class ItemScrollPane extends JScrollPane implements ScrollPaneIF<Item> {
 
 	private static final long serialVersionUID = -4773670531023046534L;
 
@@ -21,7 +21,6 @@ public class ItemScrollPane extends JScrollPane implements ScrollPaneIF<Item>{
 	
 	private JList<Item> itemList;
 	private DefaultListModel<Item> listRepresentationItem;
-	
 	
 	private ItemController itemController;
 	

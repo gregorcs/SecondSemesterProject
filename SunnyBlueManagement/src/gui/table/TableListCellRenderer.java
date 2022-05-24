@@ -16,7 +16,7 @@ public class TableListCellRenderer implements ListCellRenderer<Table>{
 	public Component getListCellRendererComponent(JList<? extends Table> list, Table value, int index,
 			boolean isSelected, boolean cellHasFocus) {
 		dlcr = new DefaultListCellRenderer();
-		String textToShow = "No." + value.getTableNo() + ", Seats: " + value.getNoOfSeats() + ", Is Outside: " + value.isOutside();
+		String textToShow = "No." + value.getTableNo() + ", Seats: " + value.getNoOfSeats() + ", Is Outside: " + value.getIsOutside();
 		
 		return dlcr.getListCellRendererComponent(list, textToShow, index, isSelected, cellHasFocus);
 	}

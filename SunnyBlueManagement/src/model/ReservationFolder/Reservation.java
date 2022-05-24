@@ -15,7 +15,7 @@ public class Reservation {
 
 	
 	//constructor
-	public Reservation(int reservationID, int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+	public Reservation(int reservationID, int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) {
 		this.setNumOfPeople(numOfPeople);
 		this.setDate(date);
 		this.setReservationName(reservationName);
@@ -31,7 +31,7 @@ public class Reservation {
 	 * @param specificRequests
 	 * @param phoneNo
 	 */
-	public Reservation(int numOfPeople, String date,String reservationName, String specificRequests, long phoneNo) {
+	public Reservation(int numOfPeople, String date, String reservationName, String specificRequests, long phoneNo) {
 		this.setNumOfPeople(numOfPeople);
 		this.setDate(date);
 		this.setReservationName(reservationName);
@@ -94,6 +94,4 @@ public class Reservation {
 	public void setReservationID(int reservationId) {
 		this.reservationId = reservationId;
 	}
-
 }
-

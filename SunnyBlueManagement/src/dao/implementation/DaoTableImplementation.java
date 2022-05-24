@@ -10,7 +10,7 @@ import java.util.Collection;
 
 import dao.DBConnection;
 import dao.interfaces.DaoTableIF;
-import model.Table;
+import model.ReservationFolder.Table;
 
 public class DaoTableImplementation implements DaoTableIF {
 	Connection con = DBConnection.getInstance().getDBcon();
