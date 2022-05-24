@@ -83,7 +83,7 @@ public class SupplyGUI extends JPanel {
 				addLineItems();
 			}
 		});
-		supplyRestaurantPanel.add(btnAddItem, "cell 2 15,alignx left,aligny bottom");
+		supplyRestaurantPanel.add(btnAddItem, "flowx,cell 2 15,alignx left,aligny bottom");
 
 		JButton btnCheckOrder = new JButton("Check order");
 		supplyRestaurantPanel.add(btnCheckOrder, "cell 4 5,alignx center,aligny center");
@@ -92,14 +92,6 @@ public class SupplyGUI extends JPanel {
 				JOptionPane.showMessageDialog(mainFrame, supplyOrderController.createOrderSummary());
 			}
 		});
-		
-		JButton btnRemoveFromOrder = new JButton("Remove from order");
-		supplyRestaurantPanel.add(btnRemoveFromOrder, "cell 4 17");
-		btnRemoveFromOrder.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				removeLineItems();
-			}
-		});		
 		
 		JButton btnGoBack = new JButton("Back");
 		btnGoBack.addActionListener(new ActionListener() {
@@ -143,6 +135,14 @@ public class SupplyGUI extends JPanel {
 			}
 		});
 		supplyRestaurantPanel.add(btnViewOrders, "cell 5 14,alignx center");
+		
+		JButton btnRemoveFromOrder = new JButton("Remove from order");
+		supplyRestaurantPanel.add(btnRemoveFromOrder, "cell 2 15,alignx right");
+		btnRemoveFromOrder.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				removeLineItems();
+			}
+		});		
 	}
 
 	private void createSupplyGUITextFields() {

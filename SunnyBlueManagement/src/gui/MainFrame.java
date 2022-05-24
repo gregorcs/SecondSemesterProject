@@ -3,6 +3,7 @@ package gui;
 import java.awt.EventQueue;
 import java.awt.GridBagConstraints;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;

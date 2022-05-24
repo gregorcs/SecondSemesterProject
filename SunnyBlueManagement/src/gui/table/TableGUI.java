@@ -76,14 +76,6 @@ public class TableGUI extends JPanel {
 			}
 		});
 		tablePanel.add(btnCreateTable, "cell 12 13,alignx center");
-		
-		JButton btnGoBack = new JButton("Back");
-		btnGoBack.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				mainFrame.backToMainMenu();
-			}
-		});
-		tablePanel.add(btnGoBack, "cell 6 4,alignx center,aligny baseline");
 	
 		JButton btnSearchTable = new JButton("Search");
 		btnSearchTable.addActionListener(new ActionListener() {
@@ -136,6 +128,14 @@ public class TableGUI extends JPanel {
 		
 		JLabel lblOutside = new JLabel("Location");
 		tablePanel.add(lblOutside, "cell 11 11,alignx center");
+		
+		JButton btnGoBack = new JButton("Back");
+		btnGoBack.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				mainFrame.backToMainMenu();
+			}
+		});
+		tablePanel.add(btnGoBack, "cell 13 19,alignx right,aligny bottom");
 	}
 		
 	/*
